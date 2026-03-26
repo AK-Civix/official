@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CiviX - Report Issue</title>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: system-ui, sans-serif;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color:#e2e8f0;
+}
+
+/* NAV */
+.nav {
+    position: sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    padding:16px 24px;
+    backdrop-filter: blur(14px);
+    background: rgba(15,23,42,0.7);
+    border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.nav b { font-size:18px; }
+.nav button {
+    background:#1e293b;
+    border:1px solid rgba(255,255,255,0.1);
+    padding:6px 14px;
+    border-radius:999px;
+    color:white;
+    cursor:pointer;
+    transition:0.25s;
+}
+.nav button:hover { background:#334155; }
+
+/* FORM PAGE */
+.container {
+    max-width:720px;
+    margin:auto;
+    padding:40px 20px;
+}
+
+h1 { font-size:32px; margin-bottom:20px; }
+.form-box {
+    background: rgba(17,24,39,0.8);
+    padding:20px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+input, textarea, select {
+    width:100%;
+    margin:10px 0;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    background:#020617;
+    color:white;
+}
+
+button.submit-btn {
+    padding:12px 18px;
+    border:none;
+    border-radius:999px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+    transition:0.2s;
+    margin-top:10px;
+}
+button.submit-btn:hover { transform:scale(1.05); background:#1d4ed8; }
+button.submit-btn:active { transform:scale(0.95); }
+
+/* SIGNATURE */
+.signature {
+    position: fixed;
+    bottom: 12px;
+    right: 16px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+    <div><b>CiviX</b></div>
+    <div>
+        <button onclick="location.href='contact.html'">Contact</button>
+        <button onclick="location.href='donations.html'">Donate</button>
+    </div>
+</div>
+
+<div class="container">
+    <h1>Report an Issue</h1>
+
+    <div class="form-box">
+        <select id="category">
+            <option>Pothole</option>
+            <option>Garbage</option>
+            <option>Water Leak</option>
+            <option>Streetlight</option>
+            <option>Pollution</option>
+            <option>Other</option>
+        </select>
+
+        <input id="location" placeholder="Location">
+        <textarea id="desc" placeholder="Description"></textarea>
+        <input type="file" id="media">
+
+        <button class="submit-btn" onclick="submitIssue()">Submit Issue</button>
+    </div>
+</div>
+
+<div class="signature">AK</div>
+
+<script>
+const client = supabase.createClient(
+  "https://bxtsttllyscfvawvhhas.supabase.co",
+  "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
+);
+
+// CACHE DOM
+const categoryEl = document.getElementById("category");
+const locationEl = document.getElementById("location");
+const descEl = document.getElementById("desc");
+const mediaEl = document.getElementById("media");
+
+// SUBMIT ISSUE
+async function submitIssue(){
+    const category = categoryEl.value;
+    const location = locationEl.value;
+    const description = descEl.value;
+    const file = mediaEl.files[0];
+
+    if(!location || !description){
+        alert("Fill all fields");
+        return;
+    }
+
+    let mediaUrl = null;
+
+    if(file){
+        const fileName = Date.now() + "-" + file.name;
+
+        const { error } = await client.storage
+            .from("issues-media")
+            .upload(fileName, file);
+
+        if(error){
+            alert("Upload failed");
+            return;
+        }
+
+        mediaUrl = `https://bxtsttllyscfvawvhhas.supabase.co/storage/v1/object/public/issues-media/${fileName}`;
+    }
+
+    await client.from("issues").insert([{
+        category,
+        location,
+        description,
+        media_url: mediaUrl,
+        upvotes: 0,
+        status: "Reported"
+    }]);
+
+    locationEl.value = "";
+    descEl.value = "";
+    mediaEl.value = "";
+
+    alert("Issue submitted successfully!");
+}
+</script>
+
+</body>
+</html>
