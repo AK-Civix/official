@@ -127,6 +127,33 @@ input,textarea,select{
     bottom:12px;right:16px;
     font-size:12px;opacity:0.4;
 }
+
+/* SIDEBAR SCROLLING NAME */
+.marquee-left, .marquee-right{
+    position:fixed;
+    top:0; bottom:0;
+    width:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    z-index:5;
+}
+.marquee-left{left:0}
+.marquee-right{right:0}
+
+.marquee-left span, .marquee-right span{
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size:14px;
+    color:white; /* CHANGED COLOR TO WHITE */
+    animation: scroll 10s linear infinite;
+}
+
+@keyframes scroll{
+    0%{transform: translateY(100%)}
+    100%{transform: translateY(-100%)}
+}
 </style>
 </head>
 
@@ -147,7 +174,7 @@ input,textarea,select{
 </div>
 
 <div class="controls">
-<input id="search" placeholder="Search location...">
+<input id="search" placeholder="Enter location...">
 <select id="sort">
 <option value="top">Top</option>
 <option value="latest">Latest</option>
@@ -184,6 +211,9 @@ input,textarea,select{
 
 <div id="toast" class="toast"></div>
 <div class="signature">AK</div>
+
+<div class="marquee-left"><span>Aniruddh Kumar</span></div>
+<div class="marquee-right"><span>Aniruddh Kumar</span></div>
 
 <script>
 const client = supabase.createClient(
@@ -322,7 +352,7 @@ function share(category,location){
     toast("Copied");
 }
 
-// FIXED LIKE BUTTON
+// LIKE BUTTON FUNCTION
 async function like(id, btn){
     if(localStorage.getItem("liked_"+id)) return;
 
