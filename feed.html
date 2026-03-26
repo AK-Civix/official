@@ -24,7 +24,7 @@ body {
     justify-content:space-between;
     padding:16px 24px;
     backdrop-filter: blur(14px);
-    background: rgba(15,23,42,0.7);
+    background: rgba(15,23,42,0.8);
     border-bottom:1px solid rgba(255,255,255,0.05);
 }
 .nav b { font-size:18px; }
@@ -41,10 +41,25 @@ body {
 
 /* CONTAINER */
 .container {
-    max-width:720px;
+    max-width:900px;
     margin:auto;
     padding:40px 20px;
 }
+
+/* BACK BUTTON */
+.dashboard-btn {
+    padding:12px 20px;
+    margin-bottom:20px;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    transition:0.2s;
+}
+.dashboard-btn:hover { transform:scale(1.05); background:#1d4ed8; }
+.dashboard-btn:active { transform:scale(0.95); }
 
 /* CARD */
 .card {
@@ -56,16 +71,9 @@ body {
     border:1px solid rgba(255,255,255,0.05);
     transition:0.25s;
 }
-.card:hover {
-    transform: translateY(-4px);
-    border-color:#3b82f6;
-}
+.card:hover { transform: translateY(-6px); border-color:#3b82f6; }
 
-.card img, .card video {
-    width:100%;
-    border-radius:12px;
-    margin-top:10px;
-}
+.card img, .card video { width:100%; border-radius:12px; margin-top:10px; }
 
 .meta { font-size:12px; opacity:0.6; margin-bottom:6px; }
 
@@ -82,8 +90,18 @@ button.action-btn {
     cursor:pointer;
     transition:0.2s;
 }
-button.action-btn:hover { transform:scale(1.05); }
 button.liked { background:#16a34a; color:white; }
+.status-tag {
+    padding:2px 8px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:bold;
+    color:white;
+    margin-left:10px;
+}
+.status-Reported { background:#f59e0b; }
+.status-InProgress { background:#3b82f6; }
+.status-Fixed { background:#16a34a; }
 
 /* SIGNATURE */
 .signature {
@@ -107,6 +125,7 @@ button.liked { background:#16a34a; color:white; }
 </div>
 
 <div class="container">
+    <button class="dashboard-btn" onclick="location.href='index.html'">⬅ Back to Dashboard</button>
     <h1>Top Issues</h1>
     <div id="feed">Loading issues...</div>
 </div>
@@ -119,13 +138,8 @@ const client = supabase.createClient(
   "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-// LOAD ISSUES
 async function loadIssues(){
-    const { data } = await client
-        .from("issues")
-        .select("*")
-        .order("upvotes",{ ascending:false });
-
+    const { data } = await client.from("issues").select("*").order("upvotes",{ ascending:false });
     const feed = document.getElementById("feed");
     feed.innerHTML = "";
 
@@ -139,9 +153,13 @@ async function loadIssues(){
                 : `<img src="${issue.media_url}">`;
         }
 
+        const statusClass = issue.status.replace(" ","");
         feed.innerHTML += `
         <div class="card">
-            <div class="meta">${issue.category}</div>
+            <div class="meta">
+                ${issue.category}
+                <span class="status-tag status-${statusClass}">${issue.status}</span>
+            </div>
             <b>📍 ${issue.location}</b><br>
             ${issue.description}
             ${media}
@@ -149,41 +167,28 @@ async function loadIssues(){
                 <button class="action-btn ${liked ? 'liked' : ''}" onclick="upvote(${issue.id},${issue.upvotes},this)">
                     👍 ${issue.upvotes}
                 </button>
-                <button class="action-btn" onclick="share('${issue.category}','${issue.location}')">
-                    Share
-                </button>
+                <button class="action-btn" onclick="share('${issue.category}','${issue.location}')">Share</button>
             </div>
-        </div>
-        `;
+        </div>`;
     });
 }
 
-// UPVOTE
 async function upvote(id,count,btn){
     if(localStorage.getItem("liked_" + id)) return;
-
-    btn.innerText = "⏳";
-    await client.from("issues").update({ upvotes: count + 1 }).eq("id", id);
-
+    btn.innerText="⏳";
+    await client.from("issues").update({ upvotes: count + 1 }).eq("id",id);
     localStorage.setItem("liked_" + id,true);
     btn.classList.add("liked");
-    btn.innerText = "👍 " + (count + 1);
-
+    btn.innerText="👍 "+(count+1);
     loadIssues();
 }
 
-// SHARE
 function share(category,location){
-    const text = `🚨 ${category} issue in ${location}. Check CiviX`;
-    if(navigator.share){
-        navigator.share({ text });
-    } else {
-        navigator.clipboard.writeText(text);
-        alert("Copied to clipboard!");
-    }
+    const text=`🚨 ${category} issue in ${location}. Check CiviX`;
+    if(navigator.share) navigator.share({ text });
+    else { navigator.clipboard.writeText(text); alert("Copied to clipboard!"); }
 }
 
-// INIT
 loadIssues();
 </script>
 
