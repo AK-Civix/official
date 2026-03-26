@@ -13,7 +13,7 @@
 body {
   font-family: system-ui, sans-serif;
   background: radial-gradient(circle at top, #0f172a, #020617);
-  color: #e2e8f0;
+  color:#e2e8f0;
 }
 
 /* NAV */
@@ -24,8 +24,9 @@ body {
     justify-content:space-between;
     padding:16px 24px;
     backdrop-filter: blur(14px);
-    background: rgba(15,23,42,0.7);
+    background: rgba(15,23,42,0.8);
     border-bottom:1px solid rgba(255,255,255,0.05);
+    z-index:100;
 }
 .nav b { font-size:18px; }
 .nav button {
@@ -41,14 +42,14 @@ body {
 
 /* DASHBOARD */
 .container {
-    max-width:720px;
+    max-width:900px;
     margin:auto;
     padding:60px 20px;
     text-align:center;
 }
 
 h1 {
-    font-size:42px;
+    font-size:48px;
     background: linear-gradient(90deg,#3b82f6,#22c55e);
     -webkit-background-clip:text;
     color:transparent;
@@ -58,8 +59,8 @@ h1 {
 p { opacity:0.7; margin-bottom:30px; font-size:18px; }
 
 button.dashboard-btn {
-    padding:14px 24px;
-    margin:10px;
+    padding:14px 28px;
+    margin:12px;
     border-radius:999px;
     border:none;
     cursor:pointer;
@@ -71,7 +72,42 @@ button.dashboard-btn {
 button.dashboard-btn:hover { transform:scale(1.05); background:#1d4ed8; }
 button.dashboard-btn:active { transform:scale(0.95); }
 
+/* STATS */
 .stats { margin-top:30px; font-size:16px; opacity:0.8; }
+
+/* FEATURES / ABOUT CiviX */
+.about {
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+    margin-top:60px;
+}
+
+.card {
+    background: rgba(17,24,39,0.75);
+    backdrop-filter: blur(10px);
+    padding:20px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,0.05);
+    flex:1 1 250px;
+    max-width:280px;
+    transition:0.3s;
+    text-align:left;
+}
+.card:hover { transform: translateY(-6px); border-color:#3b82f6; }
+
+.card h3 { font-size:20px; margin-bottom:8px; }
+.card p { font-size:14px; opacity:0.7; }
+
+/* SIGNATURE */
+.signature {
+    position: fixed;
+    bottom: 12px;
+    right: 16px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+}
 </style>
 </head>
 
@@ -93,7 +129,26 @@ button.dashboard-btn:active { transform:scale(0.95); }
     <button class="dashboard-btn" onclick="location.href='feed.html'">🗂 View Issues</button>
 
     <div class="stats" id="stats">Loading stats...</div>
+
+    <!-- About Section -->
+    <h2 style="margin-top:60px; margin-bottom:20px;">About CiviX</h2>
+    <div class="about">
+        <div class="card">
+            <h3>What is CiviX?</h3>
+            <p>CiviX is a platform to report civic issues, track government response, and improve urban life. Your reports make a real difference.</p>
+        </div>
+        <div class="card">
+            <h3>How it Works</h3>
+            <p>Submit an issue with location, description, and optional media. View and upvote others’ reports. Authorities and citizens can track actions.</p>
+        </div>
+        <div class="card">
+            <h3>Why Use CiviX?</h3>
+            <p>It’s simple, fast, and transparent. Every report counts, helping create safer streets, cleaner areas, and accountable governance.</p>
+        </div>
+    </div>
 </div>
+
+<div class="signature">AK</div>
 
 <script>
 const client = supabase.createClient(
