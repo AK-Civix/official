@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FixMyArea</title>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    color: #e2e8f0;
+}
+
+/* NAV */
+.nav {
+    position: sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    padding:16px 24px;
+    backdrop-filter: blur(10px);
+    background: rgba(15,23,42,0.6);
+    border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.nav button {
+    background:#1e293b;
+    border:1px solid rgba(255,255,255,0.1);
+    padding:6px 12px;
+    border-radius:999px;
+    color:white;
+    cursor:pointer;
+}
+
+/* HERO */
+.hero {
+    text-align:center;
+    padding:40px 20px 10px;
+}
+.hero h1 {
+    font-size:32px;
+    font-weight:700;
+}
+.hero p {
+    opacity:0.7;
+    margin-top:6px;
+}
+.counter {
+    margin-top:12px;
+    font-size:14px;
+    opacity:0.8;
+}
+
+/* CONTAINER */
+.container {
+    max-width:700px;
+    margin:auto;
+    padding:20px;
+}
+
+/* CARD */
+.card {
+    background: rgba(17,24,39,0.7);
+    backdrop-filter: blur(8px);
+    padding:16px;
+    margin-bottom:16px;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,0.05);
+    transition:0.2s;
+}
+.card:hover {
+    transform: translateY(-3px);
+    border-color:#2563eb;
+}
+
+.card img, .card video {
+    width:100%;
+    border-radius:10px;
+    margin-top:10px;
+}
+
+.meta {
+    font-size:13px;
+    opacity:0.7;
+    margin-bottom:6px;
+}
+
+/* FORM */
+.form-box {
+    margin-top:20px;
+    padding:18px;
+    background: rgba(17,24,39,0.7);
+    border-radius:16px;
+}
+
+input, textarea, select {
+    width:100%;
+    margin:10px 0;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    background:#020617;
+    color:white;
+}
+
+/* BUTTON */
+button {
+    padding:10px 14px;
+    background:#2563eb;
+    border:none;
+    color:white;
+    border-radius:999px;
+    cursor:pointer;
+}
+
+/* ACTIONS */
+.actions {
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+
+/* SIGNATURE */
+.signature {
+    position: fixed;
+    bottom: 12px;
+    right: 16px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+}
+</style>
+</head>
+
+<body>
+
+<div class="nav">
+    <div><b>FixMyArea</b></div>
+    <div>
+        <button onclick="location.href='fixmyarea+contact.html'">Contact</button>
+        <button onclick="location.href='fixmyarea+donations.html'">Donate</button>
+    </div>
+</div>
+
+<div class="hero">
+    <h1>FixMyArea</h1>
+    <p>Report. Amplify. Force action.</p>
+    <div id="count" class="counter">Loading...</div>
+</div>
+
+<div class="container">
+
+<div class="form-box">
+<h3>Report Issue</h3>
+
+<select id="category">
+<option>Pothole</option>
+<option>Garbage</option>
+<option>Water Leak</option>
+<option>Streetlight</option>
+<option>Pollution</option>
+<option>Other</option>
+</select>
+
+<input id="location" placeholder="Location">
+<textarea id="desc" placeholder="Description"></textarea>
+<input type="file" id="media">
+
+<button id="postBtn">Post Issue</button>
+</div>
+
+<hr style="margin:30px 0; opacity:0.2;">
+
+<h3>Top Issues</h3>
+<div id="feed"></div>
+
+</div>
+
+<div class="signature">AK</div>
+
+<script>
+const client = supabase.createClient(
+  "https://bxtsttllyscfvawvhhas.supabase.co",
+  "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
+);
+
+// LOAD
+async function loadIssues(){
+    const { data } = await client
+        .from("issues")
+        .select("*")
+        .order("upvotes", { ascending:false });
+
+    const feed = document.getElementById("feed");
+    feed.innerHTML = "";
+
+    data.forEach(issue=>{
+        let media = "";
+        if(issue.media_url){
+            if(issue.media_url.includes(".mp4")){
+                media = `<video controls src="${issue.media_url}"></video>`;
+            } else {
+                media = `<img src="${issue.media_url}">`;
+            }
+        }
+
+        feed.innerHTML += `
+        <div class="card">
+            <div class="meta">${issue.category}</div>
+            <b>📍 ${issue.location}</b><br>
+            ${issue.description}
+            ${media}
+
+            <div class="actions">
+                <button onclick="upvote(${issue.id}, ${issue.upvotes})">👍 ${issue.upvotes}</button>
+                <button onclick="share('${issue.category}','${issue.location}')">Share</button>
+            </div>
+        </div>
+        `;
+    });
+}
+
+// COUNT
+async function loadCount(){
+    const { count } = await client
+        .from("issues")
+        .select("*", { count:'exact', head:true });
+
+    document.getElementById("count").innerText =
+        count + " issues reported";
+}
+
+// POST
+async function submitIssue(){
+    const category = document.getElementById("category").value;
+    const location = document.getElementById("location").value;
+    const description = document.getElementById("desc").value;
+    const file = document.getElementById("media").files[0];
+
+    if(!location || !description){
+        alert("Fill all fields");
+        return;
+    }
+
+    let mediaUrl = null;
+
+    if(file){
+        const fileName = Date.now() + "-" + file.name;
+
+        const { error } = await client.storage
+            .from("issues-media")
+            .upload(fileName, file);
+
+        if(error){
+            alert("Upload failed");
+            return;
+        }
+
+        mediaUrl = `https://bxtsttllyscfvawvhhas.supabase.co/storage/v1/object/public/issues-media/${fileName}`;
+    }
+
+    const { error } = await client.from("issues").insert([{
+        category,
+        location,
+        description,
+        media_url: mediaUrl,
+        upvotes: 0,
+        status: "Reported"
+    }]);
+
+    if(error){
+        alert(error.message);
+        return;
+    }
+
+    alert("Posted");
+    loadIssues();
+    loadCount();
+}
+
+// UPVOTE
+async function upvote(id, count){
+    await client
+        .from("issues")
+        .update({ upvotes: count + 1 })
+        .eq("id", id);
+
+    loadIssues();
+}
+
+// SHARE (viral loop)
+function share(category, location){
+    const text = `🚨 ${category} issue in ${location}. Check FixMyArea.`;
+
+    if(navigator.share){
+        navigator.share({ text });
+    } else {
+        navigator.clipboard.writeText(text);
+        alert("Copied to clipboard");
+    }
+}
+
+document.getElementById("postBtn").addEventListener("click", submitIssue);
+
+loadIssues();
+loadCount();
+</script>
+
+</body>
+</html>
