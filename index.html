@@ -39,9 +39,9 @@ body{
     color:transparent;
 }
 .hero p{
-    color:#64748b; /* subtle dark color for legible but subdued text */
-    margin-top:6px;
-    font-weight:500;
+    opacity:0.6;
+    margin-top:8px;
+    color:#334155; /* slightly dark for AK */
 }
 .counter{opacity:0.8;margin-top:10px}
 
@@ -95,7 +95,7 @@ button{
     background:#2563eb;
     color:white;cursor:pointer;
 }
-.like-btn{background:#1e293b;transition:0.2s}
+.like-btn{background:#1e293b}
 .like-btn.liked{background:#16a34a}
 
 /* FORM */
@@ -107,6 +107,19 @@ input,textarea,select{
     width:100%;margin:10px 0;
     padding:12px;border-radius:10px;
     background:#020617;border:none;color:white;
+}
+
+/* COMMENTS */
+.comment-box{
+    margin-top:10px;padding:10px;
+    background:#020617;border-radius:12px;
+}
+.comment-box input{
+    width:calc(100% - 90px);padding:8px;margin-right:8px;
+    border-radius:10px;background:#1e293b;border:none;color:white;
+}
+.comment-box button{
+    width:70px;
 }
 
 /* TOAST */
@@ -133,31 +146,20 @@ input,textarea,select{
     font-size:12px;opacity:0.4;
 }
 
-/* SIDEBAR SCROLLING NAME */
-.marquee-left, .marquee-right{
+/* SIDES: moving name */
+.side-name{
     position:fixed;
-    top:0; bottom:0;
-    width:20px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    z-index:5;
+    top:50%;transform:translateY(-50%);
+    font-size:20px;color:white;
+    writing-mode:vertical-rl;
+    animation: moveUp 6s linear infinite;
 }
-.marquee-left{left:0}
-.marquee-right{right:0}
+.side-name.left{left:0;}
+.side-name.right{right:0;}
 
-.marquee-left span, .marquee-right span{
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    font-size:14px;
-    color:white;
-    animation: scroll 10s linear infinite;
-}
-
-@keyframes scroll{
-    0%{transform: translateY(100%)}
-    100%{transform: translateY(-100%)}
+@keyframes moveUp{
+    0%{transform:translateY(100%);}
+    100%{transform:translateY(-100%);}
 }
 </style>
 </head>
@@ -190,7 +192,6 @@ input,textarea,select{
 
 <div class="form-box">
 <h3>Report Issue</h3>
-
 <select id="category">
 <option>Pothole</option>
 <option>Garbage</option>
@@ -216,9 +217,8 @@ input,textarea,select{
 
 <div id="toast" class="toast"></div>
 <div class="signature">AK</div>
-
-<div class="marquee-left"><span>Aniruddh Kumar</span></div>
-<div class="marquee-right"><span>Aniruddh Kumar</span></div>
+<div class="side-name left">Aniruddh Kumar</div>
+<div class="side-name right">Aniruddh Kumar</div>
 
 <script>
 const client = supabase.createClient(
@@ -240,12 +240,14 @@ function toast(msg){
 async function loadIssues(){
     let { data } = await client.from("issues").select("*");
 
+    // sort
     if(sortEl.value==="top"){
         data.sort((a,b)=>b.upvotes-a.upvotes);
     } else {
         data.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
     }
 
+    // search
     const query = searchEl.value.toLowerCase();
     data = data.filter(i=>i.location.toLowerCase().includes(query));
 
@@ -283,7 +285,7 @@ async function loadIssues(){
         ${media}
 
         <div class="actions">
-            <button class="like-btn ${liked?'liked':''}" onclick="like(${issue.id}, this)">
+            <button class="like-btn ${liked?'liked':''}">
             👍 <span>${issue.upvotes}</span>
             </button>
 
@@ -291,20 +293,46 @@ async function loadIssues(){
             Share
             </button>
         </div>
+
+        <div class="comment-box">
+            <input placeholder="Add comment..." id="comment-${issue.id}">
+            <button onclick="addComment(${issue.id})">Post</button>
+        </div>
+
+        <div id="comments-${issue.id}"></div>
         `;
+
+        const likeBtn=div.querySelector(".like-btn");
+        const countSpan=likeBtn.querySelector("span");
+
+        likeBtn.onclick=async()=>{
+            if(localStorage.getItem("liked_"+issue.id)) return;
+
+            let newCount=issue.upvotes+1;
+            countSpan.innerText=newCount;
+            likeBtn.classList.add("liked");
+
+            localStorage.setItem("liked_"+issue.id,true);
+
+            await client.from("issues")
+            .update({upvotes:newCount})
+            .eq("id",issue.id);
+        };
+
         feed.appendChild(div);
+
+        loadComments(issue.id);
     });
 }
 
+// stable count
 async function loadCount(){
-    const { count } = await client
-    .from("issues")
-    .select("*",{count:'exact',head:true});
-
+    const { count } = await client.from("issues").select('id', {count:'exact'});
     document.getElementById("count").innerText =
     count + " issues reported";
 }
 
+// post new issue
 async function submitIssue(){
     const category=document.getElementById("category").value;
     const location=document.getElementById("location").value;
@@ -337,7 +365,8 @@ async function submitIssue(){
         category,location,description,
         media_url:mediaUrl,
         upvotes:0,
-        status:"Reported"
+        status:"Reported",
+        comments:[]
     }]);
 
     toast("Posted");
@@ -352,25 +381,42 @@ async function submitIssue(){
 
 function share(category,location){
     const text=`🚨 ${category} in ${location} via CiviX`;
-
     navigator.clipboard.writeText(text);
     toast("Copied");
 }
 
-async function like(id, btn){
-    if(localStorage.getItem("liked_"+id)) return;
+// comments
+async function addComment(issueId){
+    const input = document.getElementById(`comment-${issueId}`);
+    const text = input.value.trim();
+    if(!text) return;
 
-    localStorage.setItem("liked_"+id,true);
-    btn.classList.add("liked");
+    // fetch current comments
+    const { data } = await client.from("issues").select("comments").eq("id",issueId).single();
+    const newComments = data.comments ? [...data.comments, text] : [text];
 
-    const span = btn.querySelector("span");
-    const current = parseInt(span.innerText);
-    span.innerText = current+1;
+    await client.from("issues").update({comments:newComments}).eq("id",issueId);
 
-    const { data } = await client.from("issues").select("*").eq("id",id).single();
-    await client.from("issues").update({upvotes:data.upvotes+1}).eq("id",id);
+    input.value="";
+    loadComments(issueId);
 }
 
+async function loadComments(issueId){
+    const container = document.getElementById(`comments-${issueId}`);
+    const { data } = await client.from("issues").select("comments").eq("id",issueId).single();
+    container.innerHTML="";
+    if(!data || !data.comments) return;
+
+    data.comments.forEach(c=>{
+        const div = document.createElement("div");
+        div.className="meta";
+        div.style.marginLeft="10px";
+        div.innerText="💬 "+c;
+        container.appendChild(div);
+    });
+}
+
+// events
 searchEl.oninput=loadIssues;
 sortEl.onchange=loadIssues;
 
