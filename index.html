@@ -69,7 +69,7 @@ body{
     border-color:#3b82f6;
 }
 
-.meta{font-size:12px;opacity:0.6}
+.meta{font-size:12px;opacity:0.6;margin-bottom:4px}
 
 .card img,.card video{
     width:100%;
@@ -187,8 +187,8 @@ input,textarea,select{
 <div class="nav">
 <b>CiviX</b>
 <div>
-<button onclick="location.href='fixmyarea+contact.html'">Contact</button>
-<button onclick="location.href='fixmyarea+donation.html'">Donate</button>
+<button onclick="location.href='contact.html'">Contact</button>
+<button onclick="location.href='donation.html'">Donate</button>
 </div>
 </div>
 
@@ -276,10 +276,18 @@ data.forEach(issue=>{
 const div=document.createElement("div");
 div.className="card";
 
+let mediaHTML="";
+if(issue.media_url){
+mediaHTML = issue.media_url.includes(".mp4")
+? `<video controls src="${issue.media_url}"></video>`
+: `<img src="${issue.media_url}">`;
+}
+
 div.innerHTML=`
 <div class="meta">${issue.category}</div>
 <b>📍 ${issue.location}</b><br>
 ${issue.description}
+${mediaHTML}
 
 <div class="actions">
 <button onclick="like(${issue.id})">👍 ${issue.upvotes}</button>
@@ -330,17 +338,26 @@ async function submitIssue(){
 const category=document.getElementById("category").value;
 const location=document.getElementById("location").value;
 const description=document.getElementById("desc").value;
+const file=document.getElementById("media").files[0];
 
 if(!location||!description){
 toast("Fill fields");
 return;
 }
 
-await client.from("issues").insert([{
-category,location,description,upvotes:0
-}]);
+let mediaUrl=null;
+if(file){
+const name=Date.now()+"-"+file.name;
+const { error } = await client.storage.from("issues-media").upload(name,file);
+if(error){ toast("Upload failed"); return; }
+mediaUrl=`https://bxtsttllyscfvawvhhas.supabase.co/storage/v1/object/public/issues-media/${name}`;
+}
 
+await client.from("issues").insert([{category,location,description,media_url:mediaUrl,upvotes:0}]);
 toast("Posted");
+document.getElementById("location").value="";
+document.getElementById("desc").value="";
+document.getElementById("media").value="";
 loadIssues();
 }
 
