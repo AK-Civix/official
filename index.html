@@ -25,12 +25,9 @@ body{
     background: rgba(15,23,42,0.7);
 }
 .nav button{
-    background:#1e293b;
-    border:none;
-    padding:6px 14px;
-    border-radius:999px;
-    color:white;
-    cursor:pointer;
+    background:#1e293b;border:none;
+    padding:6px 14px;border-radius:999px;
+    color:white;cursor:pointer;
 }
 
 /* HERO */
@@ -58,7 +55,7 @@ body{
 
 /* CARD */
 .card{
-    background: rgba(17,24,39,0.9);
+    background: rgba(17,24,39,0.85);
     padding:18px;margin-bottom:16px;
     border-radius:18px;
     border:1px solid rgba(255,255,255,0.05);
@@ -70,11 +67,18 @@ body{
 }
 
 .meta{font-size:12px;opacity:0.6;margin-bottom:4px}
+.status{
+    font-size:11px;
+    padding:3px 8px;
+    border-radius:999px;
+    margin-left:6px;
+}
+.reported{background:#334155}
+.progress{background:#f59e0b}
+.resolved{background:#16a34a}
 
-.card img,.card video{
-    width:100%;
-    border-radius:12px;
-    margin-top:10px;
+.card img, .card video{
+    width:100%;border-radius:12px;margin-top:10px;
 }
 
 /* BUTTONS */
@@ -84,118 +88,62 @@ button{
     border-radius:999px;
     border:none;
     background:#2563eb;
-    color:white;
-    cursor:pointer;
+    color:white;cursor:pointer;
 }
-.like-btn{background:#1e293b}
-
-/* COMMENTS */
-.comments{
-    margin-top:12px;
-    border-top:1px solid rgba(255,255,255,0.08);
-    padding-top:10px;
-}
-.comment{
-    font-size:13px;
-    margin-top:6px;
-}
-.comment-box{
-    display:flex;
-    gap:6px;
-    margin-top:8px;
-}
-.comment-box input{
-    flex:1;
-    padding:6px;
-    border-radius:8px;
-    border:none;
-    background:#020617;
-    color:white;
-}
+.like-btn{background:#1e293b;transition:0.2s}
+.like-btn.liked{background:#16a34a}
 
 /* FORM */
 .form-box{
-    background: rgba(17,24,39,0.9);
-    padding:20px;
-    border-radius:18px;
+    background: rgba(17,24,39,0.85);
+    padding:20px;border-radius:18px;
 }
 input,textarea,select{
-    width:100%;
-    margin:10px 0;
-    padding:12px;
-    border-radius:10px;
-    background:#020617;
-    border:none;
-    color:white;
+    width:100%;margin:10px 0;
+    padding:12px;border-radius:10px;
+    background:#020617;border:none;color:white;
 }
 
 /* TOAST */
 .toast{
-    position:fixed;
-    bottom:20px;
-    left:50%;
+    position:fixed;bottom:20px;left:50%;
     transform:translateX(-50%);
-    background:#020617;
-    padding:10px 16px;
-    border-radius:999px;
-    opacity:0;
+    background:#020617;padding:10px 16px;
+    border-radius:999px;opacity:0;
     transition:0.3s;
 }
 .toast.show{opacity:1}
 
-/* SIDE TICKER */
-.side{
-    position:fixed;
-    top:0;
-    height:100%;
-    width:25px;
-    writing-mode:vertical-rl;
-    opacity:0.12;
-    pointer-events:none;
-    font-size:12px;
-}
-.left{left:0;animation:up 10s linear infinite}
-.right{right:0;animation:down 10s linear infinite}
-
-@keyframes up{
-0%{transform:translateY(100%)}
-100%{transform:translateY(-100%)}
-}
-@keyframes down{
-0%{transform:translateY(-100%)}
-100%{transform:translateY(100%)}
-}
-
 /* EMPTY */
-.empty{text-align:center;opacity:0.6;margin-top:20px}
+.empty{
+    text-align:center;
+    opacity:0.6;
+    margin-top:20px;
+}
 
+/* SIGN */
 .signature{
     position:fixed;
-    bottom:10px;
-    right:14px;
-    font-size:12px;
-    opacity:0.4;
+    bottom:12px;right:16px;
+    font-size:12px;opacity:0.4;
 }
 </style>
 </head>
 
 <body>
 
-<div class="side left">Aniruddh Kumar • Aniruddh Kumar •</div>
-<div class="side right">Aniruddh Kumar • Aniruddh Kumar •</div>
-
 <div class="nav">
 <b>CiviX</b>
 <div>
-<button onclick="location.href='contact.html'">Contact</button>
-<button onclick="location.href='donation.html'">Donate</button>
+<button onclick="location.href='fixmyarea+contact.html'">Contact</button>
+<button onclick="location.href='fixmyarea+donation.html'">Donate</button>
 </div>
 </div>
 
 <div class="hero">
 <h1>CiviX</h1>
 <p>Report. Amplify. Force action.</p>
-<div id="count" class="counter"></div>
+<div id="count" class="counter">Loading...</div>
 </div>
 
 <div class="controls">
@@ -220,15 +168,16 @@ input,textarea,select{
 <option>Other</option>
 </select>
 
-<input id="location" placeholder="Location">
+<input id="location" placeholder="Location (+City)">
 <textarea id="desc" placeholder="Description"></textarea>
 <input type="file" id="media">
 
-<button onclick="submitIssue()">Post</button>
+<button onclick="submitIssue()">Post Issue</button>
 </div>
 
 <hr style="margin:30px 0;opacity:0.2">
 
+<h3>Top Issues</h3>
 <div id="feed"></div>
 
 </div>
@@ -242,134 +191,157 @@ const client = supabase.createClient(
 "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-const feed=document.getElementById("feed");
-const searchEl=document.getElementById("search");
-const sortEl=document.getElementById("sort");
+const searchEl = document.getElementById("search");
+const sortEl = document.getElementById("sort");
+const feed = document.getElementById("feed");
 
 function toast(msg){
-const t=document.getElementById("toast");
-t.innerText=msg;
-t.classList.add("show");
-setTimeout(()=>t.classList.remove("show"),2000);
+    const t=document.getElementById("toast");
+    t.innerText=msg;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"),2000);
 }
 
 async function loadIssues(){
-let { data } = await client.from("issues").select("*");
+    let { data } = await client.from("issues").select("*");
 
-if(sortEl.value==="top"){
-data.sort((a,b)=>b.upvotes-a.upvotes);
-}else{
-data.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    if(sortEl.value==="top"){
+        data.sort((a,b)=>b.upvotes-a.upvotes);
+    } else {
+        data.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    }
+
+    const query = searchEl.value.toLowerCase();
+    data = data.filter(i=>i.location.toLowerCase().includes(query));
+
+    feed.innerHTML="";
+
+    if(data.length===0){
+        feed.innerHTML=`<div class="empty">No issues found</div>`;
+        return;
+    }
+
+    data.forEach(issue=>{
+        const liked = localStorage.getItem("liked_"+issue.id);
+
+        let media="";
+        if(issue.media_url){
+            media = issue.media_url.includes(".mp4")
+            ? `<video controls src="${issue.media_url}"></video>`
+            : `<img src="${issue.media_url}">`;
+        }
+
+        const statusClass = issue.status==="Resolved"?"resolved":
+                            issue.status==="In Progress"?"progress":"reported";
+
+        const div=document.createElement("div");
+        div.className="card";
+
+        div.innerHTML=`
+        <div class="meta">
+            ${issue.category}
+            <span class="status ${statusClass}">${issue.status || "Reported"}</span>
+        </div>
+
+        <b>📍 ${issue.location}</b><br>
+        ${issue.description}
+        ${media}
+
+        <div class="actions">
+            <button class="like-btn ${liked?'liked':''}" onclick="like(${issue.id}, this)">
+            👍 <span>${issue.upvotes}</span>
+            </button>
+
+            <button onclick="share('${issue.category}','${issue.location}')">
+            Share
+            </button>
+        </div>
+        `;
+        feed.appendChild(div);
+    });
 }
 
-const q=searchEl.value.toLowerCase();
-data=data.filter(i=>i.location.toLowerCase().includes(q));
+async function loadCount(){
+    const { count } = await client
+    .from("issues")
+    .select("*",{count:'exact',head:true});
 
-feed.innerHTML="";
-
-if(!data.length){
-feed.innerHTML="<div class='empty'>No issues yet</div>";
-return;
-}
-
-data.forEach(issue=>{
-const div=document.createElement("div");
-div.className="card";
-
-let mediaHTML="";
-if(issue.media_url){
-mediaHTML = issue.media_url.includes(".mp4")
-? `<video controls src="${issue.media_url}"></video>`
-: `<img src="${issue.media_url}">`;
-}
-
-div.innerHTML=`
-<div class="meta">${issue.category}</div>
-<b>📍 ${issue.location}</b><br>
-${issue.description}
-${mediaHTML}
-
-<div class="actions">
-<button onclick="like(${issue.id})">👍 ${issue.upvotes}</button>
-<button onclick="share('${issue.category}','${issue.location}')">Share</button>
-</div>
-
-<div class="comments" id="c-${issue.id}"></div>
-
-<div class="comment-box">
-<input id="i-${issue.id}" placeholder="Comment...">
-<button onclick="addComment(${issue.id})">Post</button>
-</div>
-`;
-
-feed.appendChild(div);
-loadComments(issue.id);
-});
-}
-
-async function loadComments(id){
-const { data } = await client.from("comments").select("*").eq("issue_id",id);
-
-const el=document.getElementById("c-"+id);
-if(!data.length){
-el.innerHTML="<div class='comment'>No comments</div>";
-return;
-}
-el.innerHTML=data.map(c=>`<div class='comment'>💬 ${c.text}</div>`).join("");
-}
-
-async function addComment(id){
-const input=document.getElementById("i-"+id);
-if(!input.value) return;
-
-await client.from("comments").insert([{issue_id:id,text:input.value}]);
-
-input.value="";
-loadComments(id);
-}
-
-async function like(id){
-let { data } = await client.from("issues").select("*").eq("id",id).single();
-await client.from("issues").update({upvotes:data.upvotes+1}).eq("id",id);
-loadIssues();
+    document.getElementById("count").innerText =
+    count + " issues reported";
 }
 
 async function submitIssue(){
-const category=document.getElementById("category").value;
-const location=document.getElementById("location").value;
-const description=document.getElementById("desc").value;
-const file=document.getElementById("media").files[0];
+    const category=document.getElementById("category").value;
+    const location=document.getElementById("location").value;
+    const description=document.getElementById("desc").value;
+    const file=document.getElementById("media").files[0];
 
-if(!location||!description){
-toast("Fill fields");
-return;
+    if(!location||!description){
+        toast("Fill all fields");
+        return;
+    }
+
+    let mediaUrl=null;
+
+    if(file){
+        const name=Date.now()+"-"+file.name;
+
+        const { error } = await client.storage
+        .from("issues-media")
+        .upload(name,file);
+
+        if(error){
+            toast("Upload failed");
+            return;
+        }
+
+        mediaUrl=`https://bxtsttllyscfvawvhhas.supabase.co/storage/v1/object/public/issues-media/${name}`;
+    }
+
+    await client.from("issues").insert([{
+        category,location,description,
+        media_url:mediaUrl,
+        upvotes:0,
+        status:"Reported"
+    }]);
+
+    toast("Posted");
+
+    document.getElementById("location").value="";
+    document.getElementById("desc").value="";
+    document.getElementById("media").value="";
+
+    loadIssues();
+    loadCount();
 }
 
-let mediaUrl=null;
-if(file){
-const name=Date.now()+"-"+file.name;
-const { error } = await client.storage.from("issues-media").upload(name,file);
-if(error){ toast("Upload failed"); return; }
-mediaUrl=`https://bxtsttllyscfvawvhhas.supabase.co/storage/v1/object/public/issues-media/${name}`;
+function share(category,location){
+    const text=`🚨 ${category} in ${location} via CiviX`;
+
+    navigator.clipboard.writeText(text);
+    toast("Copied");
 }
 
-await client.from("issues").insert([{category,location,description,media_url:mediaUrl,upvotes:0}]);
-toast("Posted");
-document.getElementById("location").value="";
-document.getElementById("desc").value="";
-document.getElementById("media").value="";
-loadIssues();
-}
+// FIXED LIKE BUTTON
+async function like(id, btn){
+    if(localStorage.getItem("liked_"+id)) return;
 
-function share(cat,loc){
-navigator.clipboard.writeText(`🚨 ${cat} in ${loc}`);
-toast("Copied");
+    localStorage.setItem("liked_"+id,true);
+    btn.classList.add("liked");
+
+    const span = btn.querySelector("span");
+    const current = parseInt(span.innerText);
+    span.innerText = current+1;
+
+    const { data } = await client.from("issues").select("*").eq("id",id).single();
+    await client.from("issues").update({upvotes:data.upvotes+1}).eq("id",id);
 }
 
 searchEl.oninput=loadIssues;
 sortEl.onchange=loadIssues;
 
 loadIssues();
+loadCount();
 </script>
 
 </body>
