@@ -8,162 +8,124 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
+*{margin:0;padding:0;box-sizing:border-box}
 
-body {
+body{
     font-family: system-ui, sans-serif;
-    background: radial-gradient(circle at top, #0f172a, #020617);
-    color: #e2e8f0;
+    background: radial-gradient(circle at top,#0f172a,#020617);
+    color:#e2e8f0;
 }
 
 /* NAV */
-.nav {
-    position: sticky;
-    top:0;
-    display:flex;
-    justify-content:space-between;
+.nav{
+    position:sticky;top:0;
+    display:flex;justify-content:space-between;
     padding:16px 24px;
     backdrop-filter: blur(14px);
     background: rgba(15,23,42,0.7);
-    border-bottom:1px solid rgba(255,255,255,0.05);
 }
-
-.nav b { font-size:18px; }
-
-.nav button {
-    background:#1e293b;
-    border:1px solid rgba(255,255,255,0.1);
-    padding:6px 14px;
-    border-radius:999px;
-    color:white;
-    cursor:pointer;
+.nav button{
+    background:#1e293b;border:none;
+    padding:6px 14px;border-radius:999px;
+    color:white;cursor:pointer;
 }
-.nav button:hover { background:#334155; }
 
 /* HERO */
-.hero {
-    text-align:center;
-    padding:60px 20px 20px;
-}
-.hero h1 {
-    font-size:42px;
-    background: linear-gradient(90deg,#3b82f6,#22c55e);
+.hero{text-align:center;padding:60px 20px 20px}
+.hero h1{
+    font-size:44px;
+    background:linear-gradient(90deg,#3b82f6,#22c55e);
     -webkit-background-clip:text;
     color:transparent;
 }
-.hero p { opacity:0.7; margin-top:8px; }
+.counter{opacity:0.8;margin-top:10px}
 
-.counter {
-    margin-top:12px;
-    font-size:14px;
-    opacity:0.8;
+/* CONTROLS */
+.controls{
+    max-width:720px;margin:auto;
+    display:flex;gap:10px;padding:10px;
+}
+.controls input,.controls select{
+    flex:1;padding:10px;border-radius:10px;
+    background:#020617;border:none;color:white;
 }
 
 /* CONTAINER */
-.container {
-    max-width:720px;
-    margin:auto;
-    padding:20px;
-}
+.container{max-width:720px;margin:auto;padding:20px}
 
 /* CARD */
-.card {
-    background: rgba(17,24,39,0.8);
-    padding:18px;
-    margin-bottom:16px;
+.card{
+    background: rgba(17,24,39,0.85);
+    padding:18px;margin-bottom:16px;
     border-radius:18px;
     border:1px solid rgba(255,255,255,0.05);
-    transition:0.25s;
+    transition:0.3s;
 }
-.card:hover {
-    transform: translateY(-5px);
+.card:hover{
+    transform:translateY(-6px);
     border-color:#3b82f6;
 }
 
-.card img, .card video {
-    width:100%;
-    border-radius:12px;
-    margin-top:10px;
+.meta{font-size:12px;opacity:0.6;margin-bottom:4px}
+.status{
+    font-size:11px;
+    padding:3px 8px;
+    border-radius:999px;
+    margin-left:6px;
 }
+.reported{background:#334155}
+.progress{background:#f59e0b}
+.resolved{background:#16a34a}
 
-.meta {
-    font-size:12px;
-    opacity:0.6;
-}
-
-/* FORM */
-.form-box {
-    margin-top:20px;
-    padding:20px;
-    background: rgba(17,24,39,0.8);
-    border-radius:18px;
-}
-
-input, textarea, select {
-    width:100%;
-    margin:10px 0;
-    padding:12px;
-    border-radius:10px;
-    border:none;
-    background:#020617;
-    color:white;
+.card img, .card video{
+    width:100%;border-radius:12px;margin-top:10px;
 }
 
 /* BUTTONS */
-button {
-    padding:10px 16px;
-    background:#2563eb;
-    border:none;
-    color:white;
+.actions{display:flex;gap:10px;margin-top:12px}
+button{
+    padding:8px 14px;
     border-radius:999px;
-    cursor:pointer;
+    border:none;
+    background:#2563eb;
+    color:white;cursor:pointer;
 }
-button:hover { transform:scale(1.05); }
+.like-btn{background:#1e293b}
+.like-btn.liked{background:#16a34a}
 
-.actions {
-    display:flex;
-    gap:10px;
-    margin-top:12px;
+/* FORM */
+.form-box{
+    background: rgba(17,24,39,0.85);
+    padding:20px;border-radius:18px;
 }
-
-.like-btn { background:#1e293b; }
-.like-btn.liked { background:#16a34a; }
+input,textarea,select{
+    width:100%;margin:10px 0;
+    padding:12px;border-radius:10px;
+    background:#020617;border:none;color:white;
+}
 
 /* TOAST */
-.toast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #020617;
-    padding: 10px 16px;
-    border-radius: 999px;
-    opacity: 0;
-    transition: 0.3s;
+.toast{
+    position:fixed;bottom:20px;left:50%;
+    transform:translateX(-50%);
+    background:#020617;padding:10px 16px;
+    border-radius:999px;opacity:0;
+    transition:0.3s;
 }
-.toast.show { opacity:1; }
+.toast.show{opacity:1}
 
-/* SKELETON */
-.skeleton {
-    height:100px;
-    border-radius:18px;
-    background: linear-gradient(90deg,#020617 25%,#0f172a 50%,#020617 75%);
-    background-size:200% 100%;
-    animation: shimmer 1.2s infinite;
-    margin-bottom:16px;
-}
-@keyframes shimmer {
-    0%{background-position:200%}
-    100%{background-position:-200%}
+/* EMPTY */
+.empty{
+    text-align:center;
+    opacity:0.6;
+    margin-top:20px;
 }
 
-/* SIGNATURE */
-.signature {
-    position: fixed;
-    bottom: 12px;
-    right: 16px;
-    font-size: 12px;
-    color: rgba(255,255,255,0.4);
+/* SIGN */
+.signature{
+    position:fixed;
+    bottom:12px;right:16px;
+    font-size:12px;opacity:0.4;
 }
 </style>
 </head>
@@ -171,17 +133,25 @@ button:hover { transform:scale(1.05); }
 <body>
 
 <div class="nav">
-    <b>CiviX</b>
-    <div>
-        <button onclick="location.href='fixmyarea+contact.html'">Contact</button>
-        <button onclick="location.href='fixmyarea+donations.html'">Donate</button>
-    </div>
+<b>CiviX</b>
+<div>
+<button onclick="location.href='fixmyarea+contact.html'">Contact</button>
+<button onclick="location.href='fixmyarea+donation.html'">Donate</button>
+</div>
 </div>
 
 <div class="hero">
-    <h1>CiviX</h1>
-    <p>Report. Amplify. Force action.</p>
-    <div id="count" class="counter">Loading...</div>
+<h1>CiviX</h1>
+<p>Report. Amplify. Force action.</p>
+<div id="count" class="counter">Loading...</div>
+</div>
+
+<div class="controls">
+<input id="search" placeholder="Search location...">
+<select id="sort">
+<option value="top">Top</option>
+<option value="latest">Latest</option>
+</select>
 </div>
 
 <div class="container">
@@ -205,183 +175,174 @@ button:hover { transform:scale(1.05); }
 <button onclick="submitIssue()">Post Issue</button>
 </div>
 
-<hr style="margin:30px 0; opacity:0.2;">
+<hr style="margin:30px 0;opacity:0.2">
 
 <h3>Top Issues</h3>
 <div id="feed"></div>
 
 </div>
 
-<div class="signature">AK</div>
 <div id="toast" class="toast"></div>
+<div class="signature">AK</div>
 
 <script>
 const client = supabase.createClient(
-  "https://bxtsttllyscfvawvhhas.supabase.co",
-  "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
+"https://bxtsttllyscfvawvhhas.supabase.co",
+"sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-const categoryEl = document.getElementById("category");
-const locationEl = document.getElementById("location");
-const descEl = document.getElementById("desc");
-const mediaEl = document.getElementById("media");
+const searchEl = document.getElementById("search");
+const sortEl = document.getElementById("sort");
+const feed = document.getElementById("feed");
 
-function showToast(msg){
-    const t = document.getElementById("toast");
-    t.innerText = msg;
+function toast(msg){
+    const t=document.getElementById("toast");
+    t.innerText=msg;
     t.classList.add("show");
     setTimeout(()=>t.classList.remove("show"),2000);
 }
 
-// LOAD ISSUES
 async function loadIssues(){
-    const feed = document.getElementById("feed");
-    feed.innerHTML = `
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-    `;
+    let { data } = await client.from("issues").select("*");
 
-    const { data } = await client
-        .from("issues")
-        .select("*")
-        .order("upvotes", { ascending:false });
+    if(sortEl.value==="top"){
+        data.sort((a,b)=>b.upvotes-a.upvotes);
+    } else {
+        data.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    }
 
-    feed.innerHTML = "";
+    const query = searchEl.value.toLowerCase();
+    data = data.filter(i=>i.location.toLowerCase().includes(query));
+
+    feed.innerHTML="";
+
+    if(data.length===0){
+        feed.innerHTML=`<div class="empty">No issues found</div>`;
+        return;
+    }
 
     data.forEach(issue=>{
-        const liked = localStorage.getItem("liked_" + issue.id);
+        const liked = localStorage.getItem("liked_"+issue.id);
 
-        let media = "";
+        let media="";
         if(issue.media_url){
             media = issue.media_url.includes(".mp4")
-                ? `<video controls src="${issue.media_url}"></video>`
-                : `<img src="${issue.media_url}">`;
+            ? `<video controls src="${issue.media_url}"></video>`
+            : `<img src="${issue.media_url}">`;
         }
 
-        const div = document.createElement("div");
-        div.className = "card";
+        const statusClass = issue.status==="Resolved"?"resolved":
+                            issue.status==="In Progress"?"progress":"reported";
 
-        div.innerHTML = `
-            <div class="meta">
-                ${issue.category}
-                ${issue.upvotes > 10 ? "🔥 Trending" : ""}
-            </div>
-            <b>📍 ${issue.location}</b><br>
-            ${issue.description}
-            ${media}
+        const div=document.createElement("div");
+        div.className="card";
 
-            <div class="actions">
-                <button class="like-btn ${liked ? 'liked' : ''}">
-                    👍 <span>${issue.upvotes}</span>
-                </button>
-                <button onclick="share('${issue.category}','${issue.location}')">
-                    Share
-                </button>
-            </div>
+        div.innerHTML=`
+        <div class="meta">
+            ${issue.category}
+            <span class="status ${statusClass}">${issue.status || "Reported"}</span>
+        </div>
+
+        <b>📍 ${issue.location}</b><br>
+        ${issue.description}
+        ${media}
+
+        <div class="actions">
+            <button class="like-btn ${liked?'liked':''}">
+            👍 <span>${issue.upvotes}</span>
+            </button>
+
+            <button onclick="share('${issue.category}','${issue.location}')">
+            Share
+            </button>
+        </div>
         `;
 
-        const likeBtn = div.querySelector(".like-btn");
-        const countSpan = likeBtn.querySelector("span");
+        const likeBtn=div.querySelector(".like-btn");
+        const countSpan=likeBtn.querySelector("span");
 
-        likeBtn.onclick = async () => {
-            if(localStorage.getItem("liked_" + issue.id)) return;
+        likeBtn.onclick=async()=>{
+            if(localStorage.getItem("liked_"+issue.id)) return;
 
+            let newCount=issue.upvotes+1;
+            countSpan.innerText=newCount;
             likeBtn.classList.add("liked");
-            let newCount = issue.upvotes + 1;
-            countSpan.innerText = newCount;
 
-            localStorage.setItem("liked_" + issue.id, true);
+            localStorage.setItem("liked_"+issue.id,true);
 
-            await client
-                .from("issues")
-                .update({ upvotes: newCount })
-                .eq("id", issue.id);
+            await client.from("issues")
+            .update({upvotes:newCount})
+            .eq("id",issue.id);
         };
 
         feed.appendChild(div);
     });
 }
 
-// COUNT
 async function loadCount(){
     const { count } = await client
-        .from("issues")
-        .select("*", { count:'exact', head:true });
+    .from("issues")
+    .select("*",{count:'exact',head:true});
 
-    let current = 0;
-    const el = document.getElementById("count");
-
-    const interval = setInterval(()=>{
-        current += Math.ceil(count/20);
-        if(current >= count){
-            current = count;
-            clearInterval(interval);
-        }
-        el.innerText = current + " issues reported";
-    },30);
+    document.getElementById("count").innerText =
+    count + " issues reported";
 }
 
-// POST ISSUE
 async function submitIssue(){
-    const category = categoryEl.value;
-    const location = locationEl.value;
-    const description = descEl.value;
-    const file = mediaEl.files[0];
+    const category=document.getElementById("category").value;
+    const location=document.getElementById("location").value;
+    const description=document.getElementById("desc").value;
+    const file=document.getElementById("media").files[0];
 
-    if(!location || !description){
-        showToast("Fill all fields");
+    if(!location||!description){
+        toast("Fill all fields");
         return;
     }
 
-    let mediaUrl = null;
+    let mediaUrl=null;
 
     if(file){
-        const fileName = Date.now() + "-" + file.name;
+        const name=Date.now()+"-"+file.name;
 
         const { error } = await client.storage
-            .from("issues-media")
-            .upload(fileName, file);
+        .from("issues-media")
+        .upload(name,file);
 
         if(error){
-            showToast("Upload failed");
+            toast("Upload failed");
             return;
         }
 
-        mediaUrl = `https://bxtsttllyscfvawvhhas.supabase.co/storage/v1/object/public/issues-media/${fileName}`;
+        mediaUrl=`https://bxtsttllyscfvawvhhas.supabase.co/storage/v1/object/public/issues-media/${name}`;
     }
 
     await client.from("issues").insert([{
-        category,
-        location,
-        description,
-        media_url: mediaUrl,
-        upvotes: 0
+        category,location,description,
+        media_url:mediaUrl,
+        upvotes:0,
+        status:"Reported"
     }]);
 
-    locationEl.value = "";
-    descEl.value = "";
-    mediaEl.value = "";
+    toast("Posted");
 
-    showToast("Issue posted");
+    document.getElementById("location").value="";
+    document.getElementById("desc").value="";
+    document.getElementById("media").value="";
 
     loadIssues();
     loadCount();
 }
 
-// SHARE
-function share(category, location){
-    const text = `🚨 ${category} issue in ${location}. Check CiviX`;
+function share(category,location){
+    const text=`🚨 ${category} in ${location} via CiviX`;
 
-    if(navigator.share){
-        navigator.share({ text });
-    } else {
-        navigator.clipboard.writeText(text);
-        showToast("Copied");
-    }
+    navigator.clipboard.writeText(text);
+    toast("Copied");
 }
 
-// INIT
+searchEl.oninput=loadIssues;
+sortEl.onchange=loadIssues;
+
 loadIssues();
 loadCount();
 </script>
