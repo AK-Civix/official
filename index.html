@@ -23,30 +23,45 @@ body {
     display:flex;
     justify-content:space-between;
     padding:16px 24px;
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(14px);
     background: rgba(15,23,42,0.7);
     border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.nav b {
+    font-size:18px;
+    letter-spacing:0.5px;
 }
 
 .nav button {
     background:#1e293b;
     border:1px solid rgba(255,255,255,0.1);
-    padding:6px 12px;
+    padding:6px 14px;
     border-radius:999px;
     color:white;
     cursor:pointer;
-    transition:0.2s;
+    transition:0.25s;
 }
 .nav button:hover { background:#334155; }
 
 /* HERO */
 .hero {
     text-align:center;
-    padding:50px 20px 20px;
+    padding:60px 20px 20px;
 }
-.hero h1 { font-size:34px; }
-.hero p { opacity:0.7; margin-top:6px; }
-.counter { margin-top:10px; font-size:14px; opacity:0.8; }
+.hero h1 {
+    font-size:42px;
+    background: linear-gradient(90deg,#3b82f6,#22c55e);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+.hero p { opacity:0.7; margin-top:8px; }
+
+.counter {
+    margin-top:12px;
+    font-size:14px;
+    opacity:0.8;
+}
 
 /* CONTAINER */
 .container {
@@ -57,17 +72,19 @@ body {
 
 /* CARD */
 .card {
-    background: rgba(17,24,39,0.75);
-    backdrop-filter: blur(10px);
-    padding:16px;
+    background: rgba(17,24,39,0.8);
+    backdrop-filter: blur(12px);
+    padding:18px;
     margin-bottom:16px;
     border-radius:18px;
     border:1px solid rgba(255,255,255,0.05);
     transition:0.25s;
+    box-shadow: 0 0 0 transparent;
 }
 .card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-5px);
     border-color:#3b82f6;
+    box-shadow: 0 10px 30px rgba(59,130,246,0.2);
 }
 
 .card img, .card video {
@@ -86,8 +103,9 @@ body {
 .form-box {
     margin-top:20px;
     padding:20px;
-    background: rgba(17,24,39,0.75);
+    background: rgba(17,24,39,0.8);
     border-radius:18px;
+    border:1px solid rgba(255,255,255,0.05);
 }
 
 input, textarea, select {
@@ -102,7 +120,7 @@ input, textarea, select {
 
 /* BUTTONS */
 button {
-    padding:10px 14px;
+    padding:10px 16px;
     background:#2563eb;
     border:none;
     color:white;
@@ -110,7 +128,7 @@ button {
     cursor:pointer;
     transition:0.2s;
 }
-button:hover { transform:scale(1.05); background:#1d4ed8; }
+button:hover { transform:scale(1.06); background:#1d4ed8; }
 button:active { transform:scale(0.95); }
 
 .actions {
@@ -119,8 +137,13 @@ button:active { transform:scale(0.95); }
     margin-top:12px;
 }
 
-.liked {
-    background:#16a34a !important;
+/* LIKE BUTTON */
+.like-btn {
+    background:#1e293b;
+}
+
+.like-btn.liked {
+    background:#16a34a;
 }
 
 /* SIGNATURE */
@@ -139,8 +162,8 @@ button:active { transform:scale(0.95); }
 <div class="nav">
     <div><b>CiviX</b></div>
     <div>
-        <button onclick="location.href='fixmyarea+contact.html'">Contact</button>
-        <button onclick="location.href='fixmyarea+donations.html'">Donate</button>
+        <button onclick="location.href='contact.html'">Contact</button>
+        <button onclick="location.href='donations.html'">Donate</button>
     </div>
 </div>
 
@@ -206,27 +229,46 @@ async function loadIssues(){
                 : `<img src="${issue.media_url}">`;
         }
 
-        feed.innerHTML += `
-        <div class="card">
+        const div = document.createElement("div");
+        div.className = "card";
+
+        div.innerHTML = `
             <div class="meta">${issue.category}</div>
             <b>📍 ${issue.location}</b><br>
             ${issue.description}
             ${media}
 
             <div class="actions">
-                <button 
-                    class="${liked ? 'liked' : ''}"
-                    onclick="upvote(${issue.id}, ${issue.upvotes}, this)"
-                >
-                    👍 ${issue.upvotes}
+                <button class="like-btn ${liked ? 'liked' : ''}">
+                    👍 <span>${issue.upvotes}</span>
                 </button>
 
                 <button onclick="share('${issue.category}','${issue.location}')">
                     Share
                 </button>
             </div>
-        </div>
         `;
+
+        const likeBtn = div.querySelector(".like-btn");
+        const countSpan = likeBtn.querySelector("span");
+
+        likeBtn.onclick = async () => {
+            if(localStorage.getItem("liked_" + issue.id)) return;
+
+            likeBtn.classList.add("liked");
+
+            let newCount = issue.upvotes + 1;
+            countSpan.innerText = newCount;
+
+            localStorage.setItem("liked_" + issue.id, true);
+
+            await client
+                .from("issues")
+                .update({ upvotes: newCount })
+                .eq("id", issue.id);
+        };
+
+        feed.appendChild(div);
     });
 }
 
@@ -286,27 +328,9 @@ async function submitIssue(){
     loadCount();
 }
 
-// UPVOTE
-async function upvote(id, count, btn){
-    if(localStorage.getItem("liked_" + id)) return;
-
-    btn.innerText = "⏳";
-
-    await client
-        .from("issues")
-        .update({ upvotes: count + 1 })
-        .eq("id", id);
-
-    localStorage.setItem("liked_" + id, true);
-    btn.classList.add("liked");
-    btn.innerText = "👍 " + (count + 1);
-
-    loadIssues();
-}
-
 // SHARE
 function share(category, location){
-    const text = `🚨 ${category} issue in ${location}. Check FixMyArea`;
+    const text = `🚨 ${category} issue in ${location}. Check CiviX`;
 
     if(navigator.share){
         navigator.share({ text });
