@@ -3,121 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CiviX - Report Issue</title>
+<title>CiviX - Issues Feed</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: system-ui, sans-serif; background: radial-gradient(circle at top, #0f172a, #020617); color:#e2e8f0; line-height:1.6; }
 
-body {
-  font-family: system-ui, sans-serif;
-  background: radial-gradient(circle at top, #0f172a, #020617);
-  color:#e2e8f0;
-}
-
-/* NAV */
 .nav {
-    position: sticky;
-    top:0;
-    display:flex;
-    justify-content:space-between;
-    padding:16px 24px;
-    backdrop-filter: blur(14px);
-    background: rgba(15,23,42,0.8);
-    border-bottom:1px solid rgba(255,255,255,0.05);
-    z-index:100;
+    position: sticky; top:0; display:flex; justify-content:space-between; padding:16px 24px; backdrop-filter:blur(14px); background:rgba(15,23,42,0.8); border-bottom:1px solid rgba(255,255,255,0.05);
 }
 .nav b { font-size:18px; }
-.nav button {
-    background:#1e293b;
-    border:1px solid rgba(255,255,255,0.1);
-    padding:6px 14px;
-    border-radius:999px;
-    color:white;
-    cursor:pointer;
-    transition:0.25s;
-}
-.nav button:hover { background:#334155; }
+.nav button { background:#1e293b; border:1px solid rgba(255,255,255,0.1); padding:6px 14px; border-radius:999px; color:white; cursor:pointer; transition:0.25s; }
+.nav button:hover { background:#334155; transform:scale(1.05); }
 
-/* CONTAINER */
-.container {
-    max-width:720px;
-    margin:auto;
-    padding:40px 20px;
-    text-align:center;
-}
+.container { max-width:1000px; margin:auto; padding:40px 20px; display:flex; flex-direction:column; gap:30px; }
 
-/* BACK BUTTON */
-.dashboard-btn {
-    padding:12px 20px;
-    margin-bottom:20px;
-    border-radius:999px;
-    border:none;
-    cursor:pointer;
-    background:#2563eb;
-    color:white;
-    font-size:16px;
-    transition:0.2s;
-}
+.dashboard-btn { padding:12px 20px; margin-bottom:20px; border-radius:999px; border:none; cursor:pointer; background:#2563eb; color:white; font-size:16px; transition:0.25s; }
 .dashboard-btn:hover { transform:scale(1.05); background:#1d4ed8; }
 .dashboard-btn:active { transform:scale(0.95); }
 
-/* FORM BOX */
-.form-box {
-    background: rgba(17,24,39,0.8);
-    padding:20px;
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,0.05);
-    text-align:left;
-    margin-top:20px;
-}
+/* GRID LAYOUT */
+.issue-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
 
-.form-box input, .form-box textarea, .form-box select {
-    width:100%;
-    margin:10px 0;
-    padding:12px;
-    border-radius:10px;
-    border:none;
-    background:#020617;
-    color:white;
-}
+/* CARD */
+.card { background: rgba(17,24,39,0.75); backdrop-filter:blur(10px); padding:16px; border-radius:18px; border:1px solid rgba(255,255,255,0.05); transition:0.25s; cursor:pointer; }
+.card:hover { transform:scale(1.05); box-shadow:0 8px 20px rgba(0,0,0,0.3); }
+.card img, .card video { width:100%; border-radius:12px; margin-top:10px; }
+.meta { font-size:12px; opacity:0.6; margin-bottom:6px; }
 
-button.submit-btn {
-    padding:12px 18px;
-    border:none;
-    border-radius:999px;
-    background:#16a34a;
-    color:white;
-    cursor:pointer;
-    transition:0.2s;
-    margin-top:10px;
-}
-button.submit-btn:hover { transform:scale(1.05); background:#15803d; }
-button.submit-btn:active { transform:scale(0.95); }
+.status-tag { padding:2px 8px; border-radius:8px; font-size:12px; font-weight:bold; color:white; margin-left:10px; }
+.status-Reported { background:#f59e0b; }
+.status-InProgress { background:#3b82f6; }
+.status-Fixed { background:#16a34a; }
 
-/* GUIDE / TIPS */
-.tips {
-    background: rgba(17,24,39,0.75);
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,0.05);
-    padding:16px;
-    margin-bottom:20px;
-    text-align:left;
-}
-.tips h3 { font-size:18px; margin-bottom:8px; }
-.tips p { font-size:14px; opacity:0.8; margin-bottom:6px; }
+/* ACTION BUTTONS */
+.actions { display:flex; gap:10px; margin-top:12px; }
+button.action-btn { padding:8px 14px; border:none; border-radius:999px; cursor:pointer; transition:0.2s; }
+button.liked { background:#16a34a; color:white; }
+
+/* FLOATING REPORT BUTTON */
+.float-report { position: fixed; bottom:24px; right:24px; padding:16px 20px; border-radius:999px; background:#16a34a; color:white; font-size:16px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.3); transition:0.25s; z-index:100; }
+.float-report:hover { transform:scale(1.05); background:#15803d; }
+.float-report:active { transform:scale(0.95); }
 
 /* SIGNATURE */
-.signature {
-    position: fixed;
-    bottom: 12px;
-    right: 16px;
-    font-size: 12px;
-    color: rgba(255,255,255,0.4);
-}
+.signature { position: fixed; bottom: 12px; right: 16px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
 </style>
 </head>
+
 <body>
 
 <div class="nav">
@@ -129,36 +65,12 @@ button.submit-btn:active { transform:scale(0.95); }
 </div>
 
 <div class="container">
-
     <button class="dashboard-btn" onclick="location.href='index.html'">⬅ Back to Dashboard</button>
-
-    <h1>Report an Issue</h1>
-
-    <div class="tips">
-        <h3>How to report effectively:</h3>
-        <p>1. Clearly describe the issue in detail.</p>
-        <p>2. Provide an exact location (street, landmark, or coordinates).</p>
-        <p>3. Attach a photo or video if possible — it helps authorities respond faster.</p>
-        <p>4. Choose the correct category so the report reaches the right team.</p>
-    </div>
-
-    <div class="form-box">
-        <select id="category">
-            <option>Pothole</option>
-            <option>Garbage</option>
-            <option>Water Leak</option>
-            <option>Streetlight</option>
-            <option>Pollution</option>
-            <option>Other</option>
-        </select>
-
-        <input id="location" placeholder="Location">
-        <textarea id="desc" placeholder="Description"></textarea>
-        <input type="file" id="media">
-
-        <button class="submit-btn" onclick="submitIssue()">Submit Issue</button>
-    </div>
+    <h1>All Reported Issues</h1>
+    <div id="feed" class="issue-grid">Loading issues...</div>
 </div>
+
+<button class="float-report" onclick="location.href='report.html'">📢 Report Issue</button>
 
 <div class="signature">AK</div>
 
@@ -168,37 +80,44 @@ const client = supabase.createClient(
   "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-const categoryEl = document.getElementById("category");
-const locationEl = document.getElementById("location");
-const descEl = document.getElementById("desc");
-const mediaEl = document.getElementById("media");
-
-async function submitIssue(){
-    const category = categoryEl.value;
-    const location = locationEl.value;
-    const description = descEl.value;
-    const file = mediaEl.files[0];
-
-    if(!location || !description){
-        alert("Please fill all fields!");
-        return;
-    }
-
-    let mediaUrl = null;
-    if(file){
-        const fileName = Date.now() + "-" + file.name;
-        const { error } = await client.storage.from("issues-media").upload(fileName,file);
-        if(error){ alert("Upload failed"); return; }
-        mediaUrl = `https://bxtsttllyscfvawvhhas.supabase.co/storage/v1/object/public/issues-media/${fileName}`;
-    }
-
-    await client.from("issues").insert([{
-        category, location, description, media_url: mediaUrl, upvotes: 0, status: "Reported"
-    }]);
-
-    locationEl.value=""; descEl.value=""; mediaEl.value="";
-    alert("Issue submitted successfully!");
+async function loadIssues(){
+    const { data } = await client.from("issues").select("*").order("upvotes",{ ascending:false });
+    const feed = document.getElementById("feed");
+    feed.innerHTML = "";
+    data.forEach(issue=>{
+        let media = "";
+        if(issue.media_url){
+            media = issue.media_url.includes(".mp4")
+                ? `<video controls src="${issue.media_url}"></video>`
+                : `<img src="${issue.media_url}">`;
+        }
+        const statusClass = issue.status.replace(" ","");
+        const liked = localStorage.getItem("liked_" + issue.id);
+        feed.innerHTML += `
+        <div class="card">
+            <div class="meta">${issue.category} <span class="status-tag status-${statusClass}">${issue.status}</span></div>
+            <b>📍 ${issue.location}</b><br>
+            ${issue.description}
+            ${media}
+            <div class="actions">
+                <button class="action-btn ${liked ? 'liked' : ''}" onclick="upvote(${issue.id},${issue.upvotes},this)">👍 ${issue.upvotes}</button>
+            </div>
+        </div>`;
+    });
 }
+
+async function upvote(id,count,btn){
+    if(localStorage.getItem("liked_" + id)) return;
+    btn.innerText="⏳";
+    await client.from("issues").update({ upvotes: count + 1 }).eq("id",id);
+    localStorage.setItem("liked_" + id,true);
+    btn.classList.add("liked");
+    btn.innerText="👍 "+(count+1);
+    loadIssues();
+}
+
+loadIssues();
 </script>
+
 </body>
 </html>
