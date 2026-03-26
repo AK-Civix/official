@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CiviX - Issues Feed</title>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: system-ui, sans-serif;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color:#e2e8f0;
+}
+
+/* NAV */
+.nav {
+    position: sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    padding:16px 24px;
+    backdrop-filter: blur(14px);
+    background: rgba(15,23,42,0.7);
+    border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.nav b { font-size:18px; }
+.nav button {
+    background:#1e293b;
+    border:1px solid rgba(255,255,255,0.1);
+    padding:6px 14px;
+    border-radius:999px;
+    color:white;
+    cursor:pointer;
+    transition:0.25s;
+}
+.nav button:hover { background:#334155; }
+
+/* CONTAINER */
+.container {
+    max-width:720px;
+    margin:auto;
+    padding:40px 20px;
+}
+
+/* CARD */
+.card {
+    background: rgba(17,24,39,0.75);
+    backdrop-filter: blur(10px);
+    padding:16px;
+    margin-bottom:16px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,0.05);
+    transition:0.25s;
+}
+.card:hover {
+    transform: translateY(-4px);
+    border-color:#3b82f6;
+}
+
+.card img, .card video {
+    width:100%;
+    border-radius:12px;
+    margin-top:10px;
+}
+
+.meta { font-size:12px; opacity:0.6; margin-bottom:6px; }
+
+.actions {
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+}
+
+button.action-btn {
+    padding:8px 14px;
+    border:none;
+    border-radius:999px;
+    cursor:pointer;
+    transition:0.2s;
+}
+button.action-btn:hover { transform:scale(1.05); }
+button.liked { background:#16a34a; color:white; }
+
+/* SIGNATURE */
+.signature {
+    position: fixed;
+    bottom: 12px;
+    right: 16px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+}
+</style>
+</head>
+
+<body>
+
+<div class="nav">
+    <div><b>CiviX</b></div>
+    <div>
+        <button onclick="location.href='contact.html'">Contact</button>
+        <button onclick="location.href='donations.html'">Donate</button>
+    </div>
+</div>
+
+<div class="container">
+    <h1>Top Issues</h1>
+    <div id="feed">Loading issues...</div>
+</div>
+
+<div class="signature">AK</div>
+
+<script>
+const client = supabase.createClient(
+  "https://bxtsttllyscfvawvhhas.supabase.co",
+  "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
+);
+
+// LOAD ISSUES
+async function loadIssues(){
+    const { data } = await client
+        .from("issues")
+        .select("*")
+        .order("upvotes",{ ascending:false });
+
+    const feed = document.getElementById("feed");
+    feed.innerHTML = "";
+
+    data.forEach(issue => {
+        const liked = localStorage.getItem("liked_" + issue.id);
+
+        let media = "";
+        if(issue.media_url){
+            media = issue.media_url.includes(".mp4") 
+                ? `<video controls src="${issue.media_url}"></video>` 
+                : `<img src="${issue.media_url}">`;
+        }
+
+        feed.innerHTML += `
+        <div class="card">
+            <div class="meta">${issue.category}</div>
+            <b>📍 ${issue.location}</b><br>
+            ${issue.description}
+            ${media}
+            <div class="actions">
+                <button class="action-btn ${liked ? 'liked' : ''}" onclick="upvote(${issue.id},${issue.upvotes},this)">
+                    👍 ${issue.upvotes}
+                </button>
+                <button class="action-btn" onclick="share('${issue.category}','${issue.location}')">
+                    Share
+                </button>
+            </div>
+        </div>
+        `;
+    });
+}
+
+// UPVOTE
+async function upvote(id,count,btn){
+    if(localStorage.getItem("liked_" + id)) return;
+
+    btn.innerText = "⏳";
+    await client.from("issues").update({ upvotes: count + 1 }).eq("id", id);
+
+    localStorage.setItem("liked_" + id,true);
+    btn.classList.add("liked");
+    btn.innerText = "👍 " + (count + 1);
+
+    loadIssues();
+}
+
+// SHARE
+function share(category,location){
+    const text = `🚨 ${category} issue in ${location}. Check CiviX`;
+    if(navigator.share){
+        navigator.share({ text });
+    } else {
+        navigator.clipboard.writeText(text);
+        alert("Copied to clipboard!");
+    }
+}
+
+// INIT
+loadIssues();
+</script>
+
+</body>
+</html>
