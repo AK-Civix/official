@@ -38,6 +38,11 @@ body{
     -webkit-background-clip:text;
     color:transparent;
 }
+.hero p{
+    color:#64748b; /* subtle dark color for legible but subdued text */
+    margin-top:6px;
+    font-weight:500;
+}
 .counter{opacity:0.8;margin-top:10px}
 
 /* CONTROLS */
@@ -146,7 +151,7 @@ input,textarea,select{
     writing-mode: vertical-rl;
     text-orientation: mixed;
     font-size:14px;
-    color:white; /* CHANGED COLOR TO WHITE */
+    color:white;
     animation: scroll 10s linear infinite;
 }
 
@@ -169,12 +174,12 @@ input,textarea,select{
 
 <div class="hero">
 <h1>CiviX</h1>
-<p>Report. Amplify. Force action.</p>
+<p>AK</p>
 <div id="count" class="counter">Loading...</div>
 </div>
 
 <div class="controls">
-<input id="search" placeholder="Enter location...">
+<input id="search" placeholder="Search location...">
 <select id="sort">
 <option value="top">Top</option>
 <option value="latest">Latest</option>
@@ -352,7 +357,6 @@ function share(category,location){
     toast("Copied");
 }
 
-// LIKE BUTTON FUNCTION
 async function like(id, btn){
     if(localStorage.getItem("liked_"+id)) return;
 
