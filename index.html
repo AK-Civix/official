@@ -28,10 +28,7 @@ body {
     border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
-.nav b {
-    font-size:18px;
-    letter-spacing:0.5px;
-}
+.nav b { font-size:18px; }
 
 .nav button {
     background:#1e293b;
@@ -40,7 +37,6 @@ body {
     border-radius:999px;
     color:white;
     cursor:pointer;
-    transition:0.25s;
 }
 .nav button:hover { background:#334155; }
 
@@ -73,18 +69,15 @@ body {
 /* CARD */
 .card {
     background: rgba(17,24,39,0.8);
-    backdrop-filter: blur(12px);
     padding:18px;
     margin-bottom:16px;
     border-radius:18px;
     border:1px solid rgba(255,255,255,0.05);
     transition:0.25s;
-    box-shadow: 0 0 0 transparent;
 }
 .card:hover {
     transform: translateY(-5px);
     border-color:#3b82f6;
-    box-shadow: 0 10px 30px rgba(59,130,246,0.2);
 }
 
 .card img, .card video {
@@ -96,7 +89,6 @@ body {
 .meta {
     font-size:12px;
     opacity:0.6;
-    margin-bottom:6px;
 }
 
 /* FORM */
@@ -105,7 +97,6 @@ body {
     padding:20px;
     background: rgba(17,24,39,0.8);
     border-radius:18px;
-    border:1px solid rgba(255,255,255,0.05);
 }
 
 input, textarea, select {
@@ -126,10 +117,8 @@ button {
     color:white;
     border-radius:999px;
     cursor:pointer;
-    transition:0.2s;
 }
-button:hover { transform:scale(1.06); background:#1d4ed8; }
-button:active { transform:scale(0.95); }
+button:hover { transform:scale(1.05); }
 
 .actions {
     display:flex;
@@ -137,13 +126,35 @@ button:active { transform:scale(0.95); }
     margin-top:12px;
 }
 
-/* LIKE BUTTON */
-.like-btn {
-    background:#1e293b;
-}
+.like-btn { background:#1e293b; }
+.like-btn.liked { background:#16a34a; }
 
-.like-btn.liked {
-    background:#16a34a;
+/* TOAST */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #020617;
+    padding: 10px 16px;
+    border-radius: 999px;
+    opacity: 0;
+    transition: 0.3s;
+}
+.toast.show { opacity:1; }
+
+/* SKELETON */
+.skeleton {
+    height:100px;
+    border-radius:18px;
+    background: linear-gradient(90deg,#020617 25%,#0f172a 50%,#020617 75%);
+    background-size:200% 100%;
+    animation: shimmer 1.2s infinite;
+    margin-bottom:16px;
+}
+@keyframes shimmer {
+    0%{background-position:200%}
+    100%{background-position:-200%}
 }
 
 /* SIGNATURE */
@@ -160,10 +171,10 @@ button:active { transform:scale(0.95); }
 <body>
 
 <div class="nav">
-    <div><b>CiviX</b></div>
+    <b>CiviX</b>
     <div>
-        <button onclick="location.href='fixmyarea+contact.html'">Contact</button>
-        <button onclick="location.href='fixmyarea+donations.html'">Donate</button>
+        <button onclick="location.href='contact.html'">Contact</button>
+        <button onclick="location.href='donations.html'">Donate</button>
     </div>
 </div>
 
@@ -187,7 +198,7 @@ button:active { transform:scale(0.95); }
 <option>Other</option>
 </select>
 
-<input id="location (+City Name)" placeholder="Location">
+<input id="location" placeholder="Location (+City)">
 <textarea id="desc" placeholder="Description"></textarea>
 <input type="file" id="media">
 
@@ -202,6 +213,7 @@ button:active { transform:scale(0.95); }
 </div>
 
 <div class="signature">AK</div>
+<div id="toast" class="toast"></div>
 
 <script>
 const client = supabase.createClient(
@@ -209,14 +221,32 @@ const client = supabase.createClient(
   "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
+const categoryEl = document.getElementById("category");
+const locationEl = document.getElementById("location");
+const descEl = document.getElementById("desc");
+const mediaEl = document.getElementById("media");
+
+function showToast(msg){
+    const t = document.getElementById("toast");
+    t.innerText = msg;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"),2000);
+}
+
 // LOAD ISSUES
 async function loadIssues(){
+    const feed = document.getElementById("feed");
+    feed.innerHTML = `
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+    `;
+
     const { data } = await client
         .from("issues")
         .select("*")
         .order("upvotes", { ascending:false });
 
-    const feed = document.getElementById("feed");
     feed.innerHTML = "";
 
     data.forEach(issue=>{
@@ -233,7 +263,10 @@ async function loadIssues(){
         div.className = "card";
 
         div.innerHTML = `
-            <div class="meta">${issue.category}</div>
+            <div class="meta">
+                ${issue.category}
+                ${issue.upvotes > 10 ? "🔥 Trending" : ""}
+            </div>
             <b>📍 ${issue.location}</b><br>
             ${issue.description}
             ${media}
@@ -242,7 +275,6 @@ async function loadIssues(){
                 <button class="like-btn ${liked ? 'liked' : ''}">
                     👍 <span>${issue.upvotes}</span>
                 </button>
-
                 <button onclick="share('${issue.category}','${issue.location}')">
                     Share
                 </button>
@@ -256,7 +288,6 @@ async function loadIssues(){
             if(localStorage.getItem("liked_" + issue.id)) return;
 
             likeBtn.classList.add("liked");
-
             let newCount = issue.upvotes + 1;
             countSpan.innerText = newCount;
 
@@ -278,8 +309,17 @@ async function loadCount(){
         .from("issues")
         .select("*", { count:'exact', head:true });
 
-    document.getElementById("count").innerText =
-        count + " issues reported";
+    let current = 0;
+    const el = document.getElementById("count");
+
+    const interval = setInterval(()=>{
+        current += Math.ceil(count/20);
+        if(current >= count){
+            current = count;
+            clearInterval(interval);
+        }
+        el.innerText = current + " issues reported";
+    },30);
 }
 
 // POST ISSUE
@@ -290,7 +330,7 @@ async function submitIssue(){
     const file = mediaEl.files[0];
 
     if(!location || !description){
-        alert("Fill all fields");
+        showToast("Fill all fields");
         return;
     }
 
@@ -304,7 +344,7 @@ async function submitIssue(){
             .upload(fileName, file);
 
         if(error){
-            alert("Upload failed");
+            showToast("Upload failed");
             return;
         }
 
@@ -316,13 +356,14 @@ async function submitIssue(){
         location,
         description,
         media_url: mediaUrl,
-        upvotes: 0,
-        status: "Reported"
+        upvotes: 0
     }]);
 
     locationEl.value = "";
     descEl.value = "";
     mediaEl.value = "";
+
+    showToast("Issue posted");
 
     loadIssues();
     loadCount();
@@ -336,15 +377,9 @@ function share(category, location){
         navigator.share({ text });
     } else {
         navigator.clipboard.writeText(text);
-        alert("Copied");
+        showToast("Copied");
     }
 }
-
-// CACHE DOM
-const categoryEl = document.getElementById("category");
-const locationEl = document.getElementById("location");
-const descEl = document.getElementById("desc");
-const mediaEl = document.getElementById("media");
 
 // INIT
 loadIssues();
