@@ -11,7 +11,7 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: system-ui, sans-serif;
     background: radial-gradient(circle at top, #0f172a, #020617);
     color: #e2e8f0;
 }
@@ -23,8 +23,8 @@ body {
     display:flex;
     justify-content:space-between;
     padding:16px 24px;
-    backdrop-filter: blur(10px);
-    background: rgba(15,23,42,0.6);
+    backdrop-filter: blur(12px);
+    background: rgba(15,23,42,0.7);
     border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
@@ -35,67 +35,59 @@ body {
     border-radius:999px;
     color:white;
     cursor:pointer;
+    transition:0.2s;
 }
+.nav button:hover { background:#334155; }
 
 /* HERO */
 .hero {
     text-align:center;
-    padding:40px 20px 10px;
+    padding:50px 20px 20px;
 }
-.hero h1 {
-    font-size:32px;
-    font-weight:700;
-}
-.hero p {
-    opacity:0.7;
-    margin-top:6px;
-}
-.counter {
-    margin-top:12px;
-    font-size:14px;
-    opacity:0.8;
-}
+.hero h1 { font-size:34px; }
+.hero p { opacity:0.7; margin-top:6px; }
+.counter { margin-top:10px; font-size:14px; opacity:0.8; }
 
 /* CONTAINER */
 .container {
-    max-width:700px;
+    max-width:720px;
     margin:auto;
     padding:20px;
 }
 
 /* CARD */
 .card {
-    background: rgba(17,24,39,0.7);
-    backdrop-filter: blur(8px);
+    background: rgba(17,24,39,0.75);
+    backdrop-filter: blur(10px);
     padding:16px;
     margin-bottom:16px;
-    border-radius:16px;
+    border-radius:18px;
     border:1px solid rgba(255,255,255,0.05);
-    transition:0.2s;
+    transition:0.25s;
 }
 .card:hover {
-    transform: translateY(-3px);
-    border-color:#2563eb;
+    transform: translateY(-4px);
+    border-color:#3b82f6;
 }
 
 .card img, .card video {
     width:100%;
-    border-radius:10px;
+    border-radius:12px;
     margin-top:10px;
 }
 
 .meta {
-    font-size:13px;
-    opacity:0.7;
+    font-size:12px;
+    opacity:0.6;
     margin-bottom:6px;
 }
 
 /* FORM */
 .form-box {
     margin-top:20px;
-    padding:18px;
-    background: rgba(17,24,39,0.7);
-    border-radius:16px;
+    padding:20px;
+    background: rgba(17,24,39,0.75);
+    border-radius:18px;
 }
 
 input, textarea, select {
@@ -108,7 +100,7 @@ input, textarea, select {
     color:white;
 }
 
-/* BUTTON */
+/* BUTTONS */
 button {
     padding:10px 14px;
     background:#2563eb;
@@ -116,13 +108,19 @@ button {
     color:white;
     border-radius:999px;
     cursor:pointer;
+    transition:0.2s;
 }
+button:hover { transform:scale(1.05); background:#1d4ed8; }
+button:active { transform:scale(0.95); }
 
-/* ACTIONS */
 .actions {
     display:flex;
     gap:10px;
-    margin-top:10px;
+    margin-top:12px;
+}
+
+.liked {
+    background:#16a34a !important;
 }
 
 /* SIGNATURE */
@@ -170,7 +168,7 @@ button {
 <textarea id="desc" placeholder="Description"></textarea>
 <input type="file" id="media">
 
-<button id="postBtn">Post Issue</button>
+<button onclick="submitIssue()">Post Issue</button>
 </div>
 
 <hr style="margin:30px 0; opacity:0.2;">
@@ -188,7 +186,7 @@ const client = supabase.createClient(
   "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-// LOAD
+// LOAD ISSUES
 async function loadIssues(){
     const { data } = await client
         .from("issues")
@@ -199,13 +197,13 @@ async function loadIssues(){
     feed.innerHTML = "";
 
     data.forEach(issue=>{
+        const liked = localStorage.getItem("liked_" + issue.id);
+
         let media = "";
         if(issue.media_url){
-            if(issue.media_url.includes(".mp4")){
-                media = `<video controls src="${issue.media_url}"></video>`;
-            } else {
-                media = `<img src="${issue.media_url}">`;
-            }
+            media = issue.media_url.includes(".mp4")
+                ? `<video controls src="${issue.media_url}"></video>`
+                : `<img src="${issue.media_url}">`;
         }
 
         feed.innerHTML += `
@@ -216,8 +214,16 @@ async function loadIssues(){
             ${media}
 
             <div class="actions">
-                <button onclick="upvote(${issue.id}, ${issue.upvotes})">👍 ${issue.upvotes}</button>
-                <button onclick="share('${issue.category}','${issue.location}')">Share</button>
+                <button 
+                    class="${liked ? 'liked' : ''}"
+                    onclick="upvote(${issue.id}, ${issue.upvotes}, this)"
+                >
+                    👍 ${issue.upvotes}
+                </button>
+
+                <button onclick="share('${issue.category}','${issue.location}')">
+                    Share
+                </button>
             </div>
         </div>
         `;
@@ -234,12 +240,12 @@ async function loadCount(){
         count + " issues reported";
 }
 
-// POST
+// POST ISSUE
 async function submitIssue(){
-    const category = document.getElementById("category").value;
-    const location = document.getElementById("location").value;
-    const description = document.getElementById("desc").value;
-    const file = document.getElementById("media").files[0];
+    const category = categoryEl.value;
+    const location = locationEl.value;
+    const description = descEl.value;
+    const file = mediaEl.files[0];
 
     if(!location || !description){
         alert("Fill all fields");
@@ -263,7 +269,7 @@ async function submitIssue(){
         mediaUrl = `https://bxtsttllyscfvawvhhas.supabase.co/storage/v1/object/public/issues-media/${fileName}`;
     }
 
-    const { error } = await client.from("issues").insert([{
+    await client.from("issues").insert([{
         category,
         location,
         description,
@@ -272,40 +278,51 @@ async function submitIssue(){
         status: "Reported"
     }]);
 
-    if(error){
-        alert(error.message);
-        return;
-    }
+    locationEl.value = "";
+    descEl.value = "";
+    mediaEl.value = "";
 
-    alert("Posted");
     loadIssues();
     loadCount();
 }
 
 // UPVOTE
-async function upvote(id, count){
+async function upvote(id, count, btn){
+    if(localStorage.getItem("liked_" + id)) return;
+
+    btn.innerText = "⏳";
+
     await client
         .from("issues")
         .update({ upvotes: count + 1 })
         .eq("id", id);
 
+    localStorage.setItem("liked_" + id, true);
+    btn.classList.add("liked");
+    btn.innerText = "👍 " + (count + 1);
+
     loadIssues();
 }
 
-// SHARE (viral loop)
+// SHARE
 function share(category, location){
-    const text = `🚨 ${category} issue in ${location}. Check FixMyArea.`;
+    const text = `🚨 ${category} issue in ${location}. Check FixMyArea`;
 
     if(navigator.share){
         navigator.share({ text });
     } else {
         navigator.clipboard.writeText(text);
-        alert("Copied to clipboard");
+        alert("Copied");
     }
 }
 
-document.getElementById("postBtn").addEventListener("click", submitIssue);
+// CACHE DOM
+const categoryEl = document.getElementById("category");
+const locationEl = document.getElementById("location");
+const descEl = document.getElementById("desc");
+const mediaEl = document.getElementById("media");
 
+// INIT
 loadIssues();
 loadCount();
 </script>
