@@ -17,9 +17,9 @@ a { text-decoration:none; }
 .nav {
     position: sticky; top:0; display:flex; justify-content:space-between; align-items:center;
     padding:16px 24px; background: #ffffffcc; backdrop-filter:blur(10px);
-    box-shadow:0 2px 12px rgba(0,0,0,0.08);
+    box-shadow:0 2px 12px rgba(0,0,0,0.08); z-index:1000;
 }
-.nav b { font-size:20px; color:#059669; }
+.nav b { font-size:22px; color:#059669; }
 .nav button {
     margin-left:12px; background:#10b981; border:none; padding:8px 16px; border-radius:999px;
     color:white; font-weight:bold; cursor:pointer; transition:0.2s;
@@ -57,11 +57,12 @@ transition:0.3s; }
 
 /* RECENT REPORTS */
 .feed-preview { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; margin-top:40px; }
-.card { background:white; border-radius:16px; padding:16px; box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:0.25s; cursor:pointer; }
+.card { background:white; border-radius:16px; padding:16px; box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:0.25s; cursor:pointer; opacity:0; transform:translateY(20px); }
+.card.visible { opacity:1; transform:translateY(0); }
 .card:hover { transform:scale(1.05); box-shadow:0 8px 20px rgba(0,0,0,0.15); }
 .card img, .card video { width:100%; border-radius:12px; margin-top:10px; }
-.meta { font-size:12px; color:#065f46; font-weight:bold; margin-bottom:6px; }
-.status-tag { padding:2px 8px; border-radius:8px; font-size:12px; font-weight:bold; color:white; margin-left:10px; }
+.meta { font-size:12px; color:#065f46; font-weight:bold; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between; }
+.status-tag { padding:2px 8px; border-radius:8px; font-size:12px; font-weight:bold; color:white; }
 .status-Reported { background:#f59e0b; }
 .status-InProgress { background:#3b82f6; }
 .status-Fixed { background:#16a34a; }
@@ -75,8 +76,10 @@ cursor:pointer; transition:0.25s; margin-top:20px; display:inline-block; }
 .signature { text-align:center; margin-top:60px; font-size:12px; color:rgba(0,0,0,0.5); }
 
 /* MEDIA QUERIES */
-@media(max-width:600px){ .steps { flex-direction:column; align-items:center; } }
-
+@media(max-width:600px){ 
+    .steps { flex-direction:column; align-items:center; }
+    .nav { flex-direction:column; gap:10px; }
+}
 </style>
 </head>
 
@@ -88,7 +91,7 @@ cursor:pointer; transition:0.25s; margin-top:20px; display:inline-block; }
         <button onclick="location.href='report.html'">Report Issue</button>
         <button onclick="location.href='feed.html'">View Feed</button>
         <button onclick="location.href='fixmyarea+contact.html'">Contact</button>
-        <button onclick="location.href='fixmyarea+donation.html'">Donate</button>
+        <button onclick="location.href='fixmyarea+donations.html'">Donate</button>
     </div>
 </div>
 
@@ -126,7 +129,6 @@ cursor:pointer; transition:0.25s; margin-top:20px; display:inline-block; }
     <div class="stats">
         <div class="stat"><span id="totalIssues">0</span><p>Issues Reported</p></div>
         <div class="stat"><span id="totalResolved">0</span><p>Issues Resolved</p></div>
-        
     </div>
 </div>
 
@@ -144,27 +146,27 @@ const client = supabase.createClient(
   "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-// Fade-in on scroll
-const sections = document.querySelectorAll('.section');
-window.addEventListener('scroll', () => {
-    sections.forEach(sec=>{
-        if(sec.getBoundingClientRect().top < window.innerHeight - 100){
-            sec.classList.add('visible');
+// Fade-in on scroll for sections and cards
+const fadeIn = () => {
+    document.querySelectorAll('.section, .card').forEach(el=>{
+        if(el.getBoundingClientRect().top < window.innerHeight - 100){
+            el.classList.add('visible');
         }
     });
-});
+};
+window.addEventListener('scroll', fadeIn);
+window.addEventListener('load', fadeIn);
 
-// Load stats
+// Load stats dynamically
 async function loadStats(){
     const { count: total } = await client.from("issues").select("*", {head:true,count:"exact"});
     const { data: resolved } = await client.from("issues").select("*").eq("status","Fixed");
     document.getElementById("totalIssues").innerText = total;
     document.getElementById("totalResolved").innerText = resolved.length;
-    document.getElementById("activeUsers").innerText = Math.floor(Math.random()*2000+500); // placeholder
 }
 loadStats();
 
-// Load recent feed preview
+// Load recent feed
 async function loadFeed(){
     const { data } = await client.from("issues").select("*").order("id",{ascending:false}).limit(6);
     const feed = document.getElementById("feed");
@@ -177,13 +179,16 @@ async function loadFeed(){
                 : `<img src="${issue.media_url}">`;
         }
         const statusClass = issue.status.replace(" ","");
-        feed.innerHTML += `
-        <div class="card">
+        const card = document.createElement("div");
+        card.className="card";
+        card.innerHTML=`
             <div class="meta">${issue.category} <span class="status-tag status-${statusClass}">${issue.status}</span></div>
             <b>📍 ${issue.location}</b>
             <p>${issue.description}</p>
             ${media}
-        </div>`;
+        `;
+        feed.appendChild(card);
+        fadeIn();
     });
 }
 loadFeed();
