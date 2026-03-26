@@ -24,6 +24,14 @@ body{
     backdrop-filter: blur(14px);
     background: rgba(15,23,42,0.7);
 }
+.nav button{
+    background:#1e293b;
+    border:none;
+    padding:6px 14px;
+    border-radius:999px;
+    color:white;
+    cursor:pointer;
+}
 
 /* HERO */
 .hero{text-align:center;padding:60px 20px 20px}
@@ -62,15 +70,6 @@ body{
 }
 
 .meta{font-size:12px;opacity:0.6}
-.status{
-    font-size:10px;
-    padding:2px 8px;
-    border-radius:999px;
-    margin-left:6px;
-}
-.reported{background:#334155}
-.progress{background:#f59e0b}
-.resolved{background:#16a34a}
 
 .card img,.card video{
     width:100%;
@@ -85,10 +84,10 @@ button{
     border-radius:999px;
     border:none;
     background:#2563eb;
-    color:white;cursor:pointer;
+    color:white;
+    cursor:pointer;
 }
 .like-btn{background:#1e293b}
-.like-btn.liked{background:#16a34a}
 
 /* COMMENTS */
 .comments{
@@ -99,7 +98,6 @@ button{
 .comment{
     font-size:13px;
     margin-top:6px;
-    opacity:0.85;
 }
 .comment-box{
     display:flex;
@@ -127,12 +125,15 @@ input,textarea,select{
     padding:12px;
     border-radius:10px;
     background:#020617;
-    border:none;color:white;
+    border:none;
+    color:white;
 }
 
 /* TOAST */
 .toast{
-    position:fixed;bottom:20px;left:50%;
+    position:fixed;
+    bottom:20px;
+    left:50%;
     transform:translateX(-50%);
     background:#020617;
     padding:10px 16px;
@@ -185,6 +186,10 @@ input,textarea,select{
 
 <div class="nav">
 <b>CiviX</b>
+<div>
+<button onclick="location.href='contact.html'">Contact</button>
+<button onclick="location.href='donation.html'">Donate</button>
+</div>
 </div>
 
 <div class="hero">
@@ -238,6 +243,8 @@ const client = supabase.createClient(
 );
 
 const feed=document.getElementById("feed");
+const searchEl=document.getElementById("search");
+const sortEl=document.getElementById("sort");
 
 function toast(msg){
 const t=document.getElementById("toast");
@@ -249,9 +256,18 @@ setTimeout(()=>t.classList.remove("show"),2000);
 async function loadIssues(){
 let { data } = await client.from("issues").select("*");
 
+if(sortEl.value==="top"){
+data.sort((a,b)=>b.upvotes-a.upvotes);
+}else{
+data.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+}
+
+const q=searchEl.value.toLowerCase();
+data=data.filter(i=>i.location.toLowerCase().includes(q));
+
 feed.innerHTML="";
 
-if(!data || data.length===0){
+if(!data.length){
 feed.innerHTML="<div class='empty'>No issues yet</div>";
 return;
 }
@@ -279,16 +295,12 @@ ${issue.description}
 `;
 
 feed.appendChild(div);
-
 loadComments(issue.id);
 });
 }
 
 async function loadComments(id){
-const { data } = await client
-.from("comments")
-.select("*")
-.eq("issue_id",id);
+const { data } = await client.from("comments").select("*").eq("issue_id",id);
 
 const el=document.getElementById("c-"+id);
 if(!data.length){
@@ -310,9 +322,7 @@ loadComments(id);
 
 async function like(id){
 let { data } = await client.from("issues").select("*").eq("id",id).single();
-let newCount=data.upvotes+1;
-
-await client.from("issues").update({upvotes:newCount}).eq("id",id);
+await client.from("issues").update({upvotes:data.upvotes+1}).eq("id",id);
 loadIssues();
 }
 
@@ -338,6 +348,9 @@ function share(cat,loc){
 navigator.clipboard.writeText(`🚨 ${cat} in ${loc}`);
 toast("Copied");
 }
+
+searchEl.oninput=loadIssues;
+sortEl.onchange=loadIssues;
 
 loadIssues();
 </script>
