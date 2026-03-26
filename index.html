@@ -8,420 +8,107 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+* { margin:0; padding:0; box-sizing:border-box; }
 
-body{
-    font-family: system-ui, sans-serif;
-    background: radial-gradient(circle at top,#0f172a,#020617);
-    color:#e2e8f0;
+body {
+  font-family: system-ui, sans-serif;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: #e2e8f0;
 }
 
 /* NAV */
-.nav{
-    position:sticky;top:0;
-    display:flex;justify-content:space-between;
+.nav {
+    position: sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
     padding:16px 24px;
     backdrop-filter: blur(14px);
     background: rgba(15,23,42,0.7);
+    border-bottom:1px solid rgba(255,255,255,0.05);
 }
-.nav button{
-    background:#1e293b;border:none;
-    padding:6px 14px;border-radius:999px;
-    color:white;cursor:pointer;
+.nav b { font-size:18px; }
+.nav button {
+    background:#1e293b;
+    border:1px solid rgba(255,255,255,0.1);
+    padding:6px 14px;
+    border-radius:999px;
+    color:white;
+    cursor:pointer;
+    transition:0.25s;
+}
+.nav button:hover { background:#334155; }
+
+/* DASHBOARD */
+.container {
+    max-width:720px;
+    margin:auto;
+    padding:60px 20px;
+    text-align:center;
 }
 
-/* HERO */
-.hero{text-align:center;padding:60px 20px 20px}
-.hero h1{
-    font-size:44px;
-    background:linear-gradient(90deg,#3b82f6,#22c55e);
+h1 {
+    font-size:42px;
+    background: linear-gradient(90deg,#3b82f6,#22c55e);
     -webkit-background-clip:text;
     color:transparent;
-}
-.hero p{
-    opacity:0.6;
-    margin-top:8px;
-    color:#334155; /* slightly dark for AK */
-}
-.counter{opacity:0.8;margin-top:10px}
-
-/* CONTROLS */
-.controls{
-    max-width:720px;margin:auto;
-    display:flex;gap:10px;padding:10px;
-}
-.controls input,.controls select{
-    flex:1;padding:10px;border-radius:10px;
-    background:#020617;border:none;color:white;
+    margin-bottom:10px;
 }
 
-/* CONTAINER */
-.container{max-width:720px;margin:auto;padding:20px}
+p { opacity:0.7; margin-bottom:30px; font-size:18px; }
 
-/* CARD */
-.card{
-    background: rgba(17,24,39,0.85);
-    padding:18px;margin-bottom:16px;
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,0.05);
-    transition:0.3s;
-}
-.card:hover{
-    transform:translateY(-6px);
-    border-color:#3b82f6;
-}
-
-.meta{font-size:12px;opacity:0.6;margin-bottom:4px}
-.status{
-    font-size:11px;
-    padding:3px 8px;
-    border-radius:999px;
-    margin-left:6px;
-}
-.reported{background:#334155}
-.progress{background:#f59e0b}
-.resolved{background:#16a34a}
-
-.card img, .card video{
-    width:100%;border-radius:12px;margin-top:10px;
-}
-
-/* BUTTONS */
-.actions{display:flex;gap:10px;margin-top:12px}
-button{
-    padding:8px 14px;
+button.dashboard-btn {
+    padding:14px 24px;
+    margin:10px;
     border-radius:999px;
     border:none;
+    cursor:pointer;
     background:#2563eb;
-    color:white;cursor:pointer;
+    color:white;
+    font-size:16px;
+    transition:0.2s;
 }
-.like-btn{background:#1e293b}
-.like-btn.liked{background:#16a34a}
+button.dashboard-btn:hover { transform:scale(1.05); background:#1d4ed8; }
+button.dashboard-btn:active { transform:scale(0.95); }
 
-/* FORM */
-.form-box{
-    background: rgba(17,24,39,0.85);
-    padding:20px;border-radius:18px;
-}
-input,textarea,select{
-    width:100%;margin:10px 0;
-    padding:12px;border-radius:10px;
-    background:#020617;border:none;color:white;
-}
-
-/* COMMENTS */
-.comment-box{
-    margin-top:10px;padding:10px;
-    background:#020617;border-radius:12px;
-}
-.comment-box input{
-    width:calc(100% - 90px);padding:8px;margin-right:8px;
-    border-radius:10px;background:#1e293b;border:none;color:white;
-}
-.comment-box button{
-    width:70px;
-}
-
-/* TOAST */
-.toast{
-    position:fixed;bottom:20px;left:50%;
-    transform:translateX(-50%);
-    background:#020617;padding:10px 16px;
-    border-radius:999px;opacity:0;
-    transition:0.3s;
-}
-.toast.show{opacity:1}
-
-/* EMPTY */
-.empty{
-    text-align:center;
-    opacity:0.6;
-    margin-top:20px;
-}
-
-/* SIGN */
-.signature{
-    position:fixed;
-    bottom:12px;right:16px;
-    font-size:12px;opacity:0.4;
-}
-
-/* SIDES: moving name */
-.side-name{
-    position:fixed;
-    top:50%;transform:translateY(-50%);
-    font-size:20px;color:white;
-    writing-mode:vertical-rl;
-    animation: moveUp 6s linear infinite;
-}
-.side-name.left{left:0;}
-.side-name.right{right:0;}
-
-@keyframes moveUp{
-    0%{transform:translateY(100%);}
-    100%{transform:translateY(-100%);}
-}
+.stats { margin-top:30px; font-size:16px; opacity:0.8; }
 </style>
 </head>
 
 <body>
 
 <div class="nav">
-<b>CiviX</b>
-<div>
-<button onclick="location.href='fixmyarea+contact.html'">Contact</button>
-<button onclick="location.href='fixmyarea+donation.html'">Donate</button>
-</div>
-</div>
-
-<div class="hero">
-<h1>CiviX</h1>
-<p>AK</p>
-<div id="count" class="counter">Loading...</div>
-</div>
-
-<div class="controls">
-<input id="search" placeholder="Search location...">
-<select id="sort">
-<option value="top">Top</option>
-<option value="latest">Latest</option>
-</select>
+    <div><b>CiviX</b></div>
+    <div>
+        <button onclick="location.href='contact.html'">Contact</button>
+        <button onclick="location.href='donations.html'">Donate</button>
+    </div>
 </div>
 
 <div class="container">
+    <h1>Welcome to CiviX</h1>
+    <p>Track, report, and amplify issues in your area. Together we can make cities safer.</p>
 
-<div class="form-box">
-<h3>Report Issue</h3>
-<select id="category">
-<option>Pothole</option>
-<option>Garbage</option>
-<option>Water Leak</option>
-<option>Streetlight</option>
-<option>Pollution</option>
-<option>Other</option>
-</select>
+    <button class="dashboard-btn" onclick="location.href='report.html'">📢 Report an Issue</button>
+    <button class="dashboard-btn" onclick="location.href='feed.html'">🗂 View Issues</button>
 
-<input id="location" placeholder="Location (+City)">
-<textarea id="desc" placeholder="Description"></textarea>
-<input type="file" id="media">
-
-<button onclick="submitIssue()">Post Issue</button>
+    <div class="stats" id="stats">Loading stats...</div>
 </div>
-
-<hr style="margin:30px 0;opacity:0.2">
-
-<h3>Top Issues</h3>
-<div id="feed"></div>
-
-</div>
-
-<div id="toast" class="toast"></div>
-<div class="signature">AK</div>
-<div class="side-name left">Civix</div>
-<div class="side-name right">by AK</div>
 
 <script>
 const client = supabase.createClient(
-"https://bxtsttllyscfvawvhhas.supabase.co",
-"sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
+  "https://bxtsttllyscfvawvhhas.supabase.co",
+  "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-const searchEl = document.getElementById("search");
-const sortEl = document.getElementById("sort");
-const feed = document.getElementById("feed");
-
-function toast(msg){
-    const t=document.getElementById("toast");
-    t.innerText=msg;
-    t.classList.add("show");
-    setTimeout(()=>t.classList.remove("show"),2000);
+async function loadStats(){
+    const { count } = await client
+        .from("issues")
+        .select("*",{count:'exact',head:true});
+    document.getElementById("stats").innerText = count + " issues reported so far";
 }
 
-async function loadIssues(){
-    let { data } = await client.from("issues").select("*");
-
-    // sort
-    if(sortEl.value==="top"){
-        data.sort((a,b)=>b.upvotes-a.upvotes);
-    } else {
-        data.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
-    }
-
-    // search
-    const query = searchEl.value.toLowerCase();
-    data = data.filter(i=>i.location.toLowerCase().includes(query));
-
-    feed.innerHTML="";
-
-    if(data.length===0){
-        feed.innerHTML=`<div class="empty">No issues found</div>`;
-        return;
-    }
-
-    data.forEach(issue=>{
-        const liked = localStorage.getItem("liked_"+issue.id);
-
-        let media="";
-        if(issue.media_url){
-            media = issue.media_url.includes(".mp4")
-            ? `<video controls src="${issue.media_url}"></video>`
-            : `<img src="${issue.media_url}">`;
-        }
-
-        const statusClass = issue.status==="Resolved"?"resolved":
-                            issue.status==="In Progress"?"progress":"reported";
-
-        const div=document.createElement("div");
-        div.className="card";
-
-        div.innerHTML=`
-        <div class="meta">
-            ${issue.category}
-            <span class="status ${statusClass}">${issue.status || "Reported"}</span>
-        </div>
-
-        <b>📍 ${issue.location}</b><br>
-        ${issue.description}
-        ${media}
-
-        <div class="actions">
-            <button class="like-btn ${liked?'liked':''}">
-            👍 <span>${issue.upvotes}</span>
-            </button>
-
-            <button onclick="share('${issue.category}','${issue.location}')">
-            Share
-            </button>
-        </div>
-
-        <div class="comment-box">
-            <input placeholder="Add comment..." id="comment-${issue.id}">
-            <button onclick="addComment(${issue.id})">Post</button>
-        </div>
-
-        <div id="comments-${issue.id}"></div>
-        `;
-
-        const likeBtn=div.querySelector(".like-btn");
-        const countSpan=likeBtn.querySelector("span");
-
-        likeBtn.onclick=async()=>{
-            if(localStorage.getItem("liked_"+issue.id)) return;
-
-            let newCount=issue.upvotes+1;
-            countSpan.innerText=newCount;
-            likeBtn.classList.add("liked");
-
-            localStorage.setItem("liked_"+issue.id,true);
-
-            await client.from("issues")
-            .update({upvotes:newCount})
-            .eq("id",issue.id);
-        };
-
-        feed.appendChild(div);
-
-        loadComments(issue.id);
-    });
-}
-
-// stable count
-async function loadCount(){
-    const { count } = await client.from("issues").select('id', {count:'exact'});
-    document.getElementById("count").innerText =
-    count + " issues reported";
-}
-
-// post new issue
-async function submitIssue(){
-    const category=document.getElementById("category").value;
-    const location=document.getElementById("location").value;
-    const description=document.getElementById("desc").value;
-    const file=document.getElementById("media").files[0];
-
-    if(!location||!description){
-        toast("Fill all fields");
-        return;
-    }
-
-    let mediaUrl=null;
-
-    if(file){
-        const name=Date.now()+"-"+file.name;
-
-        const { error } = await client.storage
-        .from("issues-media")
-        .upload(name,file);
-
-        if(error){
-            toast("Upload failed");
-            return;
-        }
-
-        mediaUrl=`https://bxtsttllyscfvawvhhas.supabase.co/storage/v1/object/public/issues-media/${name}`;
-    }
-
-    await client.from("issues").insert([{
-        category,location,description,
-        media_url:mediaUrl,
-        upvotes:0,
-        status:"Reported",
-        comments:[]
-    }]);
-
-    toast("Posted");
-
-    document.getElementById("location").value="";
-    document.getElementById("desc").value="";
-    document.getElementById("media").value="";
-
-    loadIssues();
-    loadCount();
-}
-
-function share(category,location){
-    const text=`🚨 ${category} in ${location} via CiviX`;
-    navigator.clipboard.writeText(text);
-    toast("Copied");
-}
-
-// comments
-async function addComment(issueId){
-    const input = document.getElementById(`comment-${issueId}`);
-    const text = input.value.trim();
-    if(!text) return;
-
-    // fetch current comments
-    const { data } = await client.from("issues").select("comments").eq("id",issueId).single();
-    const newComments = data.comments ? [...data.comments, text] : [text];
-
-    await client.from("issues").update({comments:newComments}).eq("id",issueId);
-
-    input.value="";
-    loadComments(issueId);
-}
-
-async function loadComments(issueId){
-    const container = document.getElementById(`comments-${issueId}`);
-    const { data } = await client.from("issues").select("comments").eq("id",issueId).single();
-    container.innerHTML="";
-    if(!data || !data.comments) return;
-
-    data.comments.forEach(c=>{
-        const div = document.createElement("div");
-        div.className="meta";
-        div.style.marginLeft="10px";
-        div.innerText="💬 "+c;
-        container.appendChild(div);
-    });
-}
-
-// events
-searchEl.oninput=loadIssues;
-sortEl.onchange=loadIssues;
-
-loadIssues();
-loadCount();
+loadStats();
 </script>
 
 </body>
