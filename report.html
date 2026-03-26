@@ -24,8 +24,9 @@ body {
     justify-content:space-between;
     padding:16px 24px;
     backdrop-filter: blur(14px);
-    background: rgba(15,23,42,0.7);
+    background: rgba(15,23,42,0.8);
     border-bottom:1px solid rgba(255,255,255,0.05);
+    z-index:100;
 }
 .nav b { font-size:18px; }
 .nav button {
@@ -39,22 +40,40 @@ body {
 }
 .nav button:hover { background:#334155; }
 
-/* FORM PAGE */
+/* CONTAINER */
 .container {
     max-width:720px;
     margin:auto;
     padding:40px 20px;
+    text-align:center;
 }
 
-h1 { font-size:32px; margin-bottom:20px; }
+/* BACK BUTTON */
+.dashboard-btn {
+    padding:12px 20px;
+    margin-bottom:20px;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    transition:0.2s;
+}
+.dashboard-btn:hover { transform:scale(1.05); background:#1d4ed8; }
+.dashboard-btn:active { transform:scale(0.95); }
+
+/* FORM BOX */
 .form-box {
     background: rgba(17,24,39,0.8);
     padding:20px;
     border-radius:18px;
     border:1px solid rgba(255,255,255,0.05);
+    text-align:left;
+    margin-top:20px;
 }
 
-input, textarea, select {
+.form-box input, .form-box textarea, .form-box select {
     width:100%;
     margin:10px 0;
     padding:12px;
@@ -68,14 +87,26 @@ button.submit-btn {
     padding:12px 18px;
     border:none;
     border-radius:999px;
-    background:#2563eb;
+    background:#16a34a;
     color:white;
     cursor:pointer;
     transition:0.2s;
     margin-top:10px;
 }
-button.submit-btn:hover { transform:scale(1.05); background:#1d4ed8; }
+button.submit-btn:hover { transform:scale(1.05); background:#15803d; }
 button.submit-btn:active { transform:scale(0.95); }
+
+/* GUIDE / TIPS */
+.tips {
+    background: rgba(17,24,39,0.75);
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,0.05);
+    padding:16px;
+    margin-bottom:20px;
+    text-align:left;
+}
+.tips h3 { font-size:18px; margin-bottom:8px; }
+.tips p { font-size:14px; opacity:0.8; margin-bottom:6px; }
 
 /* SIGNATURE */
 .signature {
@@ -98,7 +129,18 @@ button.submit-btn:active { transform:scale(0.95); }
 </div>
 
 <div class="container">
+
+    <button class="dashboard-btn" onclick="location.href='index.html'">⬅ Back to Dashboard</button>
+
     <h1>Report an Issue</h1>
+
+    <div class="tips">
+        <h3>How to report effectively:</h3>
+        <p>1. Clearly describe the issue in detail.</p>
+        <p>2. Provide an exact location (street, landmark, or coordinates).</p>
+        <p>3. Attach a photo or video if possible — it helps authorities respond faster.</p>
+        <p>4. Choose the correct category so the report reaches the right team.</p>
+    </div>
 
     <div class="form-box">
         <select id="category">
@@ -126,13 +168,11 @@ const client = supabase.createClient(
   "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-// CACHE DOM
 const categoryEl = document.getElementById("category");
 const locationEl = document.getElementById("location");
 const descEl = document.getElementById("desc");
 const mediaEl = document.getElementById("media");
 
-// SUBMIT ISSUE
 async function submitIssue(){
     const category = categoryEl.value;
     const location = locationEl.value;
@@ -140,43 +180,25 @@ async function submitIssue(){
     const file = mediaEl.files[0];
 
     if(!location || !description){
-        alert("Fill all fields");
+        alert("Please fill all fields!");
         return;
     }
 
     let mediaUrl = null;
-
     if(file){
         const fileName = Date.now() + "-" + file.name;
-
-        const { error } = await client.storage
-            .from("issues-media")
-            .upload(fileName, file);
-
-        if(error){
-            alert("Upload failed");
-            return;
-        }
-
+        const { error } = await client.storage.from("issues-media").upload(fileName,file);
+        if(error){ alert("Upload failed"); return; }
         mediaUrl = `https://bxtsttllyscfvawvhhas.supabase.co/storage/v1/object/public/issues-media/${fileName}`;
     }
 
     await client.from("issues").insert([{
-        category,
-        location,
-        description,
-        media_url: mediaUrl,
-        upvotes: 0,
-        status: "Reported"
+        category, location, description, media_url: mediaUrl, upvotes: 0, status: "Reported"
     }]);
 
-    locationEl.value = "";
-    descEl.value = "";
-    mediaEl.value = "";
-
+    locationEl.value=""; descEl.value=""; mediaEl.value="";
     alert("Issue submitted successfully!");
 }
 </script>
-
 </body>
 </html>
