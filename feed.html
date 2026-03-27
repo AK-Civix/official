@@ -3,49 +3,93 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CiviX - Ranked Issues Feed</title>
+<title>Antecessum - Issues Feed</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-body { font-family:'Inter', sans-serif; background:#f0fdf4; margin:0; padding:0; color:#111827; }
-.nav { position: sticky; top:0; display:flex; justify-content:space-between; align-items:center; padding:16px 24px; background:#ffffffcc; backdrop-filter:blur(10px); box-shadow:0 2px 12px rgba(0,0,0,0.08); z-index:1000; }
+/* GLOBAL */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: system-ui, sans-serif; background: linear-gradient(180deg,#f0fdf4 0%,#e6f7ef 100%); color:#111827; line-height:1.6; }
+a { text-decoration:none; }
+
+/* NAV */
+.nav {
+    position: sticky; top:0; display:flex; justify-content:space-between; align-items:center;
+    padding:16px 24px; background:#ffffffcc; backdrop-filter:blur(10px);
+    box-shadow:0 2px 12px rgba(0,0,0,0.08); z-index:1000;
+}
 .nav b { font-size:22px; color:#059669; }
-.nav button { margin-left:12px; background:#10b981; border:none; padding:8px 16px; border-radius:999px; color:white; font-weight:bold; cursor:pointer; transition:0.2s; }
+.nav button {
+    margin-left:12px;
+    background:#10b981; border:none; padding:8px 16px; border-radius:999px;
+    color:white; font-weight:bold; cursor:pointer; transition:0.2s;
+}
 .nav button:hover { background:#059669; transform:scale(1.05); }
-.container { max-width:900px; margin:auto; padding:40px 20px; }
-.card { background:white; border-radius:16px; padding:24px; margin-bottom:24px; box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:0.3s; }
+
+/* CONTAINER */
+.container { max-width:1000px; margin:auto; padding:40px 20px; }
+h1 { color:#059669; margin-bottom:20px; }
+
+/* CARD */
+.feed-preview { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
+.card {
+    background:white; border-radius:16px; padding:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:0.25s; cursor:pointer;
+    display:flex; flex-direction:column; gap:12px; position:relative;
+}
 .card:hover { transform:scale(1.03); box-shadow:0 8px 20px rgba(0,0,0,0.15); }
-.meta { font-size:12px; color:#059669; font-weight:bold; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+.card img, .card video { width:100%; border-radius:12px; max-height:240px; object-fit:cover; }
+.meta { font-size:12px; color:#059669; font-weight:bold; display:flex; justify-content:space-between; align-items:center; }
+
+/* STATUS TAGS */
 .status-tag { padding:2px 8px; border-radius:8px; font-size:12px; font-weight:bold; color:white; }
 .status-Reported { background:#f59e0b; }
 .status-InProgress { background:#3b82f6; }
 .status-Fixed { background:#16a34a; }
-.actions { display:flex; gap:10px; margin-top:12px; }
-button.action-btn { padding:8px 14px; border:none; border-radius:999px; cursor:pointer; transition:0.2s; font-weight:bold; background:#10b981; color:white; }
-button.action-btn:hover { background:#059669; transform:scale(1.05); }
-.float-report { position: fixed; bottom:24px; right:24px; padding:16px 20px; border-radius:999px; background:#10b981; color:white; font-size:16px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.3); transition:0.25s; z-index:100; }
+
+/* RATE IMPORTANCE BUTTON */
+.action-btn {
+    padding:8px 14px; border:none; border-radius:999px; cursor:pointer; transition:0.2s; font-weight:bold;
+    background:#10b981; color:white;
+}
+.action-btn.liked { background:#16a34a; }
+.action-btn:hover { transform:scale(1.05); }
+
+/* FLOATING REPORT BUTTON */
+.float-report {
+    position: fixed; bottom:24px; right:24px; padding:16px 20px; border-radius:999px;
+    background:#10b981; color:white; font-size:16px; cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,0.3); transition:0.25s; z-index:100;
+}
 .float-report:hover { transform:scale(1.05); background:#059669; }
-h1.page-title { color:#059669; margin-bottom:20px; }
+.float-report:active { transform:scale(0.95); }
+
+/* SIGNATURE */
+.signature { text-align:center; margin-top:40px; font-size:12px; color:rgba(0,0,0,0.25); }
 </style>
 </head>
+
 <body>
 
 <div class="nav">
-    <b>CiviX</b>
+    <b>Antecessum</b>
     <div>
+        <button onclick="location.href='report.html'">Report Issue</button>
         <button onclick="location.href='contact.html'">Contact</button>
         <button onclick="location.href='donations.html'">Donate</button>
     </div>
 </div>
 
 <div class="container">
-    <h1 class="page-title">Top Ranked Issues</h1>
-    <div id="feed">Loading issues...</div>
+    <h1>Top Civic Issues</h1>
+    <div class="feed-preview" id="feed">Loading issues...</div>
 </div>
 
+<!-- Floating Report Button -->
 <button class="float-report" onclick="location.href='report.html'">📢 Report Issue</button>
+
+<div class="signature">AK</div>
 
 <script>
 const client = supabase.createClient(
@@ -53,78 +97,51 @@ const client = supabase.createClient(
   "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-// Ask user importance (1-10) per issue
-async function askImportance(issue){
-    let userKey = "importance_"+issue.id;
-    let current = localStorage.getItem(userKey);
-    let rating = current ? parseInt(current) : prompt(`Rate importance of this issue (1-10):\n${issue.description}`, "5");
-    if(!rating || rating < 1 || rating > 10) rating = 5;
-    localStorage.setItem(userKey, rating);
-
-    // Update Supabase
-    let votes = issue.importance_votes || {};
-    votes[localStorage.getItem("user_id") || ("user_" + Math.floor(Math.random()*100000))] = rating;
-    localStorage.setItem("user_id", Object.keys(votes)[0]); // store user id
-    await client.from("issues").update({ importance_votes: votes }).eq("id", issue.id);
-}
-
-// Calculate combined score
-function getScore(issue){
-    const upvotes = issue.upvotes || 0;
-    const importanceVotes = issue.importance_votes ? Object.values(issue.importance_votes) : [];
-    const avgImportance = importanceVotes.length ? importanceVotes.reduce((a,b)=>a+b,0)/importanceVotes.length : 5;
-    return upvotes*0.7 + avgImportance*0.3; // Weighted formula: 70% upvotes, 30% importance
-}
-
-// Load & render feed
-async function loadIssues(){
-    const { data } = await client.from("issues").select("*");
-    if(!data) return;
-
-    // Sort by score
-    data.sort((a,b)=>getScore(b)-getScore(a));
-
+async function loadFeed(){
+    const { data } = await client.from("issues").select("*").order("upvotes",{ ascending:false });
     const feed = document.getElementById("feed");
-    feed.innerHTML = "";
+    feed.innerHTML="";
 
     data.forEach(issue=>{
         const liked = localStorage.getItem("liked_" + issue.id);
-        let media = "";
+        let media="";
         if(issue.media_url){
-            media = issue.media_url.includes(".mp4") 
-                ? `<video controls src="${issue.media_url}"></video>` 
+            media = issue.media_url.includes(".mp4")
+                ? `<video controls src="${issue.media_url}"></video>`
                 : `<img src="${issue.media_url}">`;
         }
+        const statusClass = issue.status.replace(/\s+/g,'');
+        const card = document.createElement("div");
+        card.className="card";
 
-        const statusClass = issue.status.replace(" ","");
-        feed.innerHTML += `
-        <div class="card">
+        card.innerHTML=`
             <div class="meta">
-                ${issue.category}
+                <span>${issue.category}</span>
                 <span class="status-tag status-${statusClass}">${issue.status}</span>
             </div>
             <b>📍 ${issue.location}</b>
             <p>${issue.description}</p>
             ${media}
-            <div class="actions">
-                <button class="action-btn ${liked ? 'liked' : ''}" onclick="upvote(${issue.id},${issue.upvotes},this)">
-                    👍 ${issue.upvotes}
-                </button>
-                <button class="action-btn" onclick="askImportance(${JSON.stringify(issue)})">Rate Importance</button>
+            <div style="display:flex; gap:10px;">
+                <button class="action-btn ${liked?'liked':''}" onclick="rateImportance(${issue.id},${issue.upvotes},this)">👍 ${issue.upvotes}</button>
             </div>
-        </div>`;
+        `;
+        feed.appendChild(card);
     });
 }
 
-async function upvote(id,count,btn){
+// Rate importance function (upvote)
+async function rateImportance(id,count,btn){
     if(localStorage.getItem("liked_" + id)) return;
     btn.innerText="⏳";
     await client.from("issues").update({ upvotes: count + 1 }).eq("id",id);
     localStorage.setItem("liked_" + id,true);
-    loadIssues();
+    btn.classList.add("liked");
+    btn.innerText="👍 "+(count+1);
+    loadFeed();
 }
 
-loadIssues();
+loadFeed();
 </script>
 
 </body>
