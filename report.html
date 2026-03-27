@@ -3,78 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Report Issue | Antecessum</title>
+<title>Antecessum - Report & Complaint Portal</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 /* GLOBAL */
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
-    font-family: system-ui, sans-serif;
+    font-family:'Inter', sans-serif;
     background: linear-gradient(180deg,#f0fdf4 0%,#e6f7ef 100%);
     color:#111827;
     line-height:1.6;
 }
 
-/* NAV */
+/* NAV / HEADER */
 .nav {
-    position: sticky;
-    top:0;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:16px 24px;
-    background:#ffffffcc;
-    backdrop-filter:blur(10px);
-    box-shadow:0 2px 12px rgba(0,0,0,0.08);
-    z-index:1000;
+    position: sticky; top:0; display:flex; justify-content:space-between; align-items:center;
+    padding:16px 24px; background:#ffffffcc; backdrop-filter:blur(10px);
+    box-shadow:0 2px 12px rgba(0,0,0,0.08); z-index:1000;
 }
 .nav b { font-size:22px; color:#059669; }
 .nav button {
-    margin-left:12px;
-    background:#10b981;
-    border:none;
-    padding:8px 16px;
-    border-radius:999px;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-    transition:0.2s;
+    margin-left:12px; background:#10b981; border:none; padding:8px 16px; border-radius:999px;
+    color:white; font-weight:bold; cursor:pointer; transition:0.2s;
 }
 .nav button:hover { background:#059669; transform:scale(1.05); }
 
 /* CONTAINER */
-.container {
-    max-width:700px;
-    margin:auto;
-    padding:40px 20px;
-    display:flex;
-    flex-direction:column;
-    gap:30px;
-}
+.container { max-width:900px; margin:auto; padding:40px 20px; display:flex; flex-direction:column; gap:40px; }
 
 /* BACK BUTTON */
 .dashboard-btn {
-    padding:12px 20px;
-    border-radius:999px;
-    border:none;
-    cursor:pointer;
-    background:#10b981;
-    color:white;
-    font-size:16px;
-    transition:0.25s;
-    align-self:flex-start;
+    padding:12px 20px; border-radius:999px; border:none;
+    cursor:pointer; background:#10b981; color:white; font-size:16px; transition:0.25s; align-self:flex-start;
 }
 .dashboard-btn:hover { background:#059669; transform:scale(1.05); }
 .dashboard-btn:active { transform:scale(0.95); }
 
 /* TIPS CARD */
 .tips {
-    background:white;
-    padding:20px;
-    border-radius:18px;
-    border-left:5px solid #3b82f6;
+    background:white; padding:20px; border-radius:18px; border-left:5px solid #3b82f6;
     box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 .tips b { color:#059669; margin-bottom:8px; display:block; font-size:16px; }
@@ -82,54 +53,38 @@ body {
 
 /* FORM CARD */
 .form-card {
-    background:white;
-    padding:30px 24px;
-    border-radius:18px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
-    display:flex;
-    flex-direction:column;
-    gap:16px;
-    transition:0.25s;
+    background:white; padding:30px 24px; border-radius:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    display:flex; flex-direction:column; gap:16px; transition:0.25s;
 }
 .form-card:hover { transform:scale(1.02); box-shadow:0 8px 20px rgba(0,0,0,0.12); }
 .form-card h2 { color:#059669; margin-bottom:12px; }
 
 /* INPUTS */
 input, textarea, select { 
-    width:100%;
-    padding:12px;
-    border-radius:12px;
-    border:1px solid #d1fae5;
-    transition:0.25s;
+    width:100%; padding:12px; border-radius:12px; border:1px solid #d1fae5; transition:0.25s;
 }
-input:focus, textarea:focus, select:focus { 
-    outline:none; 
-    border-color:#10b981; 
-    background:#dcfce7; 
-}
+input:focus, textarea:focus, select:focus { outline:none; border-color:#10b981; background:#dcfce7; }
 
 /* SUBMIT BUTTON */
 button.submit-btn {
-    padding:12px 20px;
-    border-radius:999px;
-    border:none;
-    cursor:pointer;
-    background:#10b981;
-    color:white;
-    font-weight:bold;
-    transition:0.25s;
-    align-self:flex-start;
+    padding:12px 20px; border-radius:999px; border:none;
+    cursor:pointer; background:#10b981; color:white; font-weight:bold; transition:0.25s; align-self:flex-start;
 }
 button.submit-btn:hover { background:#059669; transform:scale(1.05); }
 button.submit-btn:active { transform:scale(0.95); }
 
-/* SIGNATURE */
-.signature {
-    text-align:center;
-    margin-top:40px;
-    font-size:12px;
-    color:rgba(0,0,0,0.25);
+/* EXAMPLE REPORTS */
+.example-reports {
+    background:white; padding:24px; border-radius:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
+.example-reports h3 { text-align:center; text-decoration:underline; margin-bottom:15px; color:#059669; }
+.example-reports p { margin:10px 0; color:#065f46; font-size:15px; line-height:1.5; }
+
+/* FOOTER */
+footer { text-align:center; padding:20px; font-style:italic; color:#555; margin-top:40px; }
+
+/* SIGNATURE */
+.signature { text-align:center; margin-top:40px; font-size:12px; color:rgba(0,0,0,0.25); }
 
 /* RESPONSIVE */
 @media(max-width:500px){
@@ -141,6 +96,7 @@ button.submit-btn:active { transform:scale(0.95); }
 
 <body>
 
+<!-- NAV -->
 <div class="nav">
     <b>Antecessum</b>
     <div>
@@ -150,9 +106,10 @@ button.submit-btn:active { transform:scale(0.95); }
 </div>
 
 <div class="container">
+
     <button class="dashboard-btn" onclick="location.href='index.html'">⬅ Back to Dashboard</button>
 
-    <!-- Tips Card -->
+    <!-- TIPS -->
     <div class="tips">
         <b>Tips for Effective Reporting:</b>
         <ul>
@@ -163,7 +120,7 @@ button.submit-btn:active { transform:scale(0.95); }
         </ul>
     </div>
 
-    <!-- Form Card -->
+    <!-- REPORT FORM -->
     <div class="form-card">
         <h2>Report a Civic Issue</h2>
         <select id="category">
@@ -181,8 +138,18 @@ button.submit-btn:active { transform:scale(0.95); }
 
         <button class="submit-btn" onclick="submitIssue()">Submit Report</button>
     </div>
+
+    <!-- EXAMPLE REPORTS -->
+    <div class="example-reports">
+        <h3>Example Complaint Reports</h3>
+        <p><strong>Report #001:</strong> Complaint regarding faulty streetlights in downtown area. Submitted on 2026-03-25.</p>
+        <p><strong>Report #002:</strong> Complaint about water leakage in public park facilities. Submitted on 2026-03-26.</p>
+        <p><em>Note: Example reports are for reference only.</em></p>
+    </div>
+
 </div>
 
+<footer>Powered by Antecessum</footer>
 <div class="signature">AK</div>
 
 <script>
