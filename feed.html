@@ -8,9 +8,8 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
-/* GLOBAL */
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: system-ui, sans-serif; background: linear-gradient(180deg,#f0fdf4 0%,#e6f7ef 100%); color:#111827; line-height:1.6; }
+body { font-family: system-ui, sans-serif; background:#f0fdf4; color:#111827; line-height:1.6; }
 a { text-decoration:none; }
 
 /* NAV */
@@ -19,42 +18,43 @@ a { text-decoration:none; }
     padding:16px 24px; background:#ffffffcc; backdrop-filter:blur(10px);
     box-shadow:0 2px 12px rgba(0,0,0,0.08); z-index:1000;
 }
-.nav b { font-size:22px; color:#059669; }
-.nav button {
-    margin-left:12px;
-    background:#10b981; border:none; padding:8px 16px; border-radius:999px;
-    color:white; font-weight:bold; cursor:pointer; transition:0.2s;
-}
+.nav b { font-size:20px; color:#059669; }
+.nav button { margin-left:12px; background:#10b981; border:none; padding:8px 16px; border-radius:999px; color:white; font-weight:bold; cursor:pointer; transition:0.2s; }
 .nav button:hover { background:#059669; transform:scale(1.05); }
 
 /* CONTAINER */
-.container { max-width:1000px; margin:auto; padding:40px 20px; }
-h1 { color:#059669; margin-bottom:20px; }
+.container { max-width:900px; margin:auto; padding:40px 20px; }
 
 /* CARD */
-.feed-preview { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
 .card {
-    background:white; border-radius:16px; padding:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:0.25s; cursor:pointer;
-    display:flex; flex-direction:column; gap:12px; position:relative;
+    background:white; border-radius:16px; padding:20px; margin-bottom:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:0.25s; 
 }
-.card:hover { transform:scale(1.03); box-shadow:0 8px 20px rgba(0,0,0,0.15); }
-.card img, .card video { width:100%; border-radius:12px; max-height:240px; object-fit:cover; }
-.meta { font-size:12px; color:#059669; font-weight:bold; display:flex; justify-content:space-between; align-items:center; }
+.card:hover { transform:scale(1.02); box-shadow:0 8px 20px rgba(0,0,0,0.12); }
+.card img, .card video { width:100%; border-radius:12px; margin-top:10px; }
+.meta { font-size:12px; color:#059669; font-weight:bold; margin-bottom:6px; }
+
+.actions { display:flex; gap:10px; margin-top:12px; align-items:center; }
+button.action-btn { padding:6px 14px; border:none; border-radius:999px; cursor:pointer; transition:0.2s; font-weight:bold; }
+button.liked { background:#16a34a; color:white; }
+button.action-btn:hover { transform:scale(1.05); }
 
 /* STATUS TAGS */
-.status-tag { padding:2px 8px; border-radius:8px; font-size:12px; font-weight:bold; color:white; }
+.status-tag { padding:2px 8px; border-radius:8px; font-size:12px; font-weight:bold; color:white; margin-left:10px; }
 .status-Reported { background:#f59e0b; }
 .status-InProgress { background:#3b82f6; }
 .status-Fixed { background:#16a34a; }
 
-/* RATE IMPORTANCE BUTTON */
-.action-btn {
-    padding:8px 14px; border:none; border-radius:999px; cursor:pointer; transition:0.2s; font-weight:bold;
-    background:#10b981; color:white;
-}
-.action-btn.liked { background:#16a34a; }
-.action-btn:hover { transform:scale(1.05); }
+/* COMMENTS */
+.comments { margin-top:15px; border-top:1px solid #d1fae5; padding-top:10px; }
+.comments input { width:calc(100% - 90px); padding:8px; border-radius:8px; border:1px solid #d1fae5; }
+.comments button { padding:8px 12px; border:none; border-radius:999px; background:#10b981; color:white; cursor:pointer; margin-left:6px; }
+.comments button:hover { background:#059669; }
+
+/* IMPORTANCE SLIDER */
+.importance-container { display:flex; align-items:center; gap:10px; margin-top:8px; }
+.importance-container input[type=range] { flex:1; }
+.importance-value { font-weight:bold; color:#059669; width:24px; text-align:center; }
 
 /* FLOATING REPORT BUTTON */
 .float-report {
@@ -67,26 +67,24 @@ h1 { color:#059669; margin-bottom:20px; }
 
 /* SIGNATURE */
 .signature { text-align:center; margin-top:40px; font-size:12px; color:rgba(0,0,0,0.25); }
+
 </style>
 </head>
-
 <body>
 
 <div class="nav">
     <b>Antecessum</b>
     <div>
-        <button onclick="location.href='report.html'">Report Issue</button>
         <button onclick="location.href='contact.html'">Contact</button>
         <button onclick="location.href='donations.html'">Donate</button>
     </div>
 </div>
 
 <div class="container">
-    <h1>Top Civic Issues</h1>
-    <div class="feed-preview" id="feed">Loading issues...</div>
+    <h1 style="margin-bottom:20px; color:#059669;">Top Issues</h1>
+    <div id="feed">Loading issues...</div>
 </div>
 
-<!-- Floating Report Button -->
 <button class="float-report" onclick="location.href='report.html'">📢 Report Issue</button>
 
 <div class="signature">AK</div>
@@ -97,51 +95,95 @@ const client = supabase.createClient(
   "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-async function loadFeed(){
+// Load all issues
+async function loadIssues() {
     const { data } = await client.from("issues").select("*").order("upvotes",{ ascending:false });
     const feed = document.getElementById("feed");
-    feed.innerHTML="";
+    feed.innerHTML = "";
 
-    data.forEach(issue=>{
+    for(let issue of data){
         const liked = localStorage.getItem("liked_" + issue.id);
-        let media="";
+
+        let media = "";
         if(issue.media_url){
-            media = issue.media_url.includes(".mp4")
+            media = issue.media_url.endsWith(".mp4")
                 ? `<video controls src="${issue.media_url}"></video>`
                 : `<img src="${issue.media_url}">`;
         }
-        const statusClass = issue.status.replace(/\s+/g,'');
-        const card = document.createElement("div");
-        card.className="card";
 
-        card.innerHTML=`
+        // Importance slider average
+        let avgImportance = 0;
+        if(issue.importance_votes) {
+            const votes = Object.values(issue.importance_votes);
+            avgImportance = votes.length ? Math.round(votes.reduce((a,b)=>a+b,0)/votes.length) : 0;
+        }
+
+        // Comments placeholder
+        const { data: comments } = await client.from("comments").select("*").eq("issue_id", issue.id).order("created_at",{ ascending:true });
+
+        let commentsHTML = comments.map(c=>`<p>${c.text}</p>`).join("");
+
+        feed.innerHTML += `
+        <div class="card">
             <div class="meta">
-                <span>${issue.category}</span>
-                <span class="status-tag status-${statusClass}">${issue.status}</span>
+                ${issue.category} 
+                <span class="status-tag status-${issue.status.replace(" ","")}">${issue.status}</span>
             </div>
             <b>📍 ${issue.location}</b>
             <p>${issue.description}</p>
             ${media}
-            <div style="display:flex; gap:10px;">
-                <button class="action-btn ${liked?'liked':''}" onclick="rateImportance(${issue.id},${issue.upvotes},this)">👍 ${issue.upvotes}</button>
+
+            <div class="actions">
+                <button class="action-btn ${liked?'liked':''}" onclick="upvote(${issue.id},${issue.upvotes},this)">👍 ${issue.upvotes}</button>
             </div>
-        `;
-        feed.appendChild(card);
-    });
+
+            <div class="importance-container">
+                <label>Importance:</label>
+                <input type="range" min="1" max="10" value="${avgImportance}" onchange="rateImportance(${issue.id},this.value)">
+                <span class="importance-value">${avgImportance}</span>
+            </div>
+
+            <div class="comments">
+                ${commentsHTML}
+                <div style="display:flex; margin-top:5px;">
+                    <input placeholder="Add comment..." id="comment-${issue.id}">
+                    <button onclick="addComment(${issue.id})">Post</button>
+                </div>
+            </div>
+        </div>`;
+    }
 }
 
-// Rate importance function (upvote)
-async function rateImportance(id,count,btn){
+// Upvote
+async function upvote(id,count,btn){
     if(localStorage.getItem("liked_" + id)) return;
     btn.innerText="⏳";
-    await client.from("issues").update({ upvotes: count + 1 }).eq("id",id);
+    await client.from("issues").update({ upvotes: count+1 }).eq("id",id);
     localStorage.setItem("liked_" + id,true);
-    btn.classList.add("liked");
-    btn.innerText="👍 "+(count+1);
-    loadFeed();
+    loadIssues();
 }
 
-loadFeed();
+// Rate Importance
+async function rateImportance(issue_id,value){
+    const userId = "user_" + Math.random().toString(36).substring(2,8); // random for demo
+    const { data, error } = await client.from("issues").select("importance_votes").eq("id",issue_id).single();
+    const votes = data.importance_votes || {};
+    votes[userId] = parseInt(value);
+
+    await client.from("issues").update({ importance_votes: votes }).eq("id", issue_id);
+    loadIssues();
+}
+
+// Add comment
+async function addComment(issue_id){
+    const input = document.getElementById("comment-" + issue_id);
+    if(!input.value) return alert("Enter comment.");
+    await client.from("comments").insert([{ issue_id, text: input.value }]);
+    input.value = "";
+    loadIssues();
+}
+
+loadIssues();
 </script>
 
 </body>
