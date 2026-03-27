@@ -15,7 +15,7 @@
   #reportSection { display:none; max-width:650px; margin:30px auto; padding:25px; background:white; border-left:6px solid #333; border-radius:8px; box-shadow:0 0 12px rgba(0,0,0,0.15); font-family:'Times New Roman', serif; }
   #reportSection h3 { text-align:center; text-decoration:underline; margin-bottom:15px; }
   #reportSection p { margin:8px 0; line-height:1.5; }
-  #reportSection .print-btn { display:block; margin:20px auto 0; }
+  #reportSection .action-btns { display:flex; justify-content:center; gap:20px; margin-top:20px; }
   footer { text-align:center; padding:15px; font-style:italic; color:#555; }
 </style>
 </head>
@@ -67,7 +67,10 @@ function generateReport() {
     <p><strong>Complaint Details:</strong><br>${details}</p>
     <br>
     <p style="text-align:right;"><strong>Authority Signature:</strong> ____________________</p>
-    <button class="print-btn" onclick="printReport()">Print Report</button>
+    <div class="action-btns">
+      <button onclick="printReport()">Print Report</button>
+      <button onclick="goBack()">Back to Complaint Reports</button>
+    </div>
   `;
 
   const section = document.getElementById('reportSection');
@@ -82,6 +85,10 @@ function printReport() {
   document.body.innerHTML = reportContent;
   window.print();
   document.body.innerHTML = originalContent;
+}
+
+function goBack() {
+  window.location.href = "complaint_reports.html";
 }
 </script>
 
