@@ -81,11 +81,6 @@ transition:0.3s; }
 .float-report:hover { transform:scale(1.05); background:#059669; }
 .float-report:active { transform:scale(0.95); }
 
-/* NEW COMPLAINT BUTTONS SECTION */
-.cta-buttons { text-align:center; margin:50px 0; }
-.cta-buttons button { margin:12px; background:#059669; padding:14px 28px; font-size:18px; font-weight:bold; border-radius:12px; color:white; cursor:pointer; transition:0.2s; }
-.cta-buttons button:hover { background:#10b981; transform:scale(1.05); }
-
 /* FOOTER */
 .signature { text-align:center; margin-top:60px; font-size:12px; color:rgba(0,0,0,0.25); }
 
@@ -107,9 +102,6 @@ transition:0.3s; }
         <button onclick="location.href='feed.html'">View Feed</button>
         <button onclick="location.href='fixmyarea+contact.html'">Contact</button>
         <button onclick="location.href='fixmyarea+donation.html'">Donate</button>
-        <!-- NEW BUTTONS IN NAV -->
-        <button onclick="location.href='complaint_reports.html'">Complaint Reports</button>
-        <button onclick="location.href='generate_report.html'">Generate Report</button>
     </div>
 </div>
 
@@ -142,12 +134,6 @@ transition:0.3s; }
         <div class="stat"><span id="totalIssues">0</span><p>Issues Reported</p></div>
         <div class="stat"><span id="totalResolved">0</span><p>Issues Resolved</p></div>
     </div>
-</div>
-
-<!-- CTA BUTTONS FOR NEW COMPLAINT SYSTEM -->
-<div class="cta-buttons">
-    <button onclick="location.href='complaint_reports.html'">View Complaint Reports</button>
-    <button onclick="location.href='generate_report.html'">Generate Your Own Report</button>
 </div>
 
 <!-- RECENT REPORTS -->
@@ -203,8 +189,6 @@ async function loadFeed(){
         const statusClass = issue.status.replace(" ","");
         const card = document.createElement("div");
         card.className="card";
-
-        const liked = localStorage.getItem(`liked_${issue.id}`);
 
         card.innerHTML=`
             <div class="meta">${issue.category} <span class="status-tag status-${statusClass}">${issue.status}</span></div>
