@@ -3,49 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Support | FixMyArea</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<title>Support | Antecessum</title>
 
 <style>
+/* GLOBAL */
 body {
     margin:0;
-    font-family: 'Inter', sans-serif;
-    background:#0b0f1a;
-    color:white;
+    font-family: system-ui, sans-serif;
+    background: linear-gradient(180deg,#f0fdf4 0%,#e6f7ef 100%);
+    color:#111827;
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
-    text-align:center;
+    min-height:100vh;
 }
-.box {
+
+.support-box {
+    background:white;
+    padding:40px 30px;
+    border-radius:20px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.15);
+    text-align:center;
     max-width:400px;
 }
-button {
+
+.support-box h1 {
+    font-size:36px;
+    color:#059669;
+    margin-bottom:16px;
+}
+
+.support-box p {
+    font-size:16px;
+    margin-bottom:16px;
+    color:#065f46;
+}
+
+.support-box strong {
+    color:#047857;
+}
+
+.support-box button {
     margin-top:20px;
-    padding:10px 16px;
+    padding:12px 24px;
     border:none;
     border-radius:999px;
-    background:#2563eb;
+    background:#10b981;
     color:white;
+    font-weight:bold;
+    font-size:16px;
     cursor:pointer;
+    transition:0.2s;
+}
+
+.support-box button:hover {
+    background:#059669;
+    transform:scale(1.05);
+}
+
+/* SIGNATURE */
+.signature {
+    margin-top:20px;
+    font-size:14px;
+    color:rgba(0,0,0,0.25);
+}
+
+/* RESPONSIVE */
+@media(max-width:500px){
+    .support-box {
+        padding:30px 20px;
+    }
+    .support-box h1 {
+        font-size:28px;
+    }
+    .support-box p {
+        font-size:14px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
-    <h1>Support FixMyArea</h1>
+<div class="support-box">
+    <h1>Support Antecessum</h1>
     <p>If you want this platform to grow and actually fix real issues, support it.</p>
-<p>	</p>
-    <p>"Aniruddh Kumar"</p>
 
     <p><strong>Phone:</strong><br>+91 7019844552</p>
-    <p><strong>Email:</strong><br>ak.fixmyarea@proton.me</p>
+    <p><strong>Email:</strong><br><a href="mailto:ak.fixmyarea@proton.me" style="color:#10b981; font-weight:bold; text-decoration:none;">ak.fixmyarea@proton.me</a></p>
 
     <button onclick="window.location.href='index.html'">← Back</button>
+    <div class="signature">Aniruddh Kumar</div>
 </div>
 
 </body>
