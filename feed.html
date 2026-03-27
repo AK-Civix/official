@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CiviX - Issues Feed</title>
+<title>Antecessum - Issues Feed</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -82,7 +82,7 @@ h1.page-title { color:#059669; margin-bottom:20px; }
 <body>
 
 <div class="nav">
-    <b>CiviX</b>
+    <b>Antecessum</b>
     <div>
         <button onclick="location.href='contact.html'">Contact</button>
         <button onclick="location.href='donations.html'">Donate</button>
@@ -151,7 +151,7 @@ async function upvote(id,count,btn){
 }
 
 function share(category,location){
-    const text=`🚨 ${category} issue in ${location}. Check CiviX`;
+    const text=`🚨 ${category} issue in ${location}. Check Antecessum`;
     if(navigator.share) navigator.share({ text });
     else { navigator.clipboard.writeText(text); alert("Copied to clipboard!"); }
 }
