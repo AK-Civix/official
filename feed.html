@@ -1,36 +1,135 @@
--- ISSUES TABLE
-CREATE TABLE IF NOT EXISTS issues (
-    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    category TEXT NOT NULL,
-    location TEXT NOT NULL,
-    description TEXT NOT NULL,
-    media_url TEXT,
-    upvotes INT DEFAULT 0,
-    status TEXT DEFAULT 'Reported',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    last_activity TIMESTAMP WITH TIME ZONE DEFAULT now()
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Antecessum Feed</title>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<style>
+body { font-family: sans-serif; background:#f0fdf4; }
+.container { max-width:900px; margin:auto; padding:20px; }
+.card { background:white; padding:20px; margin-bottom:20px; border-radius:12px; }
+button { background:#10b981; color:white; border:none; padding:6px 12px; border-radius:999px; margin:5px; }
+.comments { display:none; margin-top:10px; }
+.comments.open { display:block; }
+video,img { width:100%; margin-top:10px; border-radius:10px; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>📢 Civic Feed</h1>
+<button onclick="location.href='index.html'">⬅ Back</button>
+<div id="feed"></div>
+</div>
+
+<script>
+const client = supabase.createClient(
+ "https://bxtsttllyscfvawvhhas.supabase.co",
+ "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
--- COMMENTS
-CREATE TABLE IF NOT EXISTS comments (
-    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    issue_id BIGINT REFERENCES issues(id) ON DELETE CASCADE,
-    text TEXT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
-);
+// LOAD
+async function load(){
 
--- AUTO UPDATE ACTIVITY
-CREATE OR REPLACE FUNCTION update_last_activity()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.last_activity = now();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+    const { data: issues } = await client
+        .from("issues")
+        .select("*")
+        .order("upvotes", { ascending:false });
 
-DROP TRIGGER IF EXISTS trg_update_last_activity ON issues;
+    const { data: comments } = await client.from("comments").select("*");
 
-CREATE TRIGGER trg_update_last_activity
-BEFORE UPDATE ON issues
-FOR EACH ROW
-EXECUTE FUNCTION update_last_activity;
+    const commentMap = {};
+    comments.forEach(c=>{
+        if(!commentMap[c.issue_id]) commentMap[c.issue_id]=[];
+        commentMap[c.issue_id].push(c);
+    });
+
+    const feed = document.getElementById("feed");
+    feed.innerHTML = "";
+
+    issues.forEach(i=>{
+
+        let media="";
+        if(i.media_url){
+            if(i.media_url.includes(".mp4")){
+                media = `<video controls src="${i.media_url}"></video>`;
+            } else {
+                media = `<img src="${i.media_url}">`;
+            }
+        }
+
+        let cmts = (commentMap[i.id] || [])
+            .map(c=>`<p>${c.text}</p>`).join("");
+
+        feed.innerHTML += `
+        <div class="card">
+            <b>${i.category}</b>
+            <p>${i.description}</p>
+            <p>📍 ${i.location}</p>
+
+            ${media}
+
+            <button onclick="upvote(${i.id},${i.upvotes})">
+                👍 ${i.upvotes}
+            </button>
+
+            <button onclick="share('${i.category}','${i.location}')">
+                📤 Share
+            </button>
+
+            <button onclick="toggle(${i.id})">
+                💬 Comments
+            </button>
+
+            <div class="comments" id="c-${i.id}">
+                ${cmts}
+                <input id="i-${i.id}" placeholder="Add comment">
+                <button onclick="comment(${i.id})">Post</button>
+            </div>
+        </div>
+        `;
+    });
+}
+
+// ACTIONS
+async function upvote(id,count){
+    await client.from("issues")
+    .update({ upvotes: count+1 })
+    .eq("id",id);
+    load();
+}
+
+async function comment(id){
+    const input = document.getElementById("i-"+id);
+    if(!input.value) return;
+
+    await client.from("comments").insert([
+        { issue_id:id, text:input.value }
+    ]);
+
+    input.value="";
+    load();
+}
+
+function toggle(id){
+    document.getElementById("c-"+id).classList.toggle("open");
+}
+
+function share(cat,loc){
+    const text = `🚨 ${cat} issue in ${loc} on Antecessum`;
+
+    if(navigator.share){
+        navigator.share({ text });
+    } else {
+        navigator.clipboard.writeText(text);
+        alert("Copied");
+    }
+}
+
+load();
+</script>
+
+</body>
+</html>
