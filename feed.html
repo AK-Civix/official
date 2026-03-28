@@ -10,7 +10,6 @@
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family: system-ui, sans-serif; background:#f0fdf4; color:#111827; line-height:1.6; }
-a { text-decoration:none; }
 
 /* NAV */
 .nav {
@@ -19,8 +18,7 @@ a { text-decoration:none; }
     box-shadow:0 2px 12px rgba(0,0,0,0.08); z-index:1000;
 }
 .nav b { font-size:20px; color:#059669; }
-.nav button { margin-left:12px; background:#10b981; border:none; padding:8px 16px; border-radius:999px; color:white; font-weight:bold; cursor:pointer; transition:0.2s; }
-.nav button:hover { background:#059669; transform:scale(1.05); }
+.nav button { margin-left:12px; background:#10b981; border:none; padding:8px 16px; border-radius:999px; color:white; font-weight:bold; cursor:pointer; }
 
 /* CONTAINER */
 .container { max-width:900px; margin:auto; padding:40px 20px; }
@@ -28,46 +26,37 @@ a { text-decoration:none; }
 /* CARD */
 .card {
     background:white; border-radius:16px; padding:20px; margin-bottom:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:0.25s; 
+    box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:0.25s;
 }
-.card:hover { transform:scale(1.02); box-shadow:0 8px 20px rgba(0,0,0,0.12); }
-.card img, .card video { width:100%; border-radius:12px; margin-top:10px; }
-.meta { font-size:12px; color:#059669; font-weight:bold; margin-bottom:6px; }
+.card:hover { transform:scale(1.02); }
 
-.actions { display:flex; gap:10px; margin-top:12px; align-items:center; }
-button.action-btn { padding:6px 14px; border:none; border-radius:999px; cursor:pointer; transition:0.2s; font-weight:bold; }
-button.liked { background:#16a34a; color:white; }
-button.action-btn:hover { transform:scale(1.05); }
-
-/* STATUS TAGS */
-.status-tag { padding:2px 8px; border-radius:8px; font-size:12px; font-weight:bold; color:white; margin-left:10px; }
+/* STATUS */
+.status-tag { padding:2px 8px; border-radius:8px; font-size:12px; color:white; margin-left:10px; }
 .status-Reported { background:#f59e0b; }
 .status-InProgress { background:#3b82f6; }
 .status-Fixed { background:#16a34a; }
 
+/* ACTIONS */
+.actions { display:flex; gap:10px; margin-top:12px; }
+button.action-btn {
+    padding:6px 14px; border:none; border-radius:999px; cursor:pointer;
+    background:#10b981; color:white; font-weight:bold;
+}
+
 /* COMMENTS */
-.comments { margin-top:15px; border-top:1px solid #d1fae5; padding-top:10px; }
+.comments { margin-top:10px; display:none; }
+.comments.open { display:block; }
 .comments input { width:calc(100% - 90px); padding:8px; border-radius:8px; border:1px solid #d1fae5; }
-.comments button { padding:8px 12px; border:none; border-radius:999px; background:#10b981; color:white; cursor:pointer; margin-left:6px; }
-.comments button:hover { background:#059669; }
+.comments button { padding:8px 12px; border:none; border-radius:999px; background:#10b981; color:white; }
 
-/* IMPORTANCE SLIDER */
+/* IMPORTANCE */
 .importance-container { display:flex; align-items:center; gap:10px; margin-top:8px; }
-.importance-container input[type=range] { flex:1; }
-.importance-value { font-weight:bold; color:#059669; width:24px; text-align:center; }
 
-/* FLOATING REPORT BUTTON */
+/* FLOAT BUTTON */
 .float-report {
     position: fixed; bottom:24px; right:24px; padding:16px 20px; border-radius:999px;
-    background:#10b981; color:white; font-size:16px; cursor:pointer;
-    box-shadow:0 4px 12px rgba(0,0,0,0.3); transition:0.25s; z-index:100;
+    background:#10b981; color:white; cursor:pointer;
 }
-.float-report:hover { transform:scale(1.05); background:#059669; }
-.float-report:active { transform:scale(0.95); }
-
-/* SIGNATURE */
-.signature { text-align:center; margin-top:40px; font-size:12px; color:rgba(0,0,0,0.25); }
-
 </style>
 </head>
 <body>
@@ -81,13 +70,11 @@ button.action-btn:hover { transform:scale(1.05); }
 </div>
 
 <div class="container">
-    <h1 style="margin-bottom:20px; color:#059669;">Top Issues</h1>
-    <div id="feed">Loading issues...</div>
+    <h1 style="color:#059669;">Top Issues</h1>
+    <div id="feed">Loading...</div>
 </div>
 
 <button class="float-report" onclick="location.href='report.html'">📢 Report Issue</button>
-
-<div class="signature">AK</div>
 
 <script>
 const client = supabase.createClient(
@@ -95,91 +82,122 @@ const client = supabase.createClient(
   "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-// Load all issues
+// LOAD ISSUES
 async function loadIssues() {
     const { data } = await client.from("issues").select("*").order("upvotes",{ ascending:false });
     const feed = document.getElementById("feed");
     feed.innerHTML = "";
 
-    for(let issue of data){
-        const liked = localStorage.getItem("liked_" + issue.id);
+    for (let issue of data) {
 
         let media = "";
         if(issue.media_url){
             media = issue.media_url.endsWith(".mp4")
-                ? `<video controls src="${issue.media_url}"></video>`
-                : `<img src="${issue.media_url}">`;
+                ? `<video controls src="${issue.media_url}" width="100%"></video>`
+                : `<img src="${issue.media_url}" width="100%">`;
         }
 
-        // Importance slider average
-        let avgImportance = 0;
-        if(issue.importance_votes) {
-            const votes = Object.values(issue.importance_votes);
-            avgImportance = votes.length ? Math.round(votes.reduce((a,b)=>a+b,0)/votes.length) : 0;
+        // avg importance
+        let avg = 0;
+        if(issue.importance_votes){
+            let vals = Object.values(issue.importance_votes);
+            avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
         }
 
-        // Comments placeholder
-        const { data: comments } = await client.from("comments").select("*").eq("issue_id", issue.id).order("created_at",{ ascending:true });
+        const { data: comments } = await client
+            .from("comments")
+            .select("*")
+            .eq("issue_id", issue.id);
 
         let commentsHTML = comments.map(c=>`<p>${c.text}</p>`).join("");
 
         feed.innerHTML += `
         <div class="card">
-            <div class="meta">
-                ${issue.category} 
-                <span class="status-tag status-${issue.status.replace(" ","")}">${issue.status}</span>
-            </div>
-            <b>📍 ${issue.location}</b>
+
+            <b>${issue.category}</b>
+            <span class="status-tag status-${issue.status.replace(" ","")}">${issue.status}</span>
+
+            <p><b>📍 ${issue.location}</b></p>
             <p>${issue.description}</p>
+
             ${media}
 
             <div class="actions">
-                <button class="action-btn ${liked?'liked':''}" onclick="upvote(${issue.id},${issue.upvotes},this)">👍 ${issue.upvotes}</button>
+                <button class="action-btn" onclick="upvote(${issue.id},${issue.upvotes})">
+                    👍 ${issue.upvotes}
+                </button>
+
+                <button class="action-btn" onclick="shareIssue('${issue.category}','${issue.location}')">
+                    📤 Share
+                </button>
+
+                <button class="action-btn" onclick="toggleComments(${issue.id})">
+                    💬 Comments
+                </button>
             </div>
 
             <div class="importance-container">
-                <label>Importance:</label>
-                <input type="range" min="1" max="10" value="${avgImportance}" onchange="rateImportance(${issue.id},this.value)">
-                <span class="importance-value">${avgImportance}</span>
+                Importance:
+                <input type="range" min="1" max="10" value="${avg}" 
+                    onchange="rateImportance(${issue.id}, this.value)">
+                <b>${avg}</b>
             </div>
 
-            <div class="comments">
+            <div class="comments" id="comments-${issue.id}">
                 ${commentsHTML}
                 <div style="display:flex; margin-top:5px;">
-                    <input placeholder="Add comment..." id="comment-${issue.id}">
+                    <input id="input-${issue.id}" placeholder="Add comment...">
                     <button onclick="addComment(${issue.id})">Post</button>
                 </div>
             </div>
+
         </div>`;
     }
 }
 
-// Upvote
-async function upvote(id,count,btn){
-    if(localStorage.getItem("liked_" + id)) return;
-    btn.innerText="⏳";
+// UPVOTE
+async function upvote(id,count){
     await client.from("issues").update({ upvotes: count+1 }).eq("id",id);
-    localStorage.setItem("liked_" + id,true);
     loadIssues();
 }
 
-// Rate Importance
-async function rateImportance(issue_id,value){
-    const userId = "user_" + Math.random().toString(36).substring(2,8); // random for demo
-    const { data, error } = await client.from("issues").select("importance_votes").eq("id",issue_id).single();
-    const votes = data.importance_votes || {};
-    votes[userId] = parseInt(value);
+// SHARE
+function shareIssue(category, location){
+    const text = `🚨 ${category} issue in ${location} on Antecessum`;
 
-    await client.from("issues").update({ importance_votes: votes }).eq("id", issue_id);
+    if(navigator.share){
+        navigator.share({ text });
+    } else {
+        navigator.clipboard.writeText(text);
+        alert("Copied to clipboard");
+    }
+}
+
+// TOGGLE COMMENTS
+function toggleComments(id){
+    const el = document.getElementById("comments-"+id);
+    el.classList.toggle("open");
+}
+
+// IMPORTANCE
+async function rateImportance(id,value){
+    const { data } = await client.from("issues").select("importance_votes").eq("id",id).single();
+    let votes = data.importance_votes || {};
+
+    const user = "u_"+Math.random().toString(36).substring(2,7);
+    votes[user] = parseInt(value);
+
+    await client.from("issues").update({ importance_votes: votes }).eq("id",id);
     loadIssues();
 }
 
-// Add comment
-async function addComment(issue_id){
-    const input = document.getElementById("comment-" + issue_id);
-    if(!input.value) return alert("Enter comment.");
-    await client.from("comments").insert([{ issue_id, text: input.value }]);
-    input.value = "";
+// COMMENT
+async function addComment(id){
+    const input = document.getElementById("input-"+id);
+    if(!input.value) return;
+
+    await client.from("comments").insert([{ issue_id:id, text:input.value }]);
+    input.value="";
     loadIssues();
 }
 
