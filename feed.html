@@ -3,78 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Antecessum - Issues Feed</title>
+<title>Antecessum - Intelligent Feed</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: system-ui, sans-serif; background:#f0fdf4; color:#111827; line-height:1.6; }
-
-/* NAV */
-.nav {
-    position: sticky; top:0; display:flex; justify-content:space-between; align-items:center;
-    padding:16px 24px; background:#ffffffcc; backdrop-filter:blur(10px);
-    box-shadow:0 2px 12px rgba(0,0,0,0.08); z-index:1000;
-}
-.nav b { font-size:20px; color:#059669; }
-.nav button { margin-left:12px; background:#10b981; border:none; padding:8px 16px; border-radius:999px; color:white; font-weight:bold; cursor:pointer; }
-
-/* CONTAINER */
-.container { max-width:900px; margin:auto; padding:40px 20px; }
-
-/* CARD */
-.card {
-    background:white; border-radius:16px; padding:20px; margin-bottom:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:0.25s;
-}
-.card:hover { transform:scale(1.02); }
-
-/* STATUS */
-.status-tag { padding:2px 8px; border-radius:8px; font-size:12px; color:white; margin-left:10px; }
-.status-Reported { background:#f59e0b; }
-.status-InProgress { background:#3b82f6; }
-.status-Fixed { background:#16a34a; }
-
-/* ACTIONS */
-.actions { display:flex; gap:10px; margin-top:12px; }
-button.action-btn {
-    padding:6px 14px; border:none; border-radius:999px; cursor:pointer;
-    background:#10b981; color:white; font-weight:bold;
-}
-
-/* COMMENTS */
-.comments { margin-top:10px; display:none; }
+body { font-family: system-ui; background:#f0fdf4; }
+.container { max-width:900px; margin:auto; padding:20px; }
+.card { background:white; padding:20px; border-radius:12px; margin-bottom:20px; }
+button { padding:6px 12px; border:none; border-radius:999px; background:#10b981; color:white; cursor:pointer; }
+.comments { display:none; margin-top:10px; }
 .comments.open { display:block; }
-.comments input { width:calc(100% - 90px); padding:8px; border-radius:8px; border:1px solid #d1fae5; }
-.comments button { padding:8px 12px; border:none; border-radius:999px; background:#10b981; color:white; }
-
-/* IMPORTANCE */
-.importance-container { display:flex; align-items:center; gap:10px; margin-top:8px; }
-
-/* FLOAT BUTTON */
-.float-report {
-    position: fixed; bottom:24px; right:24px; padding:16px 20px; border-radius:999px;
-    background:#10b981; color:white; cursor:pointer;
-}
 </style>
 </head>
+
 <body>
 
-<div class="nav">
-    <b>Antecessum</b>
-    <div>
-        <button onclick="location.href='contact.html'">Contact</button>
-        <button onclick="location.href='donations.html'">Donate</button>
-    </div>
-</div>
-
 <div class="container">
-    <h1 style="color:#059669;">Top Issues</h1>
-    <div id="feed">Loading...</div>
+<h1>🔥 Smart Priority Feed</h1>
+<div id="feed">Loading...</div>
 </div>
-
-<button class="float-report" onclick="location.href='report.html'">📢 Report Issue</button>
 
 <script>
 const client = supabase.createClient(
@@ -82,27 +30,61 @@ const client = supabase.createClient(
   "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-// LOAD ISSUES
-async function loadIssues() {
-    const { data } = await client.from("issues").select("*").order("upvotes",{ ascending:false });
+// CATEGORY SEVERITY MAP (CRITICAL)
+function getSeverity(category){
+    const map = {
+        "Road": 8,
+        "Water": 9,
+        "Electricity": 9,
+        "Garbage": 6,
+        "Safety": 10,
+        "Other": 5
+    };
+    return map[category] || 5;
+}
+
+// CALCULATE SCORE
+function calculateScore(issue){
+
+    const upvotes = issue.upvotes || 0;
+
+    // Importance
+    let importance = 5;
+    if(issue.importance_votes){
+        let vals = Object.values(issue.importance_votes);
+        importance = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 5;
+    }
+
+    // Recency (newer = higher)
+    const created = new Date(issue.created_at);
+    const hours = (Date.now() - created.getTime()) / (1000*60*60);
+    const recency = Math.max(0, 10 - hours); // decay
+
+    // Severity
+    const severity = issue.severity || getSeverity(issue.category);
+
+    // Trend (activity boost)
+    const last = new Date(issue.last_activity);
+    const trendHours = (Date.now() - last.getTime()) / (1000*60*60);
+    const trend = Math.max(0, 10 - trendHours);
+
+    // FINAL SCORE
+    return (upvotes*0.4) + (importance*0.25) + (recency*0.2) + (severity*0.1) + (trend*0.05);
+}
+
+// LOAD FEED
+async function loadIssues(){
+
+    const { data } = await client.from("issues").select("*");
+
+    data.forEach(i => i.score = calculateScore(i));
+
+    data.sort((a,b)=>b.score - a.score);
+
     const feed = document.getElementById("feed");
     feed.innerHTML = "";
 
-    for (let issue of data) {
-
-        let media = "";
-        if(issue.media_url){
-            media = issue.media_url.endsWith(".mp4")
-                ? `<video controls src="${issue.media_url}" width="100%"></video>`
-                : `<img src="${issue.media_url}" width="100%">`;
-        }
-
-        // avg importance
-        let avg = 0;
-        if(issue.importance_votes){
-            let vals = Object.values(issue.importance_votes);
-            avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
-        }
+    for(let issue of data){
 
         const { data: comments } = await client
             .from("comments")
@@ -114,41 +96,32 @@ async function loadIssues() {
         feed.innerHTML += `
         <div class="card">
 
-            <b>${issue.category}</b>
-            <span class="status-tag status-${issue.status.replace(" ","")}">${issue.status}</span>
-
-            <p><b>📍 ${issue.location}</b></p>
+            <b>${issue.category}</b> (Score: ${issue.score.toFixed(2)})
             <p>${issue.description}</p>
+            <p>📍 ${issue.location}</p>
 
-            ${media}
+            <button onclick="upvote(${issue.id},${issue.upvotes})">
+                👍 ${issue.upvotes}
+            </button>
 
-            <div class="actions">
-                <button class="action-btn" onclick="upvote(${issue.id},${issue.upvotes})">
-                    👍 ${issue.upvotes}
-                </button>
+            <button onclick="share('${issue.category}','${issue.location}')">
+                Share
+            </button>
 
-                <button class="action-btn" onclick="shareIssue('${issue.category}','${issue.location}')">
-                    📤 Share
-                </button>
+            <button onclick="toggle(${issue.id})">
+                Comments
+            </button>
 
-                <button class="action-btn" onclick="toggleComments(${issue.id})">
-                    💬 Comments
-                </button>
-            </div>
-
-            <div class="importance-container">
+            <div>
                 Importance:
-                <input type="range" min="1" max="10" value="${avg}" 
-                    onchange="rateImportance(${issue.id}, this.value)">
-                <b>${avg}</b>
+                <input type="range" min="1" max="10"
+                onchange="rate(${issue.id},this.value)">
             </div>
 
-            <div class="comments" id="comments-${issue.id}">
+            <div class="comments" id="c-${issue.id}">
                 ${commentsHTML}
-                <div style="display:flex; margin-top:5px;">
-                    <input id="input-${issue.id}" placeholder="Add comment...">
-                    <button onclick="addComment(${issue.id})">Post</button>
-                </div>
+                <input id="i-${issue.id}">
+                <button onclick="comment(${issue.id})">Post</button>
             </div>
 
         </div>`;
@@ -157,48 +130,65 @@ async function loadIssues() {
 
 // UPVOTE
 async function upvote(id,count){
-    await client.from("issues").update({ upvotes: count+1 }).eq("id",id);
+    await client.from("issues")
+        .update({ 
+            upvotes: count+1,
+            last_activity: new Date()
+        })
+        .eq("id",id);
+
     loadIssues();
 }
 
+// RATE
+async function rate(id,val){
+    const { data } = await client.from("issues").select("importance_votes").eq("id",id).single();
+
+    let votes = data.importance_votes || {};
+    const user = "u_"+Math.random();
+
+    votes[user] = parseInt(val);
+
+    await client.from("issues")
+        .update({ 
+            importance_votes: votes,
+            last_activity: new Date()
+        })
+        .eq("id",id);
+
+    loadIssues();
+}
+
+// COMMENT
+async function comment(id){
+    const input = document.getElementById("i-"+id);
+
+    await client.from("comments").insert([
+        { issue_id:id, text:input.value }
+    ]);
+
+    await client.from("issues")
+        .update({ last_activity: new Date() })
+        .eq("id",id);
+
+    loadIssues();
+}
+
+// TOGGLE COMMENTS
+function toggle(id){
+    document.getElementById("c-"+id).classList.toggle("open");
+}
+
 // SHARE
-function shareIssue(category, location){
-    const text = `🚨 ${category} issue in ${location} on Antecessum`;
+function share(cat,loc){
+    const text = `🚨 ${cat} issue in ${loc} on Antecessum`;
 
     if(navigator.share){
         navigator.share({ text });
     } else {
         navigator.clipboard.writeText(text);
-        alert("Copied to clipboard");
+        alert("Copied!");
     }
-}
-
-// TOGGLE COMMENTS
-function toggleComments(id){
-    const el = document.getElementById("comments-"+id);
-    el.classList.toggle("open");
-}
-
-// IMPORTANCE
-async function rateImportance(id,value){
-    const { data } = await client.from("issues").select("importance_votes").eq("id",id).single();
-    let votes = data.importance_votes || {};
-
-    const user = "u_"+Math.random().toString(36).substring(2,7);
-    votes[user] = parseInt(value);
-
-    await client.from("issues").update({ importance_votes: votes }).eq("id",id);
-    loadIssues();
-}
-
-// COMMENT
-async function addComment(id){
-    const input = document.getElementById("input-"+id);
-    if(!input.value) return;
-
-    await client.from("comments").insert([{ issue_id:id, text:input.value }]);
-    input.value="";
-    loadIssues();
 }
 
 loadIssues();
