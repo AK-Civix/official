@@ -6,62 +6,24 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
-body { font-family: system-ui; background:#f0fdf4; margin:0; }
-.container { max-width:900px; margin:auto; padding:20px; }
-
-.nav {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-}
-
-.card {
-    background:white;
-    padding:20px;
-    border-radius:14px;
-    margin-bottom:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
-}
-
-button {
-    padding:6px 12px;
-    border:none;
-    border-radius:999px;
-    background:#10b981;
-    color:white;
-    cursor:pointer;
-    margin:4px;
-}
-
-.comments { display:none; margin-top:10px; }
-.comments.open { display:block; }
-
-video, img {
-    width:100%;
-    border-radius:10px;
-    margin-top:10px;
-}
+body { font-family: sans-serif; background:#f0fdf4; }
+.container { max-width:800px; margin:auto; padding:20px; }
+.card { background:white; padding:20px; margin-bottom:20px; border-radius:12px; }
+button { background:#10b981; color:white; border:none; padding:6px 10px; border-radius:999px; }
 </style>
 </head>
 
 <body>
 
 <div class="container">
-
-<div class="nav">
-    <h2>🔥 Smart Civic Feed</h2>
-    <button onclick="location.href='index.html'">⬅ Back</button>
-</div>
-
-<div id="feed">Loading...</div>
-
+<h1>🔥 Live Ranked Feed</h1>
+<div id="feed"></div>
 </div>
 
 <script>
 const client = supabase.createClient(
-  "https://bxtsttllyscfvawvhhas.supabase.co",
-  "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
+ "https://bxtsttllyscfvawvhhas.supabase.co",
+ "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
 // stable user
@@ -71,187 +33,91 @@ if(!userId){
     localStorage.setItem("uid", userId);
 }
 
-// 🔥 AUTO SEVERITY DETECTION
-function detectSeverity(text){
-    text = text.toLowerCase();
+// 🔥 STRONG SCORING (GUARANTEED DIFFERENCE)
+function score(i){
 
-    if(text.includes("death") || text.includes("accident") || text.includes("fire")) return 10;
-    if(text.includes("electric") || text.includes("water leak")) return 8;
-    if(text.includes("garbage") || text.includes("dirty")) return 6;
-
-    return 5;
-}
-
-// 🧠 AUTHORITY ROUTING
-function getAuthority(category){
-    const map = {
-        "Road": "Public Works Department",
-        "Water": "Water Supply Board",
-        "Electricity": "Electric Board",
-        "Garbage": "Municipal Sanitation",
-        "Safety": "Police Department"
-    };
-    return map[category] || "Municipal Authority";
-}
-
-// 🧠 SCORE
-function calculateScore(issue){
-
-    const upvotes = issue.upvotes || 0;
+    const upvotes = i.upvotes || 0;
 
     let importance = 5;
-    if(issue.importance_votes){
-        let vals = Object.values(issue.importance_votes);
+    if(i.importance_votes){
+        const vals = Object.values(i.importance_votes);
         if(vals.length){
             importance = vals.reduce((a,b)=>a+b,0)/vals.length;
         }
     }
 
-    const created = new Date(issue.created_at);
-    const last = new Date(issue.last_activity || issue.created_at);
+    const hoursOld = (Date.now() - new Date(i.created_at)) / 3600000;
+    const hoursActive = (Date.now() - new Date(i.last_activity)) / 3600000;
 
-    const hoursOld = (Date.now() - created) / (1000*60*60);
-    const hoursActive = (Date.now() - last) / (1000*60*60);
+    const recency = 100 / (1 + hoursOld);
+    const trend = 80 / (1 + hoursActive);
 
-    const recency = 50 / (1 + hoursOld);
-    const trend = 30 / (1 + hoursActive);
-
-    const severity = issue.severity || detectSeverity(issue.description);
+    const severity = i.severity || 5;
 
     return (
-        upvotes * 10 +
-        importance * 15 +
-        recency +
+        upvotes * 20 +        // 🔥 VERY STRONG
+        importance * 25 +     // 🔥 VERY STRONG
+        recency +             
         trend +
-        severity * 5
+        severity * 10
     );
 }
 
 // LOAD
-async function loadIssues(){
+async function load(){
 
-    const { data: issues } = await client.from("issues").select("*");
-    const { data: comments } = await client.from("comments").select("*");
+    const { data } = await client.from("issues").select("*");
 
-    const commentMap = {};
-    comments.forEach(c=>{
-        if(!commentMap[c.issue_id]) commentMap[c.issue_id]=[];
-        commentMap[c.issue_id].push(c);
-    });
+    // compute scores
+    data.forEach(i => i.s = score(i));
 
-    issues.forEach(i=>{
-        i.score = calculateScore(i);
-        i.authority = getAuthority(i.category);
-    });
+    // 🔥 SORT FIRST
+    data.sort((a,b)=>b.s - a.s);
 
-    issues.sort((a,b)=>b.score - a.score);
+    console.log("SCORES:", data.map(i=>i.s));
 
     const feed = document.getElementById("feed");
     feed.innerHTML = "";
 
-    issues.forEach(issue=>{
+    data.forEach(i=>{
 
-        let media = "";
-        if(issue.media_url){
-            if(issue.media_url.includes(".mp4")){
-                media = `<video controls src="${issue.media_url}"></video>`;
+        let media="";
+        if(i.media_url){
+            if(i.media_url.includes(".mp4")){
+                media = `<video controls src="${i.media_url}" width="100%"></video>`;
             } else {
-                media = `<img src="${issue.media_url}">`;
+                media = `<img src="${i.media_url}" width="100%">`;
             }
         }
 
-        let cmts = (commentMap[issue.id] || [])
-            .map(c=>`<p>${c.text}</p>`).join("");
-
         feed.innerHTML += `
         <div class="card">
-
-            <b>${issue.category}</b>
-            <p>${issue.description}</p>
-            <p>📍 ${issue.location}</p>
+            <b>${i.category}</b>
+            <p>${i.description}</p>
+            <p>📍 ${i.location}</p>
 
             ${media}
 
-            <p><b>Score:</b> ${issue.score.toFixed(1)}</p>
-            <p><b>Assigned Authority:</b> ${issue.authority}</p>
+            <p><b>Score:</b> ${i.s.toFixed(2)}</p>
 
-            <button onclick="upvote(${issue.id},${issue.upvotes})">👍 ${issue.upvotes}</button>
-            <button onclick="share('${issue.category}','${issue.location}')">📤 Share</button>
-            <button onclick="toggle(${issue.id})">💬 Comments</button>
-
-            <br><br>
-
-            Importance:
-            <input type="range" min="1" max="10"
-                onchange="rate(${issue.id},this.value)">
-
-            <div class="comments" id="c-${issue.id}">
-                ${cmts}
-                <input id="i-${issue.id}" placeholder="Add comment">
-                <button onclick="comment(${issue.id})">Post</button>
-            </div>
-
-        </div>`;
+            <button onclick="upvote(${i.id},${i.upvotes})">
+                👍 ${i.upvotes}
+            </button>
+        </div>
+        `;
     });
 }
 
-// ACTIONS
+// ACTION
 async function upvote(id,count){
     await client.from("issues")
-    .update({
-        upvotes: count+1,
-        last_activity: new Date().toISOString()
-    }).eq("id",id);
-
-    loadIssues();
-}
-
-async function rate(id,val){
-    const { data } = await client.from("issues")
-    .select("importance_votes").eq("id",id).single();
-
-    let votes = data.importance_votes || {};
-    votes[userId] = parseInt(val);
-
-    await client.from("issues")
-    .update({
-        importance_votes: votes,
-        last_activity: new Date().toISOString()
-    }).eq("id",id);
-
-    loadIssues();
-}
-
-async function comment(id){
-    const input = document.getElementById("i-"+id);
-    if(!input.value) return;
-
-    await client.from("comments").insert([{ issue_id:id, text:input.value }]);
-
-    await client.from("issues")
-    .update({ last_activity: new Date().toISOString() })
+    .update({ upvotes: count+1 })
     .eq("id",id);
 
-    input.value="";
-    loadIssues();
+    load();
 }
 
-function toggle(id){
-    document.getElementById("c-"+id).classList.toggle("open");
-}
-
-function share(cat,loc){
-    const text = `🚨 ${cat} issue in ${loc} on Antecessum`;
-
-    if(navigator.share){
-        navigator.share({ text });
-    } else {
-        navigator.clipboard.writeText(text);
-        alert("Copied");
-    }
-}
-
-loadIssues();
+load();
 </script>
 
 </body>
