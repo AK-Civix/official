@@ -1,0 +1,109 @@
+<!-- new/feed.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Feed — Antecessum</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/app.js" defer></script>
+    <style>
+        .feed-header {
+            padding: 120px 24px 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--white) 0%, #f8fafc 100%);
+        }
+        .filter-bar {
+            max-width: 1200px;
+            margin: -30px auto 40px;
+            padding: 24px;
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">Antecessum</div>
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="donate.html">Donate</a></li>
+    </ul>
+    <a href="report.html" class="cta-btn">Report Issue</a>
+</nav>
+
+<div class="feed-header">
+    <span class="badge">LIVE FEED</span>
+    <h1>Our Shared Progress.</h1>
+    <p>Real-time updates from neighborhoods across the city.</p>
+</div>
+
+<div class="filter-bar">
+    <div style="flex: 1; min-width: 200px;">
+        <input type="text" id="feed-search" class="form-control" placeholder="Search by location or category..." style="padding: 10px 20px;">
+    </div>
+    <select id="filter-category" class="form-control" style="width: auto; padding: 10px 20px;">
+        <option value="All">All Categories</option>
+        <option value="Roads & Potholes">Roads & Potholes</option>
+        <option value="Water & Sanitation">Water & Sanitation</option>
+        <option value="Garbage & Waste">Garbage & Waste</option>
+        <option value="Public Safety">Public Safety</option>
+    </select>
+</div>
+
+<section class="section" style="padding-top: 0;">
+    <div id="feed-grid" class="card-grid">
+        <!-- JS will populate -->
+        <div class="glass-card" style="grid-column: 1 / -1; height: 300px; display: flex; align-items: center; justify-content: center;">
+            <p>Gathering reports from the community...</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p class="copy">&copy; 2026 Antecessum Group. All Rights Reserved.</p>
+</footer>
+
+<script>
+    // Simple filter logic helper (could be moved to app.js if complex)
+    document.addEventListener("DOMContentLoaded", () => {
+        // Initial load happens via app.js
+        
+        const searchInput = document.getElementById('feed-search');
+        const categorySelect = document.getElementById('filter-category');
+        
+        const filterFeeds = () => {
+            const query = searchInput.value.toLowerCase();
+            const cat = categorySelect.value;
+            
+            document.querySelectorAll('.issue-card').forEach(card => {
+                const title = card.querySelector('.issue-title').innerText.toLowerCase();
+                const loc = card.querySelector('.issue-location').innerText.toLowerCase();
+                const badge = card.querySelector('.issue-badge').innerText;
+                
+                const matchesSearch = title.includes(query) || loc.includes(query);
+                const matchesCat = cat === "All" || badge.includes(cat);
+                
+                card.style.display = (matchesSearch && matchesCat) ? 'block' : 'none';
+            });
+        };
+        
+        searchInput.addEventListener('input', filterFeeds);
+        categorySelect.addEventListener('change', filterFeeds);
+    });
+</script>
+
+</body>
+</html>
