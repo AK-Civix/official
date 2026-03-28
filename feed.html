@@ -1,47 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Antecessum Feed</title>
+
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
-body { font-family: sans-serif; background:#f0fdf4; }
-.container { max-width:800px; margin:auto; padding:20px; }
-.card { background:white; padding:20px; border-radius:12px; margin-bottom:20px; }
-button { padding:6px 12px; border:none; border-radius:999px; background:#10b981; color:white; cursor:pointer; }
+body { font-family: system-ui; background:#f0fdf4; margin:0; }
+.container { max-width:900px; margin:auto; padding:20px; }
+
+.card {
+    background:white;
+    padding:20px;
+    border-radius:14px;
+    margin-bottom:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+button {
+    padding:6px 12px;
+    border:none;
+    border-radius:999px;
+    background:#10b981;
+    color:white;
+    cursor:pointer;
+    margin-right:6px;
+}
+
 .comments { display:none; margin-top:10px; }
 .comments.open { display:block; }
+
+video, img {
+    width:100%;
+    border-radius:10px;
+    margin-top:10px;
+}
 </style>
 </head>
 
 <body>
+
 <div class="container">
-<h1>🔥 Smart Feed</h1>
-<div id="feed"></div>
+<h1>🔥 Smart Civic Feed</h1>
+<div id="feed">Loading...</div>
 </div>
 
 <script>
 const client = supabase.createClient(
- "https://bxtsttllyscfvawvhhas.supabase.co",
- "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
+  "https://bxtsttllyscfvawvhhas.supabase.co",
+  "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-// 🔑 stable user id
+// 🔑 Stable user ID
 let userId = localStorage.getItem("uid");
 if(!userId){
     userId = "u_" + Math.random().toString(36).substring(2,8);
     localStorage.setItem("uid", userId);
 }
 
-// 🔥 REAL SCORE FUNCTION
+// 🧠 REAL SCORE FUNCTION
 function calculateScore(issue){
 
     const upvotes = issue.upvotes || 0;
 
     let importance = 5;
     if(issue.importance_votes){
-        let vals = Object.values(issue.importance_votes);
+        const vals = Object.values(issue.importance_votes);
         if(vals.length){
             importance = vals.reduce((a,b)=>a+b,0) / vals.length;
         }
@@ -67,39 +93,41 @@ function calculateScore(issue){
     );
 }
 
-// LOAD EVERYTHING
+// 🚀 LOAD EVERYTHING
 async function loadIssues(){
 
     const { data: issues } = await client.from("issues").select("*");
     const { data: comments } = await client.from("comments").select("*");
 
-    // attach comments
+    // map comments
     const commentMap = {};
     comments.forEach(c=>{
         if(!commentMap[c.issue_id]) commentMap[c.issue_id]=[];
         commentMap[c.issue_id].push(c);
     });
 
-    // compute scores
+    // calculate score
     issues.forEach(i=>{
         i.score = calculateScore(i);
     });
 
-    // sort
+    // SORT (CRITICAL)
     issues.sort((a,b)=>b.score - a.score);
+
+    console.log("SCORES:", issues.map(i=>({id:i.id,score:i.score})));
 
     const feed = document.getElementById("feed");
     feed.innerHTML = "";
 
     issues.forEach(issue=>{
 
-        // media fix
+        // 🎥 MEDIA FIX
         let media = "";
         if(issue.media_url){
             if(issue.media_url.includes(".mp4")){
-                media = `<video controls src="${issue.media_url}" style="width:100%"></video>`;
+                media = `<video controls src="${issue.media_url}"></video>`;
             } else {
-                media = `<img src="${issue.media_url}" style="width:100%">`;
+                media = `<img src="${issue.media_url}">`;
             }
         }
 
@@ -110,24 +138,24 @@ async function loadIssues(){
         feed.innerHTML += `
         <div class="card">
 
-            <b>${issue.category}</b> — Score: ${issue.score.toFixed(1)}
+            <b>${issue.category}</b> 
             <p>${issue.description}</p>
             <p>📍 ${issue.location}</p>
 
             ${media}
 
-            <br><br>
+            <p><b>Score:</b> ${issue.score.toFixed(1)}</p>
 
             <button onclick="upvote(${issue.id},${issue.upvotes})">
                 👍 ${issue.upvotes}
             </button>
 
-            <button onclick="share('${issue.category}','${issue.location}')">
-                Share
+            <button onclick="shareIssue('${issue.category}','${issue.location}')">
+                📤 Share
             </button>
 
-            <button onclick="toggle(${issue.id})">
-                Comments
+            <button onclick="toggleComments(${issue.id})">
+                💬 Comments
             </button>
 
             <br><br>
@@ -138,18 +166,15 @@ async function loadIssues(){
 
             <div class="comments" id="c-${issue.id}">
                 ${cmts}
-                <input id="i-${issue.id}">
-                <button onclick="comment(${issue.id})">Post</button>
+                <input id="i-${issue.id}" placeholder="Add comment">
+                <button onclick="addComment(${issue.id})">Post</button>
             </div>
 
         </div>`;
     });
-
-    console.log("Scores:", issues.map(i=>({id:i.id,score:i.score})));
 }
 
-// ACTIONS
-
+// 👍 UPVOTE
 async function upvote(id,count){
     await client.from("issues")
     .update({
@@ -160,6 +185,7 @@ async function upvote(id,count){
     loadIssues();
 }
 
+// ⭐ IMPORTANCE
 async function rate(id,val){
     const { data } = await client.from("issues")
     .select("importance_votes").eq("id",id).single();
@@ -176,9 +202,9 @@ async function rate(id,val){
     loadIssues();
 }
 
-async function comment(id){
+// 💬 COMMENT
+async function addComment(id){
     const input = document.getElementById("i-"+id);
-
     if(!input.value) return;
 
     await client.from("comments").insert([
@@ -193,18 +219,20 @@ async function comment(id){
     loadIssues();
 }
 
-function toggle(id){
+// 🔽 TOGGLE COMMENTS
+function toggleComments(id){
     document.getElementById("c-"+id).classList.toggle("open");
 }
 
-function share(cat,loc){
-    const text = `🚨 ${cat} issue in ${loc} on Antecessum`;
+// 📤 SHARE
+function shareIssue(category, location){
+    const text = `🚨 ${category} issue in ${location} on Antecessum`;
 
     if(navigator.share){
         navigator.share({ text });
     } else {
         navigator.clipboard.writeText(text);
-        alert("Copied");
+        alert("Copied to clipboard");
     }
 }
 
