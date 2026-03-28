@@ -1,124 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Antecessum Feed</title>
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-<style>
-body { font-family: sans-serif; background:#f0fdf4; }
-.container { max-width:800px; margin:auto; padding:20px; }
-.card { background:white; padding:20px; margin-bottom:20px; border-radius:12px; }
-button { background:#10b981; color:white; border:none; padding:6px 10px; border-radius:999px; }
-</style>
-</head>
-
-<body>
-
-<div class="container">
-<h1>🔥 Live Ranked Feed</h1>
-<div id="feed"></div>
-</div>
-
-<script>
-const client = supabase.createClient(
- "https://bxtsttllyscfvawvhhas.supabase.co",
- "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
+-- ISSUES TABLE
+CREATE TABLE IF NOT EXISTS issues (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    category TEXT NOT NULL,
+    location TEXT NOT NULL,
+    description TEXT NOT NULL,
+    media_url TEXT,
+    upvotes INT DEFAULT 0,
+    status TEXT DEFAULT 'Reported',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    last_activity TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
-// stable user
-let userId = localStorage.getItem("uid");
-if(!userId){
-    userId = "u_" + Math.random().toString(36).substring(2,8);
-    localStorage.setItem("uid", userId);
-}
+-- COMMENTS
+CREATE TABLE IF NOT EXISTS comments (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    issue_id BIGINT REFERENCES issues(id) ON DELETE CASCADE,
+    text TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
 
-// 🔥 STRONG SCORING (GUARANTEED DIFFERENCE)
-function score(i){
+-- AUTO UPDATE ACTIVITY
+CREATE OR REPLACE FUNCTION update_last_activity()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.last_activity = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
-    const upvotes = i.upvotes || 0;
+DROP TRIGGER IF EXISTS trg_update_last_activity ON issues;
 
-    let importance = 5;
-    if(i.importance_votes){
-        const vals = Object.values(i.importance_votes);
-        if(vals.length){
-            importance = vals.reduce((a,b)=>a+b,0)/vals.length;
-        }
-    }
-
-    const hoursOld = (Date.now() - new Date(i.created_at)) / 3600000;
-    const hoursActive = (Date.now() - new Date(i.last_activity)) / 3600000;
-
-    const recency = 100 / (1 + hoursOld);
-    const trend = 80 / (1 + hoursActive);
-
-    const severity = i.severity || 5;
-
-    return (
-        upvotes * 20 +        // 🔥 VERY STRONG
-        importance * 25 +     // 🔥 VERY STRONG
-        recency +             
-        trend +
-        severity * 10
-    );
-}
-
-// LOAD
-async function load(){
-
-    const { data } = await client.from("issues").select("*");
-
-    // compute scores
-    data.forEach(i => i.s = score(i));
-
-    // 🔥 SORT FIRST
-    data.sort((a,b)=>b.s - a.s);
-
-    console.log("SCORES:", data.map(i=>i.s));
-
-    const feed = document.getElementById("feed");
-    feed.innerHTML = "";
-
-    data.forEach(i=>{
-
-        let media="";
-        if(i.media_url){
-            if(i.media_url.includes(".mp4")){
-                media = `<video controls src="${i.media_url}" width="100%"></video>`;
-            } else {
-                media = `<img src="${i.media_url}" width="100%">`;
-            }
-        }
-
-        feed.innerHTML += `
-        <div class="card">
-            <b>${i.category}</b>
-            <p>${i.description}</p>
-            <p>📍 ${i.location}</p>
-
-            ${media}
-
-            <p><b>Score:</b> ${i.s.toFixed(2)}</p>
-
-            <button onclick="upvote(${i.id},${i.upvotes})">
-                👍 ${i.upvotes}
-            </button>
-        </div>
-        `;
-    });
-}
-
-// ACTION
-async function upvote(id,count){
-    await client.from("issues")
-    .update({ upvotes: count+1 })
-    .eq("id",id);
-
-    load();
-}
-
-load();
-</script>
-
-</body>
-</html>
+CREATE TRIGGER trg_update_last_activity
+BEFORE UPDATE ON issues
+FOR EACH ROW
+EXECUTE FUNCTION update_last_activity;
