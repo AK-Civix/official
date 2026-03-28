@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Antecessum Feed</title>
-
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
 body { font-family: system-ui; background:#f0fdf4; margin:0; }
 .container { max-width:900px; margin:auto; padding:20px; }
+
+.nav {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
 
 .card {
     background:white;
@@ -26,7 +31,7 @@ button {
     background:#10b981;
     color:white;
     cursor:pointer;
-    margin-right:6px;
+    margin:4px;
 }
 
 .comments { display:none; margin-top:10px; }
@@ -43,8 +48,14 @@ video, img {
 <body>
 
 <div class="container">
-<h1>🔥 Smart Civic Feed</h1>
+
+<div class="nav">
+    <h2>🔥 Smart Civic Feed</h2>
+    <button onclick="location.href='index.html'">⬅ Back</button>
+</div>
+
 <div id="feed">Loading...</div>
+
 </div>
 
 <script>
@@ -53,23 +64,46 @@ const client = supabase.createClient(
   "sb_publishable_gwJp2GV1r1lqKM5siFCeig_9JkaqV6o"
 );
 
-// 🔑 Stable user ID
+// stable user
 let userId = localStorage.getItem("uid");
 if(!userId){
     userId = "u_" + Math.random().toString(36).substring(2,8);
     localStorage.setItem("uid", userId);
 }
 
-// 🧠 REAL SCORE FUNCTION
+// 🔥 AUTO SEVERITY DETECTION
+function detectSeverity(text){
+    text = text.toLowerCase();
+
+    if(text.includes("death") || text.includes("accident") || text.includes("fire")) return 10;
+    if(text.includes("electric") || text.includes("water leak")) return 8;
+    if(text.includes("garbage") || text.includes("dirty")) return 6;
+
+    return 5;
+}
+
+// 🧠 AUTHORITY ROUTING
+function getAuthority(category){
+    const map = {
+        "Road": "Public Works Department",
+        "Water": "Water Supply Board",
+        "Electricity": "Electric Board",
+        "Garbage": "Municipal Sanitation",
+        "Safety": "Police Department"
+    };
+    return map[category] || "Municipal Authority";
+}
+
+// 🧠 SCORE
 function calculateScore(issue){
 
     const upvotes = issue.upvotes || 0;
 
     let importance = 5;
     if(issue.importance_votes){
-        const vals = Object.values(issue.importance_votes);
+        let vals = Object.values(issue.importance_votes);
         if(vals.length){
-            importance = vals.reduce((a,b)=>a+b,0) / vals.length;
+            importance = vals.reduce((a,b)=>a+b,0)/vals.length;
         }
     }
 
@@ -82,7 +116,7 @@ function calculateScore(issue){
     const recency = 50 / (1 + hoursOld);
     const trend = 30 / (1 + hoursActive);
 
-    const severity = issue.severity || 5;
+    const severity = issue.severity || detectSeverity(issue.description);
 
     return (
         upvotes * 10 +
@@ -93,35 +127,30 @@ function calculateScore(issue){
     );
 }
 
-// 🚀 LOAD EVERYTHING
+// LOAD
 async function loadIssues(){
 
     const { data: issues } = await client.from("issues").select("*");
     const { data: comments } = await client.from("comments").select("*");
 
-    // map comments
     const commentMap = {};
     comments.forEach(c=>{
         if(!commentMap[c.issue_id]) commentMap[c.issue_id]=[];
         commentMap[c.issue_id].push(c);
     });
 
-    // calculate score
     issues.forEach(i=>{
         i.score = calculateScore(i);
+        i.authority = getAuthority(i.category);
     });
 
-    // SORT (CRITICAL)
     issues.sort((a,b)=>b.score - a.score);
-
-    console.log("SCORES:", issues.map(i=>({id:i.id,score:i.score})));
 
     const feed = document.getElementById("feed");
     feed.innerHTML = "";
 
     issues.forEach(issue=>{
 
-        // 🎥 MEDIA FIX
         let media = "";
         if(issue.media_url){
             if(issue.media_url.includes(".mp4")){
@@ -131,32 +160,24 @@ async function loadIssues(){
             }
         }
 
-        // comments
         let cmts = (commentMap[issue.id] || [])
             .map(c=>`<p>${c.text}</p>`).join("");
 
         feed.innerHTML += `
         <div class="card">
 
-            <b>${issue.category}</b> 
+            <b>${issue.category}</b>
             <p>${issue.description}</p>
             <p>📍 ${issue.location}</p>
 
             ${media}
 
             <p><b>Score:</b> ${issue.score.toFixed(1)}</p>
+            <p><b>Assigned Authority:</b> ${issue.authority}</p>
 
-            <button onclick="upvote(${issue.id},${issue.upvotes})">
-                👍 ${issue.upvotes}
-            </button>
-
-            <button onclick="shareIssue('${issue.category}','${issue.location}')">
-                📤 Share
-            </button>
-
-            <button onclick="toggleComments(${issue.id})">
-                💬 Comments
-            </button>
+            <button onclick="upvote(${issue.id},${issue.upvotes})">👍 ${issue.upvotes}</button>
+            <button onclick="share('${issue.category}','${issue.location}')">📤 Share</button>
+            <button onclick="toggle(${issue.id})">💬 Comments</button>
 
             <br><br>
 
@@ -167,14 +188,14 @@ async function loadIssues(){
             <div class="comments" id="c-${issue.id}">
                 ${cmts}
                 <input id="i-${issue.id}" placeholder="Add comment">
-                <button onclick="addComment(${issue.id})">Post</button>
+                <button onclick="comment(${issue.id})">Post</button>
             </div>
 
         </div>`;
     });
 }
 
-// 👍 UPVOTE
+// ACTIONS
 async function upvote(id,count){
     await client.from("issues")
     .update({
@@ -185,7 +206,6 @@ async function upvote(id,count){
     loadIssues();
 }
 
-// ⭐ IMPORTANCE
 async function rate(id,val){
     const { data } = await client.from("issues")
     .select("importance_votes").eq("id",id).single();
@@ -202,14 +222,11 @@ async function rate(id,val){
     loadIssues();
 }
 
-// 💬 COMMENT
-async function addComment(id){
+async function comment(id){
     const input = document.getElementById("i-"+id);
     if(!input.value) return;
 
-    await client.from("comments").insert([
-        { issue_id:id, text:input.value }
-    ]);
+    await client.from("comments").insert([{ issue_id:id, text:input.value }]);
 
     await client.from("issues")
     .update({ last_activity: new Date().toISOString() })
@@ -219,20 +236,18 @@ async function addComment(id){
     loadIssues();
 }
 
-// 🔽 TOGGLE COMMENTS
-function toggleComments(id){
+function toggle(id){
     document.getElementById("c-"+id).classList.toggle("open");
 }
 
-// 📤 SHARE
-function shareIssue(category, location){
-    const text = `🚨 ${category} issue in ${location} on Antecessum`;
+function share(cat,loc){
+    const text = `🚨 ${cat} issue in ${loc} on Antecessum`;
 
     if(navigator.share){
         navigator.share({ text });
     } else {
         navigator.clipboard.writeText(text);
-        alert("Copied to clipboard");
+        alert("Copied");
     }
 }
 
