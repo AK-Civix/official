@@ -1,0 +1,138 @@
+<!-- new/report.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Issue — Antecessum</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="js/app.js" type="module"></script>
+    <style>
+        .report-header {
+            padding: 120px 24px 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--white) 0%, #f8fafc 100%);
+        }
+        #preview-container {
+            margin-top: 16px;
+            max-width: 100%;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px dashed var(--secondary);
+            display: none;
+        }
+        #preview-container img, #preview-container video {
+            width: 100%;
+            height: auto;
+        }
+        .loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.9); display: none;
+            flex-direction: column; align-items: center; justify-content: center; z-index: 2000;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">Antecessum</div>
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="feed.html">Explore Feed</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="index.html" class="cta-btn" style="background: var(--secondary-dark);">&larr; Back Home</a>
+</nav>
+
+<div class="report-header">
+    <span class="badge">SUBMIT A REPORT</span>
+    <h1>Make Your Community Better.</h1>
+    <p>Describe the issue, add photo/video proof, and our community will handle the rest.</p>
+</div>
+
+<section class="section" style="padding-top: 0;">
+    <div class="form-card">
+        <form id="report-form">
+            <div class="form-group">
+                <label>Issue Category</label>
+                <select id="category" class="form-control" required>
+                    <option value="">Select a category</option>
+                    <option value="Roads & Potholes">Roads & Potholes</option>
+                    <option value="Water & Sanitation">Water & Sanitation</option>
+                    <option value="Garbage & Waste">Garbage & Waste</option>
+                    <option value="Public Safety">Public Safety</option>
+                    <option value="Street Lighting">Street Lighting</option>
+                    <option value="Electricity & Power">Electricity & Power</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Location</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="location" class="form-control" placeholder="e.g. Sector 12, Main Road" required>
+                    <button type="button" id="geo-btn" class="cta-btn" style="background: var(--secondary-dark); width: 48px; padding: 0;" title="Get Location">📍</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="description" class="form-control" rows="4" placeholder="Briefly describe the issue..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Media Proof (URL for now)</label>
+                <input type="url" id="media_url" class="form-control" placeholder="Direct link to image or video (mp4/webm)">
+                <p style="font-size: 11px; color: #94a3b8; margin-top: 4px;">For testing, use any public image URL. Real upload coming soon!</p>
+                <div id="preview-container"></div>
+            </div>
+
+            <button type="submit" class="cta-btn" style="width: 100%; padding: 16px; font-size: 18px; margin-top: 12px;">Submit Report</button>
+        </form>
+    </div>
+</section>
+
+<div class="loading-overlay" id="loader">
+    <div style="width: 48px; height: 48px; border: 4px solid var(--primary-light); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    <p style="margin-top: 16px; font-weight: 600; color: var(--secondary-dark);">Uploading reports...</p>
+</div>
+
+<footer style="margin-top: 60px;">
+    <p class="copy">&copy; 2026 Antecessum Group. All Rights Reserved.</p>
+</footer>
+
+<script>
+    // Preview logic
+    const mediaInput = document.getElementById('media_url');
+    const preview = document.getElementById('preview-container');
+    
+    mediaInput.addEventListener('input', () => {
+        const val = mediaInput.value;
+        if(val) {
+            preview.style.display = 'block';
+            if(val.includes('.mp4') || val.includes('.webm')) {
+                preview.innerHTML = `<video src="${val}" controls></video>`;
+            } else {
+                preview.innerHTML = `<img src="${val}" alt="Preview">`;
+            }
+        } else {
+            preview.style.display = 'none';
+        }
+    });
+
+    // Geolocation helpers
+    document.getElementById('geo-btn').addEventListener('click', () => {
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(pos => {
+                document.getElementById('location').value = `Geo: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
+            });
+        }
+    });
+</script>
+
+<style>
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+
+</body>
+</html>

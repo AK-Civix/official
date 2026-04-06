@@ -1,0 +1,122 @@
+<!-- new/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antecessum — Civic Engineering, Reimagined.</title>
+    <meta name="description" content="Report, track, and resolve community issues in real-time. Join thousands of citizens making neighborhoods better.">
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="js/app.js" type="module"></script>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><path d="M3 14h18M3 10h18M3 6h18M3 18h18"/></svg>
+        Antecessum
+    </div>
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="feed.html">Explore Feed</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="donate.html">Support Us</a></li>
+    </ul>
+    <a href="report.html" class="cta-btn">Report an Issue</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+    <div class="hero-content reveal">
+        <span class="badge">PROACTIVE CIVIC ENGAGEMENT</span>
+        <h1>Community Care,<br>One Report at a Time.</h1>
+        <p>Antecessum empowers citizens to identify and track neighborhood issues in real-time. From potholes to public safety, we bridge the gap between reporting and resolution.</p>
+        <div style="display: flex; gap: 16px; justify-content: center;">
+            <a href="report.html" class="cta-btn" style="padding: 16px 32px; font-size: 18px;">Get Started</a>
+            <a href="feed.html" class="cta-btn" style="background: var(--white); color: var(--secondary-dark); padding: 16px 32px; font-size: 18px;">Explore Reports</a>
+        </div>
+    </div>
+    
+    <div class="hero-image reveal">
+        <img src="assets/hero.png" alt="Antecessum Neighborhood">
+    </div>
+</header>
+
+<!-- STATS -->
+<section class="stats">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3 id="stat-total">0</h3>
+            <p>Active Issues Reported</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="stat-resolved">0</h3>
+            <p>Issues Successfully Fixed</p>
+        </div>
+        <div class="stat-card">
+            <h3>24/7</h3>
+            <p>Community Monitoring</p>
+        </div>
+        <div class="stat-card">
+            <h3>< 48h</h3>
+            <p>Avg. Response Time</p>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section">
+    <div class="section-header reveal">
+        <span class="badge" style="background: #f1f5f9; color: #64748b;">OUR PROCESS</span>
+        <h2>How Antecessum Works</h2>
+    </div>
+    <div class="card-grid">
+        <div class="glass-card reveal">
+            <div class="card-icon">1</div>
+            <h3>Capture & Tag</h3>
+            <p>Snap a photo or video of the issue. Our platform automatically tags the GPS location and categorizes the problem for processing.</p>
+        </div>
+        <div class="glass-card reveal">
+            <div class="card-icon">2</div>
+            <h3>Identify & Verify</h3>
+            <p>Community members can verify reports, adding credibility and ensuring that urgent issues rise to the top of the priority list.</p>
+        </div>
+        <div class="glass-card reveal">
+            <div class="card-icon">3</div>
+            <h3>Assign & Resolve</h3>
+            <p>Verified reports are routed to local authorities or community volunteers. Track the progress from 'Reported' to 'Fixed' in real-time.</p>
+        </div>
+    </div>
+</section>
+
+<!-- RECENT REPORTS -->
+<section class="section" style="background: #f8fafc; border-top: 1px solid #f1f5f9;">
+    <div class="section-header reveal">
+        <span class="badge">LIVE FEED</span>
+        <h2>Recent Community Reports</h2>
+    </div>
+    <div id="feed-grid" class="card-grid">
+        <!-- JS will populate this -->
+    </div>
+    <div style="text-align: center; margin-top: 50px;" class="reveal">
+        <a href="feed.html" class="cta-btn" style="background: #f1f5f9; color: #475569;">View Full Feed</a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">Antecessum</div>
+    <div class="footer-nav">
+        <a href="index.html">Home</a>
+        <a href="feed.html">Feed</a>
+        <a href="contact.html">Contact</a>
+        <a href="donate.html">Donate</a>
+        <a href="report.html">Report Issue</a>
+    </div>
+    <p class="copy">&copy; 2026 Antecessum Group. All Rights Reserved. Built with care for AK-Civix.</p>
+</footer>
+
+<button class="float-fab" title="Report an Issue" onclick="location.href='report.html'">+</button>
+
+</body>
+</html>
