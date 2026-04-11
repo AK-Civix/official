@@ -107,15 +107,17 @@ function createIssueCard(issue) {
                 </button>
             </div>
             
-            <div id="comments-${issue.id}" class="comment-section">
-                <div class="comment-list" id="comment-list-${issue.id}">
-                    <!-- Comments loaded here -->
-                </div>
-                <div class="comment-input-area">
-                    <input type="text" id="comment-input-${issue.id}" class="comment-input" placeholder="Add a comment...">
-                    <button class="send-comment-btn" onclick="window.submitComment(${issue.id})">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                    </button>
+            <div id="comments-${issue.id}" class="comments-container">
+                <div class="comments-inner">
+                    <div class="comment-list" id="comment-list-${issue.id}">
+                        <!-- Comments loaded here -->
+                    </div>
+                    <div class="comment-input-area">
+                        <textarea id="comment-input-${issue.id}" class="comment-field" placeholder="Share your thoughts..." rows="1"></textarea>
+                        <button class="comment-submit-btn" onclick="window.submitComment(${issue.id})" title="Send Comment">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -215,17 +217,25 @@ async function loadComments(issueId) {
         if (error) throw error;
 
         if (!data || data.length === 0) {
-            list.innerHTML = '<div style="font-size:12px; color:#94a3b8; padding:10px; text-align:center;">No comments yet. Start the conversation!</div>';
+            list.innerHTML = `
+                <div class="no-comments">
+                    <div style="font-size: 24px; margin-bottom: 8px;">💭</div>
+                    No comments yet. Be the first to start the conversation!
+                </div>`;
             return;
         }
 
         list.innerHTML = data.map(comment => `
             <div class="comment-item">
-                <div class="comment-meta">
-                    <span>${comment.user_name || 'Anonymous'}</span>
-                    <span>${new Date(comment.created_at).toLocaleDateString()}</span>
+                <div class="comment-header">
+                    <div class="comment-user">
+                         ${comment.user_name || 'Anonymous'}
+                    </div>
+                    <div class="comment-date">
+                        ${new Date(comment.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </div>
                 </div>
-                <div class="comment-content">${comment.content}</div>
+                <div class="comment-body">${comment.content}</div>
             </div>
         `).join('');
         
