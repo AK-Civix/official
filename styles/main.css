@@ -240,6 +240,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 32px;
+    align-items: start;
 }
 
 /* RECENT REPORTS CARD */
@@ -576,16 +577,21 @@ footer {
 }
 
 /* THE "PILL" INPUT AREA */
+.comment-inner {
+    padding: 32px;
+}
+
 .comment-input-area {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 16px;
     background: var(--white);
-    padding: 12px 12px 12px 24px;
+    padding: 6px 6px 6px 24px;
     border-radius: var(--radius-full);
     border: 2px solid #e2e8f0;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: var(--shadow-sm);
+    min-height: 60px;
 }
 
 .comment-input-area:focus-within {
@@ -601,10 +607,11 @@ footer {
     font-family: inherit;
     font-size: 15px;
     resize: none;
-    padding: 12px 0;
+    padding: 8px 0;
     background: transparent;
     color: var(--secondary-dark);
     max-height: 120px;
+    overflow-y: hidden;
 }
 
 .comment-field::placeholder {

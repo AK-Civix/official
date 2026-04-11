@@ -113,7 +113,7 @@ function createIssueCard(issue) {
                         <!-- Comments loaded here -->
                     </div>
                     <div class="comment-input-area">
-                        <textarea id="comment-input-${issue.id}" class="comment-field" placeholder="Share your thoughts..." rows="1"></textarea>
+                        <textarea id="comment-input-${issue.id}" class="comment-field" placeholder="Share your thoughts..." rows="1" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
                         <button class="comment-submit-btn" onclick="window.submitComment(${issue.id})" title="Send Comment">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                         </button>
