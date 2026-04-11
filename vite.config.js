@@ -11,6 +11,9 @@ export default defineConfig({
         report: './report.html',
         contact: './contact.html',
         donate: './donate.html',
+        complaint: './complaint_reports.html',
+        generate: './generate_report.html',
+        verify: './verify_report.html',
       }
     },
     outDir: 'dist',
