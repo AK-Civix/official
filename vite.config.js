@@ -13,7 +13,8 @@ export default defineConfig({
         donate: './donate.html',
         complaint: './complaint_reports.html',
         generate: './generate_report.html',
-        verify: './verify_report.html',
+        fixcontact: './fixmyarea+contact.html',
+        fixdonate: './fixmyarea+donation.html',
       }
     },
     outDir: 'dist',
