@@ -85,7 +85,10 @@ function createIssueCard(issue) {
                     <button class="upvote-btn" onclick="event.stopPropagation(); window.upvoteIssue(${issue.id}, ${issue.upvotes || 0}, 1)" title="Upvote this issue" style="border: none; background: transparent; cursor: pointer; color: #64748b; display: flex; align-items: center; transition: 0.2s;" onmouseover="this.style.color='#10b981'" onmouseout="this.style.color='#64748b'">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
                     </button>
-                    <span class="upvote-count" style="font-weight: 700; color: #1e293b; font-size: 14px; min-width: 20px; text-align: center;">${issue.upvotes || 0}</span>
+                    <span class="upvote-count" style="font-weight: 700; color: #1e293b; font-size: 13px; min-width: 20px; text-align: center; display: flex; align-items: center; gap: 4px;">
+                        ${issue.upvotes || 0}
+                        <span style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Upvotes</span>
+                    </span>
                     <button class="upvote-btn" onclick="event.stopPropagation(); window.upvoteIssue(${issue.id}, ${issue.upvotes || 0}, -1)" title="Downvote this issue" style="border: none; background: transparent; cursor: pointer; color: #64748b; display: flex; align-items: center; transition: 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#64748b'">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
                     </button>
