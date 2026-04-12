@@ -81,12 +81,12 @@ function createIssueCard(issue) {
         <div class="issue-content">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
                 <span class="issue-badge status-${statusClass}">${issue.status || 'Reported'}</span>
-                <div class="vote-controls" style="display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.8); padding: 4px 8px; border-radius: 12px; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.3);">
-                    <button class="vote-btn" onclick="event.stopPropagation(); window.voteIssue(${issue.id}, ${issue.upvotes || 0}, 1)" style="border: none; background: transparent; cursor: pointer; color: #64748b; display: flex; align-items: center; transition: 0.2s;" onmouseover="this.style.color='#10b981'" onmouseout="this.style.color='#64748b'">
+                <div class="upvote-controls" style="display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.8); padding: 4px 8px; border-radius: 12px; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.3);">
+                    <button class="upvote-btn" onclick="event.stopPropagation(); window.upvoteIssue(${issue.id}, ${issue.upvotes || 0}, 1)" title="Upvote this issue" style="border: none; background: transparent; cursor: pointer; color: #64748b; display: flex; align-items: center; transition: 0.2s;" onmouseover="this.style.color='#10b981'" onmouseout="this.style.color='#64748b'">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
                     </button>
-                    <span style="font-weight: 700; color: #1e293b; font-size: 14px; min-width: 20px; text-align: center;">${issue.upvotes || 0}</span>
-                    <button class="vote-btn" onclick="event.stopPropagation(); window.voteIssue(${issue.id}, ${issue.upvotes || 0}, -1)" style="border: none; background: transparent; cursor: pointer; color: #64748b; display: flex; align-items: center; transition: 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#64748b'">
+                    <span class="upvote-count" style="font-weight: 700; color: #1e293b; font-size: 14px; min-width: 20px; text-align: center;">${issue.upvotes || 0}</span>
+                    <button class="upvote-btn" onclick="event.stopPropagation(); window.upvoteIssue(${issue.id}, ${issue.upvotes || 0}, -1)" title="Downvote this issue" style="border: none; background: transparent; cursor: pointer; color: #64748b; display: flex; align-items: center; transition: 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#64748b'">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
                     </button>
                 </div>
@@ -113,9 +113,9 @@ function createIssueCard(issue) {
                         <!-- Comments loaded here -->
                     </div>
                     <div class="comment-input-area">
-                        <textarea id="comment-input-${issue.id}" class="comment-field" placeholder="Share your thoughts..." rows="1" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
-                        <button class="comment-submit-btn" onclick="window.submitComment(${issue.id})" title="Send Comment">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        <textarea id="comment-input-${issue.id}" class="comment-field" placeholder="Write a comment..." rows="1" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px'"></textarea>
+                        <button class="comment-submit-btn" onclick="window.submitComment(${issue.id})" title="Post comment">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                         </button>
                     </div>
                 </div>
@@ -172,8 +172,8 @@ async function handleSub(e) {
     }
 }
 
-// Voting Logic
-async function voteIssue(id, currentVotes, delta) {
+// Upvoting Logic
+async function upvoteIssue(id, currentVotes, delta) {
     if (!supabaseClient) return;
     
     try {
@@ -219,8 +219,7 @@ async function loadComments(issueId) {
         if (!data || data.length === 0) {
             list.innerHTML = `
                 <div class="no-comments">
-                    <div style="font-size: 24px; margin-bottom: 8px;">💭</div>
-                    No comments yet. Be the first to start the conversation!
+                    <p>No comments yet. Be the first to start the conversation!</p>
                 </div>`;
             return;
         }
@@ -274,7 +273,7 @@ async function submitComment(issueId) {
     }
 }
 
-window.voteIssue = voteIssue;
+window.upvoteIssue = upvoteIssue;
 window.toggleComments = toggleComments;
 window.submitComment = submitComment;
 

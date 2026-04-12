@@ -306,8 +306,8 @@ body {
     color: var(--secondary-dark);
 }
 
-/* VOTING CONTROLS */
-.vote-controls {
+/* UPVOTE CONTROLS */
+.upvote-controls {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -320,12 +320,12 @@ body {
     transition: var(--transition-fast);
 }
 
-.vote-controls:hover {
+.upvote-controls:hover {
     background: var(--white);
     box-shadow: var(--shadow-md);
 }
 
-.vote-btn {
+.upvote-btn {
     border: none;
     background: transparent;
     cursor: pointer;
@@ -338,19 +338,19 @@ body {
     border-radius: 6px;
 }
 
-.vote-btn:hover {
+.upvote-btn:hover {
     background: #f1f5f9;
 }
 
-.vote-btn.up:hover {
+.upvote-btn.up:hover {
     color: var(--primary);
 }
 
-.vote-btn.down:hover {
+.upvote-btn.down:hover {
     color: #ef4444;
 }
 
-.vote-count {
+.upvote-count {
     font-weight: 800;
     color: var(--secondary-dark);
     font-size: 14px;
@@ -474,25 +474,27 @@ footer {
 .comments-container {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(248, 250, 252, 0.8);
-    backdrop-filter: blur(16px);
-    border-top: 1px solid rgba(226, 232, 240, 0.5);
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #fdfdfe;
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .comments-container.active {
-    max-height: 1200px;
+    max-height: 800px;
 }
 
 .comments-inner {
-    padding: 32px;
+    padding: 20px;
 }
 
 .comment-list {
-    max-height: 480px;
+    max-height: 400px;
     overflow-y: auto;
-    margin-bottom: 32px;
-    padding-right: 12px;
+    margin-bottom: 20px;
+    padding-right: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .comment-list::-webkit-scrollbar {
@@ -509,13 +511,11 @@ footer {
 }
 
 .comment-item {
-    background: var(--white);
-    padding: 24px;
-    border-radius: var(--radius-md);
-    margin-bottom: 20px;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--glass-border);
-    animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    background: #f8fafc;
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     opacity: 0;
 }
 
@@ -570,34 +570,76 @@ footer {
 }
 
 .comment-body {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--secondary);
-    line-height: 1.7;
-    margin-left: 40px;
+    line-height: 1.6;
+    margin-left: 0;
+    padding-top: 4px;
 }
 
-/* THE "PILL" INPUT AREA */
-.comment-inner {
-    padding: 32px;
-}
-
+/* COMPACT INPUT AREA */
 .comment-input-area {
     display: flex;
-    align-items: center;
-    gap: 16px;
+    align-items: flex-end;
+    gap: 12px;
     background: var(--white);
-    padding: 6px 6px 6px 24px;
-    border-radius: var(--radius-full);
+    padding: 8px 12px;
+    border-radius: 20px;
     border: 2px solid #e2e8f0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
     box-shadow: var(--shadow-sm);
-    min-height: 60px;
 }
 
 .comment-input-area:focus-within {
     border-color: var(--primary);
-    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.2);
-    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+}
+
+.comment-field {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 8px 4px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: none;
+    max-height: 120px;
+    min-height: 20px;
+    outline: none;
+    line-height: 1.5;
+}
+
+.comment-submit-btn {
+    width: 36px;
+    height: 36px;
+    background: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+    flex-shrink: 0;
+    margin-bottom: 2px;
+}
+
+.comment-submit-btn:hover {
+    background: var(--primary-dark);
+    transform: scale(1.05);
+}
+
+.comment-submit-btn:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+}
+
+.no-comments {
+    text-align: center;
+    padding: 20px;
+    color: #94a3b8;
+    font-size: 14px;
 }
 
 .comment-field {
