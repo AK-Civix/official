@@ -1,12 +1,10 @@
-<!-- donate.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Support Our Mission — Antecessum</title>
+    <title>Support Our Mission — Praxis Pune</title>
     <link rel="stylesheet" href="styles/main.css">
-    <script src="js/app.js" type="module"></script>
     <style>
         .donate-header {
             padding: 140px 24px 70px;
@@ -21,20 +19,6 @@
             color: var(--text-secondary);
             font-size: 16px;
         }
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            background: var(--primary-light);
-            border: 1px solid var(--border-color);
-            color: var(--primary);
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
         .popular-badge {
             position: absolute;
             top: 20px;
@@ -47,6 +31,32 @@
             border-radius: var(--radius-full);
             letter-spacing: 0.05em;
         }
+        .supply-wishlist {
+            margin-top: 40px;
+            background: var(--bg-surface);
+            padding: var(--space-4);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-premium);
+        }
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .wishlist-item {
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .wishlist-icon {
+            font-size: 24px;
+        }
     </style>
 </head>
 <body>
@@ -54,7 +64,7 @@
 <nav class="navbar">
     <div class="nav-brand" onclick="location.href='index.html'">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        Antecessum
+        Praxis
     </div>
     <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
@@ -67,43 +77,88 @@
 
 <div class="donate-header">
     <span class="badge">SUPPORT US</span>
-    <h1>Fund Local Drives</h1>
-    <p>Your contributions fund cleanup equipment, tools, safety gear, and support local neighborhood drives in Pune.</p>
+    <h1>Fund Pune Cleanup Campaigns</h1>
+    <p>Your contributions fund cleanup equipment, safety gear, logistics, and coordinator support in Pune.</p>
 </div>
 
 <section class="section" style="padding-top: 0;">
+    <!-- Donation Tiers -->
     <div class="card-grid">
-        <div class="glass-card reveal">
+        <div class="glass-card reveal active">
             <h3>Gear Sponsor</h3>
-            <p style="margin-bottom: var(--space-md); flex: 1;">Provides gloves, trash bags, and safety vests for 5 volunteers.</p>
+            <p style="margin-bottom: var(--space-md); flex: 1;">Provides safety gloves, reflective jackets, masks, and garbage disposal sacks for 5 volunteers.</p>
             <div style="font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 800; color: var(--primary); margin: var(--space-md) 0;">
-                $10<span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">/mo</span>
+                $10<span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">/one-time</span>
             </div>
-            <button class="cta-btn secondary" style="width: 100%; border-radius: var(--radius-md);" onclick="alert('Redirecting to secure payment...')">Support with $10</button>
+            <button class="cta-btn secondary" style="width: 100%; border-radius: var(--radius-md);" onclick="alert('Redirecting to secure payment gateway for Gear Sponsor ($10)...')">Sponsor $10</button>
         </div>
-        <div class="glass-card reveal" style="border: 2px solid var(--primary); box-shadow: var(--shadow-lg);">
+        <div class="glass-card reveal active" style="border: 2px solid var(--primary); box-shadow: var(--shadow-premium); position: relative;">
             <span class="popular-badge">MOST POPULAR</span>
             <h3>Drive Leader</h3>
-            <p style="margin-bottom: var(--space-md); flex: 1;">Funds tools, garbage bins, and coordination for an entire local street cleanup.</p>
+            <p style="margin-bottom: var(--space-md); flex: 1;">Covers high-grade iron brooms, metal pickers, safety signs, and refreshment packages for a local street team drive.</p>
             <div style="font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 800; color: var(--primary); margin: var(--space-md) 0;">
-                $25<span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">/mo</span>
+                $25<span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">/one-time</span>
             </div>
-            <button class="cta-btn" style="width: 100%; border-radius: var(--radius-md);" onclick="alert('Redirecting to secure payment...')">Support with $25</button>
+            <button class="cta-btn" style="width: 100%; border-radius: var(--radius-md);" onclick="alert('Redirecting to secure payment gateway for Drive Leader ($25)...')">Sponsor $25</button>
         </div>
-        <div class="glass-card reveal">
+        <div class="glass-card reveal active">
             <h3>Neighborhood Patron</h3>
-            <p style="margin-bottom: var(--space-md); flex: 1;">Supports large-scale machinery rental or community awareness drives across multiple zones.</p>
+            <p style="margin-bottom: var(--space-md); flex: 1;">Funds tractor rental for debris transit, community banner printings, and larger public awareness campaigns across multiple societies.</p>
             <div style="font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 800; color: var(--primary); margin: var(--space-md) 0;">
-                $100<span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">/mo</span>
+                $100<span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">/one-time</span>
             </div>
-            <button class="cta-btn secondary" style="width: 100%; border-radius: var(--radius-md);" onclick="alert('Redirecting to secure payment...')">Support with $100</button>
+            <button class="cta-btn secondary" style="width: 100%; border-radius: var(--radius-md);" onclick="alert('Redirecting to secure payment gateway for Neighborhood Patron ($100)...')">Sponsor $100</button>
         </div>
     </div>
 
-    <div class="glass-card reveal" style="margin-top: 40px; text-align: center; align-items: center;">
-        <h3>Custom Amount?</h3>
-        <p style="max-width: 500px; margin-bottom: var(--space-md);">Every contribution counts. Whether it's $1 or $1000, your support keeps Praxis running.</p>
-        <button class="cta-btn secondary" style="margin-top: var(--space-sm); border-radius: var(--radius-md); padding: 12px 28px;" onclick="alert('Redirecting to secure payment...')">Custom Donation</button>
+    <!-- Custom Donation & UPI QR -->
+    <div class="glass-card reveal active" style="margin-top: 40px; text-align: center; align-items: center; justify-content: center; padding: 32px;">
+        <h3>Custom Amount Contribution</h3>
+        <p style="max-width: 500px; margin-bottom: var(--space-md); font-size: 14px; color: var(--text-secondary);">
+            Every contribution counts. Whether you donate $1 or $1000, your support keeps Praxis running and buying equipment.
+        </p>
+        <div style="display: flex; gap: 8px; margin-bottom: 16px; max-width: 320px; width: 100%;">
+            <input type="number" class="form-control" placeholder="Enter amount (USD)" style="text-align: center;">
+            <button class="cta-btn" onclick="alert('Thank you! Redirecting to secure gateway...')">Contribute</button>
+        </div>
+    </div>
+
+    <!-- Supply Wishlist -->
+    <div class="supply-wishlist reveal active">
+        <h3 style="text-align: center; font-weight: 700; color: var(--primary);">Donate Materials / Supplies</h3>
+        <p style="text-align: center; color: var(--text-secondary); max-width: 600px; margin: 0 auto; font-size: 14px;">
+            Prefer to donate physical tools? We are always looking for cleanup items in Pune. Contact us to schedule drop-offs!
+        </p>
+        <div class="wishlist-grid">
+            <div class="wishlist-item">
+                <span class="wishlist-icon">🧹</span>
+                <div>
+                    <h4 style="font-size: 14px; font-weight: 600;">Long Yard Brooms</h4>
+                    <p style="font-size: 12px; color: var(--text-muted);">Goal: 50 pieces</p>
+                </div>
+            </div>
+            <div class="wishlist-item">
+                <span class="wishlist-icon">🧤</span>
+                <div>
+                    <h4 style="font-size: 14px; font-weight: 600;">Rubber Gloves</h4>
+                    <p style="font-size: 12px; color: var(--text-muted);">Goal: 200 pairs</p>
+                </div>
+            </div>
+            <div class="wishlist-item">
+                <span class="wishlist-icon">🗑️</span>
+                <div>
+                    <h4 style="font-size: 14px; font-weight: 600;">Industrial Dustbins</h4>
+                    <p style="font-size: 12px; color: var(--text-muted);">Goal: 20 pieces</p>
+                </div>
+            </div>
+            <div class="wishlist-item">
+                <span class="wishlist-icon">🦺</span>
+                <div>
+                    <h4 style="font-size: 14px; font-weight: 600;">Reflective Jackets</h4>
+                    <p style="font-size: 12px; color: var(--text-muted);">Goal: 100 pieces</p>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
