@@ -71,7 +71,7 @@ function createIssueCard(issue) {
             mediaHtml = `<img src="${issue.media_url}" alt="${issue.category}" loading="lazy">`;
         }
     } else {
-        mediaHtml = `<div class="placeholder-img" style="background:#f1f5f9; display:flex; align-items:center; justify-content:center; height:100%; color:#94a3b8;"><span style="font-size:40px;">📍</span></div>`;
+        mediaHtml = `<div class="placeholder-img" style="background:var(--bg-secondary); display:flex; align-items:center; justify-content:center; height:100%; color:var(--text-light);"><span style="font-size:40px;">📍</span></div>`;
     }
 
     const statusClass = issue.status ? issue.status.replace(/\s+/g, '') : 'Reported';
@@ -79,18 +79,15 @@ function createIssueCard(issue) {
     card.innerHTML = `
         <div class="issue-media">${mediaHtml}</div>
         <div class="issue-content">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md);">
                 <span class="issue-badge status-${statusClass}">${issue.status || 'Reported'}</span>
-                <div class="upvote-controls" style="display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.8); padding: 4px 8px; border-radius: 12px; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.3);">
-                    <button class="upvote-btn" onclick="event.stopPropagation(); window.upvoteIssue(${issue.id}, ${issue.upvotes || 0}, 1)" title="Upvote this issue" style="border: none; background: transparent; cursor: pointer; color: #64748b; display: flex; align-items: center; transition: 0.2s;" onmouseover="this.style.color='#10b981'" onmouseout="this.style.color='#64748b'">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+                <div class="upvote-controls">
+                    <button class="upvote-btn up" onclick="event.stopPropagation(); window.upvoteIssue(${issue.id}, ${issue.upvotes || 0}, 1)" title="Upvote this issue">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
                     </button>
-                    <span class="upvote-count" style="font-weight: 700; color: #1e293b; font-size: 13px; min-width: 20px; text-align: center; display: flex; align-items: center; gap: 4px;">
-                        ${issue.upvotes || 0}
-                        <span style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Upvotes</span>
-                    </span>
-                    <button class="upvote-btn" onclick="event.stopPropagation(); window.upvoteIssue(${issue.id}, ${issue.upvotes || 0}, -1)" title="Downvote this issue" style="border: none; background: transparent; cursor: pointer; color: #64748b; display: flex; align-items: center; transition: 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#64748b'">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+                    <span class="upvote-count">${issue.upvotes || 0}</span>
+                    <button class="upvote-btn down" onclick="event.stopPropagation(); window.upvoteIssue(${issue.id}, ${issue.upvotes || 0}, -1)" title="Downvote this issue">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
                     </button>
                 </div>
             </div>
@@ -99,11 +96,11 @@ function createIssueCard(issue) {
                 ${issue.location || 'Unknown Location'}
             </div>
             <h3 class="issue-title">${issue.category || 'Civic Issue'}</h3>
-            <p class="issue-desc" style="font-size: 14px; color: #64748b; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+            <p class="issue-desc" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
                 ${issue.description || 'No description provided.'}
             </p>
-            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 12px; margin-bottom: 8px;">
-                <span style="font-size: 11px; color: #94a3b8; font-weight: 500;">ID: #${issue.id}</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: var(--space-md); margin-top: auto; margin-bottom: var(--space-xs);">
+                <span style="font-size: 11px; color: var(--text-light); font-weight: 500;">ID: #${issue.id}</span>
                 <button class="comment-toggle-btn" onclick="window.toggleComments(${issue.id})">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
                     Comments

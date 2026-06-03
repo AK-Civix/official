@@ -7,6 +7,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: './index.html',
+        minimalist_light: './index_minimalist_light.html',
+        warm_editorial: './index_warm_editorial.html',
+        professional_saas_light: './index_professional_saas_light.html',
         feed: './feed.html',
         report: './report.html',
         contact: './contact.html',

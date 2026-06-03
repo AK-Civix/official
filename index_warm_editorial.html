@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Antecessum | Warm Editorial Concept</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Inter:wght@400;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Playfair+Display:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#747878",
+                        "background": "#fdf8f8",
+                        "surface-tint": "#5f5e5e",
+                        "inverse-surface": "#313030",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#8c8375",
+                        "primary-fixed": "#e5e2e1",
+                        "surface-dim": "#ddd9d8",
+                        "surface-variant": "#e5e2e1",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "tertiary-fixed-dim": "#d0c5b5",
+                        "secondary": "#605e59",
+                        "secondary-fixed": "#e6e2db",
+                        "on-background": "#1c1b1b",
+                        "tertiary-fixed": "#ede1d1",
+                        "on-primary-fixed-variant": "#474746",
+                        "outline-variant": "#c4c7c7",
+                        "inverse-on-surface": "#f4f0ef",
+                        "surface-bright": "#fdf8f8",
+                        "secondary-container": "#e3dfd8",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface-container": "#f1edec",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#ebe7e6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#64625d",
+                        "on-tertiary-fixed": "#201b11",
+                        "primary": "#000000",
+                        "tertiary": "#000000",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#444748",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#484742",
+                        "inverse-primary": "#c8c6c5",
+                        "tertiary-container": "#201b11",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface": "#fdf8f8",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#cac6bf",
+                        "primary-container": "#1c1b1b",
+                        "surface-container-highest": "#e5e2e1",
+                        "on-primary-container": "#858383",
+                        "surface-container-low": "#f7f3f2",
+                        "on-surface": "#1c1b1b",
+                        "on-tertiary-fixed-variant": "#4d463a",
+                        "on-secondary-fixed": "#1c1c17"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Playfair Display"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #fdf8f8; /* Warm off-white from config surface */
+            color: #1c1b1b; /* Muted dark-charcoal from config on-surface */
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .hairline-border {
+            border-width: 0.5px;
+        }
+        ::selection {
+            background: #1c1b1b;
+            color: #fdf8f8;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface border-b border-secondary-fixed-dim px-margin-desktop py-6 max-w-container-max mx-auto left-0 right-0 flex justify-between items-center">
+<div class="flex items-center gap-4 cursor-pointer" onclick="location.href='index.html'">
+<img alt="Antecessum Logo" class="h-8 w-8 grayscale contrast-125" src="https://lh3.googleusercontent.com/aida/ADBb0ujXhVJynBql2FypEHJY9igA6TwwcgzuFGQsehxjoWQucTznpH7ga2swvWMpYI_fem07j7ni4VtgBei8XdDZbRgAhv6gXXxDYoUGZtvOmFZwDoWMcjLLHxqGrxYTHxlRRdz7H7HArc6d_SPhEq5taRjC1HNJcnGWr1nCknnUabm_EjdqCaxc0nvQM2EF9pnwiLBPEGb2SH2I-9RF6y1c-Gib85JRUnSsq04Ar8yCPj48rGubtsSHEp6EiXd6"/>
+<span class="font-headline-lg text-headline-lg text-primary uppercase tracking-tight">Antecessum</span>
+</div>
+<div class="hidden md:flex gap-12">
+<a class="text-primary font-bold border-b border-primary font-body-md text-body-md" href="index.html">Home</a>
+<a class="text-secondary hover:text-primary transition-colors duration-200 font-body-md text-body-md" href="feed.html">Explore Feed</a>
+<a class="text-secondary hover:text-primary transition-colors duration-200 font-body-md text-body-md" href="report.html">Report Issue</a>
+<a class="text-secondary hover:text-primary transition-colors duration-200 font-body-md text-body-md" href="donate.html">Support Us</a>
+</div>
+<div class="flex items-center gap-8">
+<button class="font-label-sm text-label-sm uppercase tracking-widest text-secondary hover:text-primary transition-colors" onclick="location.href='contact.html'">Sign In</button>
+<button class="px-6 py-3 border border-primary bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-widest hover:bg-transparent hover:text-primary transition-all duration-300" onclick="location.href='report.html'">Get Started</button>
+</div>
+</nav>
+<main class="mt-24">
+<!-- Hero Section -->
+<section class="relative min-h-[85vh] flex flex-col justify-end px-margin-desktop pb-24 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Architectural perspective of modern infrastructure" class="w-full h-full object-cover grayscale brightness-90 contrast-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy7rrrCfBrSjVg6tv2TKUMMD7FDdxu2uwYjzBgmzDPcNYWaZ0PQTGhbtektQUlOXxrZDsBOIf8sHmjcK92VI8OAQH5VWMHHQOYw9tNxbOk57SpK-OrBsrLQ13DDypH1LmX1t4L1mpvGJS1_ALvRsC3Yc7oZzzKeGnMWwSTM1w3FzaitPTebGKIc7SZsx3IeGT7A1zz6gXlrEeouhTp3ibWfJklwYn7Cin4XSoccTvrJOmxValf--hv2Z96akB51C5lmbhn5DYRupNF"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-60"></div>
+</div>
+<div class="relative z-10 max-w-4xl">
+<span class="font-label-sm text-label-sm uppercase tracking-[0.3em] text-secondary mb-6 block">Legacy Reimagined</span>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-8 leading-tight">
+                    Engineering the Future of Civic Infrastructure
+                </h1>
+<p class="font-body-lg text-body-lg text-secondary max-w-2xl border-l border-primary pl-8 py-2">
+                    Antecessum delivers proactive, data-driven engineering solutions designed for the complexities of modern, resilient urban environments. We bridge the gap between archival reliability and future-proof automation.
+                </p>
+</div>
+</section>
+<!-- City Metrics -->
+<section class="py-24 px-margin-desktop border-b border-secondary-fixed-dim">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="py-12 border-l border-secondary-fixed-dim pl-8 group">
+<span class="font-label-sm text-label-sm uppercase text-secondary group-hover:text-primary transition-colors">Scale</span>
+<div class="mt-4 flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg-mobile md:text-[80px] leading-none">500+</span>
+</div>
+<p class="mt-4 font-body-md text-secondary uppercase tracking-wider">Cities Optimized Globally</p>
+</div>
+<div class="py-12 border-l border-secondary-fixed-dim pl-8 group">
+<span class="font-label-sm text-label-sm uppercase text-secondary group-hover:text-primary transition-colors">Efficiency</span>
+<div class="mt-4 flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg-mobile md:text-[80px] leading-none">40%</span>
+</div>
+<p class="mt-4 font-body-md text-secondary uppercase tracking-wider">Cost Reduction In Maintenance</p>
+</div>
+<div class="py-12 border-l border-secondary-fixed-dim pl-8 group">
+<span class="font-label-sm text-label-sm uppercase text-secondary group-hover:text-primary transition-colors">Performance</span>
+<div class="mt-4 flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg-mobile md:text-[80px] leading-none">12ms</span>
+</div>
+<p class="mt-4 font-body-md text-secondary uppercase tracking-wider">Analysis Latency Threshold</p>
+</div>
+</div>
+</section>
+<!-- System Telemetry Table -->
+<section class="py-24 px-margin-desktop bg-surface-container">
+<div class="flex justify-between items-end mb-16">
+<div class="max-w-xl">
+<h2 class="font-headline-xl text-headline-xl mb-4">System Telemetry</h2>
+<p class="font-body-md text-secondary">Real-time monitoring across global node clusters. Our proactive analytical engine detects structural fatigue before it becomes critical.</p>
+</div>
+<button class="font-label-sm text-label-sm uppercase border-b border-primary pb-1" onclick="location.href='feed.html'">View Full Network</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-primary">
+<th class="py-6 font-label-sm text-label-sm uppercase text-secondary tracking-widest">Infrastructure Node</th>
+<th class="py-6 font-label-sm text-label-sm uppercase text-secondary tracking-widest">Status</th>
+<th class="py-6 font-label-sm text-label-sm uppercase text-secondary tracking-widest">Load</th>
+<th class="py-6 font-label-sm text-label-sm uppercase text-secondary tracking-widest text-right">Uptime</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-primary">
+<tr class="border-b border-secondary-fixed-dim hover:bg-surface transition-colors">
+<td class="py-8 font-semibold">Berlin Central Transit Hub</td>
+<td class="py-8">
+<span class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary rounded-full"></span>
+                                    Operational
+                                </span>
+</td>
+<td class="py-8">84% Capacity</td>
+<td class="py-8 text-right font-mono">99.998%</td>
+</tr>
+<tr class="border-b border-secondary-fixed-dim hover:bg-surface transition-colors">
+<td class="py-8 font-semibold">Tokyo Bay Bridge Cluster</td>
+<td class="py-8">
+<span class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary rounded-full"></span>
+                                    Operational
+                                </span>
+</td>
+<td class="py-8">42% Capacity</td>
+<td class="py-8 text-right font-mono">100.00%</td>
+</tr>
+<tr class="border-b border-secondary-fixed-dim hover:bg-surface transition-colors">
+<td class="py-8 font-semibold">London Thames Barrier</td>
+<td class="py-8">
+<span class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+                                    Analyzing
+                                </span>
+</td>
+<td class="py-8">61% Capacity</td>
+<td class="py-8 text-right font-mono">99.992%</td>
+</tr>
+<tr class="border-b border-secondary-fixed-dim hover:bg-surface transition-colors">
+<td class="py-8 font-semibold">San Francisco GRID-04</td>
+<td class="py-8">
+<span class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary rounded-full"></span>
+                                    Operational
+                                </span>
+</td>
+<td class="py-8">91% Capacity</td>
+<td class="py-8 text-right font-mono">99.995%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Timeline Process Flow -->
+<section class="py-32 px-margin-desktop">
+<h2 class="font-headline-xl text-headline-xl mb-24 text-center">Modern Engineering Lifecycle</h2>
+<div class="relative max-w-5xl mx-auto">
+<!-- Timeline Line -->
+<div class="absolute top-1/2 left-0 w-full h-[1px] bg-secondary-fixed-dim -translate-y-1/2 hidden md:block"></div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-24 relative z-10">
+<div class="bg-surface p-8 text-center md:text-left">
+<div class="w-12 h-12 bg-primary text-on-primary flex items-center justify-center mb-8 mx-auto md:mx-0">
+<span class="font-label-sm text-label-sm">01</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-4">Ingest</h3>
+<p class="font-body-md text-secondary">Aggregating multi-spectral sensor data from distributed urban assets into a unified ledger.</p>
+</div>
+<div class="bg-surface p-8 text-center md:text-left">
+<div class="w-12 h-12 bg-primary text-on-primary flex items-center justify-center mb-8 mx-auto md:mx-0">
+<span class="font-label-sm text-label-sm">02</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-4">Analyze</h3>
+<p class="font-body-md text-secondary">Utilizing neural-fatigue modeling to predict structural decay before visible indicators emerge.</p>
+</div>
+<div class="bg-surface p-8 text-center md:text-left">
+<div class="w-12 h-12 bg-primary text-on-primary flex items-center justify-center mb-8 mx-auto md:mx-0">
+<span class="font-label-sm text-label-sm">03</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-4">Automate</h3>
+<p class="font-body-md text-secondary">Deploying autonomous maintenance protocols and dynamic routing to mitigate identified risks.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Insights (Publication Style) -->
+<section class="py-32 px-margin-desktop border-t border-secondary-fixed-dim">
+<div class="flex flex-col md:flex-row gap-gutter">
+<div class="md:w-1/3">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary block mb-6">Archive &amp; Analysis</span>
+<h2 class="font-headline-xl text-headline-xl mb-12">Featured Insights</h2>
+<p class="font-body-md text-secondary mb-12 pr-12">Our research collective regularly publishes white papers on the intersection of materials science, urban planning, and computational engineering.</p>
+<a class="inline-flex items-center gap-4 group" href="feed.html">
+<span class="font-label-sm text-label-sm uppercase tracking-widest border-b border-primary pb-1">Browse Publications</span>
+<span class="material-symbols-outlined transition-transform group-hover:translate-x-2">arrow_forward</span>
+</a>
+</div>
+<div class="md:w-2/3 grid grid-cols-1 gap-12">
+<article class="group cursor-pointer" onclick="location.href='feed.html'">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-sm text-label-sm text-secondary uppercase">Paper 042 / Resiliency</span>
+<span class="font-label-sm text-label-sm text-secondary">OCT 2024</span>
+</div>
+<h4 class="font-headline-lg text-headline-lg group-hover:italic transition-all">The Resilience Quotient (RQ) Standard: A New Metric for Urban Viability</h4>
+<div class="mt-6 flex gap-4 overflow-hidden h-0 group-hover:h-auto transition-all duration-500 opacity-0 group-hover:opacity-100">
+<p class="font-body-md text-secondary max-w-xl">Exploring the quantified impact of decentralized power grids on municipal stability during extreme weather events. An analysis of twelve pilot cities.</p>
+</div>
+<div class="mt-6 h-[1px] bg-secondary-fixed-dim group-hover:bg-primary transition-colors"></div>
+</article>
+<article class="group cursor-pointer" onclick="location.href='feed.html'">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-sm text-label-sm text-secondary uppercase">Paper 039 / Structural</span>
+<span class="font-label-sm text-label-sm text-secondary">AUG 2024</span>
+</div>
+<h4 class="font-headline-lg text-headline-lg group-hover:italic transition-all">Predicting Fatigue in Urban Bridge Networks using Synthetic Aperture Radar</h4>
+<div class="mt-6 flex gap-4 overflow-hidden h-0 group-hover:h-auto transition-all duration-500 opacity-0 group-hover:opacity-100">
+<p class="font-body-md text-secondary max-w-xl">Deep learning applications for millimeter-level displacement detection in critical transit spans. Case studies from the Port Authority networks.</p>
+</div>
+<div class="mt-6 h-[1px] bg-secondary-fixed-dim group-hover:bg-primary transition-colors"></div>
+</article>
+<article class="group cursor-pointer" onclick="location.href='feed.html'">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-sm text-label-sm text-secondary uppercase">Paper 031 / Automation</span>
+<span class="font-label-sm text-label-sm text-secondary">JUN 2024</span>
+</div>
+<h4 class="font-headline-lg text-headline-lg group-hover:italic transition-all">The Autonomous Maintenance Paradox: Human Oversight in Algorithmic Governance</h4>
+<div class="mt-6 flex gap-4 overflow-hidden h-0 group-hover:h-auto transition-all duration-500 opacity-0 group-hover:opacity-100">
+<p class="font-body-md text-secondary max-w-xl">A critical look at the necessity of human-in-the-loop systems for complex civil engineering automation protocols.</p>
+</div>
+<div class="mt-6 h-[1px] bg-secondary-fixed-dim group-hover:bg-primary transition-colors"></div>
+</article>
+</div>
+</div>
+</section>
+<!-- CTA Section with Image Plate -->
+<section class="py-32 px-margin-desktop grid md:grid-cols-2 gap-24 items-center">
+<div class="aspect-[4/5] bg-surface-container relative overflow-hidden group">
+<img class="w-full h-full object-cover grayscale brightness-110 contrast-100 scale-100 group-hover:scale-105 transition-transform duration-700" data-alt="A clean, minimalist architectural photograph of a brutalist concrete structure against a pale, warm twilight sky. The image emphasizes sharp geometric angles, high-contrast shadows, and a serene, intellectual mood that reflects architectural press photography. The color palette is restricted to warm beiges, deep blacks, and soft greys." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYADHowV2g7k3DNORUmW_FjDshoGDKUABK9K2zy5iRkwcpdAuTAto7SGmFSIGi-JATX8PvA2hxk1P5rluoyZ6mFxqJWBndT6op_mcmqCMFCo1gt5UwFzOvvIY-n6vNHnZEkZ95-x4bKxt2NuiykieIL6hoa8dqjTsVr1aA8BRg_pofMsWNai0jcT9QZKZWP2zGfFVSpp04CsRcSaIFYYnQYabuAYUoinghNiQUX1I10fG6-6Ailu25z150KiQ4NevN0vCkWAwGto3r"/>
+<div class="absolute bottom-6 left-6 bg-surface px-4 py-2">
+<span class="font-label-sm text-label-sm text-secondary uppercase">Plate 01: Structural Core</span>
+</div>
+</div>
+<div>
+<h2 class="font-display-lg text-display-lg-mobile md:text-headline-xl mb-8">Begin Your Civic Evolution.</h2>
+<p class="font-body-lg text-body-lg text-secondary mb-12">Contact our architectural engineering team for a comprehensive audit of your city's critical infrastructure nodes.</p>
+<form class="space-y-12" onsubmit="event.preventDefault(); location.href='contact.html'">
+<div class="relative">
+<input class="w-full bg-transparent border-b border-primary py-4 px-0 font-body-md placeholder:text-secondary-fixed-dim focus:outline-none focus:ring-0" placeholder="Professional Email Address" type="email" required/>
+<button class="absolute right-0 top-1/2 -translate-y-1/2 material-symbols-outlined hover:translate-x-2 transition-transform" type="submit">arrow_forward</button>
+</div>
+<div class="flex items-start gap-4">
+<input class="mt-1 rounded-none border-primary text-primary focus:ring-0" id="consent" type="checkbox" required/>
+<label class="font-label-sm text-label-sm text-secondary uppercase leading-relaxed" for="consent">I agree to receive the Quarterly Insight report and occasional project updates from Antecessum.</label>
+</div>
+</form>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full px-margin-desktop py-24 flex flex-col md:flex-row justify-between items-start gap-gutter max-w-container-max mx-auto bg-surface-container border-t border-secondary-fixed-dim">
+<div class="space-y-8">
+<div class="flex items-center gap-4 cursor-pointer" onclick="location.href='index.html'">
+<img alt="Logo" class="h-6 w-6 grayscale" src="https://lh3.googleusercontent.com/aida/ADBb0ujXhVJynBql2FypEHJY9igA6TwwcgzuFGQsehxjoWQucTznpH7ga2swvWMpYI_fem07j7ni4VtgBei8XdDZbRgAhv6gXXxDYoUGZtvOmFZwDoWMcjLLHxqGrxYTHxlRRdz7H7HArc6d_SPhEq5taRjC1HNJcnGWr1nCknnUabm_EjdqCaxc0nvQM2EF9pnwiLBPEGb2SH2I-9RF6y1c-Gib85JRUnSsq04Ar8yCPj48rGubtsSHEp6EiXd6"/>
+<span class="font-headline-lg text-headline-lg text-primary uppercase">Antecessum</span>
+</div>
+<p class="font-label-sm text-label-sm text-secondary max-w-xs">© 2026 Antecessum Civic Engineering. All rights reserved. Registered Office: London &amp; New York.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-16">
+<div>
+<h5 class="font-label-sm text-label-sm uppercase mb-6 text-primary">Resources</h5>
+<ul class="space-y-4">
+<li><a class="font-label-sm text-label-sm text-secondary hover:text-primary transition-opacity opacity-80 hover:opacity-100" href="feed.html">Research</a></li>
+<li><a class="font-label-sm text-label-sm text-secondary hover:text-primary transition-opacity opacity-80 hover:opacity-100" href="feed.html">Publications</a></li>
+<li><a class="font-label-sm text-label-sm text-secondary hover:text-primary transition-opacity opacity-80 hover:opacity-100" href="#">Open Data</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-label-sm text-label-sm uppercase mb-6 text-primary">Company</h5>
+<ul class="space-y-4">
+<li><a class="font-label-sm text-label-sm text-secondary hover:text-primary transition-opacity opacity-80 hover:opacity-100" href="contact.html">Contact</a></li>
+<li><a class="font-label-sm text-label-sm text-secondary hover:text-primary transition-opacity opacity-80 hover:opacity-100" href="#">Careers</a></li>
+<li><a class="font-label-sm text-label-sm text-secondary hover:text-primary transition-opacity opacity-80 hover:opacity-100" href="#">Legal</a></li>
+</ul>
+</div>
+<div class="col-span-2 md:col-span-1">
+<h5 class="font-label-sm text-label-sm uppercase mb-6 text-primary">Social</h5>
+<div class="flex gap-4">
+<a class="material-symbols-outlined opacity-80 hover:opacity-100" href="#">public</a>
+<a class="material-symbols-outlined opacity-80 hover:opacity-100" href="#">terminal</a>
+<a class="material-symbols-outlined opacity-80 hover:opacity-100" href="#">work</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Simple parallax or fade-in reveal effects
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('opacity-100');
+                        entry.target.classList.remove('opacity-0', 'translate-y-8');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-8');
+                observer.observe(section);
+            });
+        });
+    </script>
+</body></html>
