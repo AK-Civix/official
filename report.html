@@ -1,4 +1,4 @@
-<!-- new/report.html -->
+<!-- report.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,105 +9,137 @@
     <script src="js/app.js" type="module"></script>
     <style>
         .report-header {
-            padding: 120px 24px 60px;
+            padding: 140px 24px 60px;
             text-align: center;
-            background: linear-gradient(180deg, var(--white) 0%, #f8fafc 100%);
+            background: radial-gradient(120% 60% at 50% 0%, rgba(37, 99, 235, 0.08) 0%, var(--bg-light) 60%);
+        }
+        .report-header h1 {
+            font-size: clamp(32px, 5vw, 48px);
+            margin-bottom: var(--space-xs);
+        }
+        .report-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary-light);
+            border: 1px solid var(--border-color);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
         }
         #preview-container {
-            margin-top: 16px;
+            margin-top: var(--space-md);
             max-width: 100%;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-md);
             overflow: hidden;
-            border: 1px dashed var(--secondary);
+            border: 1px solid var(--border-color);
             display: none;
+            box-shadow: var(--shadow-sm);
         }
         #preview-container img, #preview-container video {
             width: 100%;
             height: auto;
+            display: block;
         }
         .loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.9); display: none;
+            background: rgba(9, 13, 22, 0.85); backdrop-filter: blur(8px); display: none;
             flex-direction: column; align-items: center; justify-content: center; z-index: 2000;
         }
+        .spinner {
+            width: 48px; height: 48px; border: 3px solid rgba(37, 99, 235, 0.1); border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand">Antecessum</div>
+    <div class="nav-brand" onclick="location.href='index.html'">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Praxis
+    </div>
     <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="feed.html">Explore Feed</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="donate.html">Support Us</a></li>
     </ul>
-    <a href="index.html" class="cta-btn" style="background: var(--secondary-dark);">&larr; Back Home</a>
+    <a href="index.html" class="cta-btn secondary">&larr; Back Home</a>
 </nav>
 
 <div class="report-header">
     <span class="badge">SUBMIT A REPORT</span>
-    <h1>Make Your Community Better.</h1>
-    <p>Describe the issue, add photo/video proof, and our community will handle the rest.</p>
+    <h1>Report a Spot in Pune</h1>
+    <p>Describe the garbage pile, pothole, or cleanup area, add photo proof, and our NGO volunteers will coordinate a drive.</p>
 </div>
 
 <section class="section" style="padding-top: 0;">
     <div class="form-card">
         <form id="report-form">
             <div class="form-group">
-                <label>Issue Category</label>
+                <label for="category">Issue Category</label>
                 <select id="category" class="form-control" required>
                     <option value="">Select a category</option>
-                    <option value="Roads & Potholes">Roads & Potholes</option>
-                    <option value="Water & Sanitation">Water & Sanitation</option>
-                    <option value="Garbage & Waste">Garbage & Waste</option>
+                    <option value="Roads & Potholes">Roads &amp; Potholes</option>
+                    <option value="Water & Sanitation">Water &amp; Sanitation</option>
+                    <option value="Garbage & Waste">Garbage &amp; Waste</option>
                     <option value="Public Safety">Public Safety</option>
                     <option value="Street Lighting">Street Lighting</option>
-                    <option value="Electricity & Power">Electricity & Power</option>
+                    <option value="Electricity & Power">Electricity &amp; Power</option>
                     <option value="Other">Other</option>
                 </select>
             </div>
             
             <div class="form-group">
-                <label>Location</label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="location" class="form-control" placeholder="e.g. Sector 12, Main Road" required>
-                    <button type="button" id="geo-btn" class="cta-btn" style="background: var(--secondary-dark); width: 48px; padding: 0;" title="Get Location">📍</button>
+                <label for="location">Location</label>
+                <div style="display: flex; gap: var(--space-xs);">
+                    <input type="text" id="location" class="form-control" placeholder="e.g. Kalyani Nagar, near HDFC Bank, Pune" required style="flex: 1;">
+                    <button type="button" id="geo-btn" class="cta-btn secondary" style="width: 44px; height: 44px; padding: 0; border-radius: var(--radius-md); font-size: 16px;" title="Get Location">📍</button>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Description</label>
-                <textarea id="description" class="form-control" rows="4" placeholder="Briefly describe the issue..." required></textarea>
+                <label for="description">Description</label>
+                <textarea id="description" class="form-control" rows="4" placeholder="Briefly describe the spot and what needs to be cleaned up..." required style="resize: vertical;"></textarea>
             </div>
 
             <div class="form-group">
-                <label>Media Proof (URL for now)</label>
+                <label for="media_url">Media Proof (URL)</label>
                 <input type="url" id="media_url" class="form-control" placeholder="Direct link to image or video (mp4/webm)">
-                <p style="font-size: 11px; color: #94a3b8; margin-top: 4px;">For testing, use any public image URL. Real upload coming soon!</p>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">For testing, use any public image URL. Real upload coming soon!</p>
                 <div id="preview-container"></div>
             </div>
 
-            <button type="submit" class="cta-btn" style="width: 100%; padding: 16px; font-size: 18px; margin-top: 12px;">Submit Report</button>
+            <button type="submit" class="cta-btn" style="width: 100%; padding: 14px; font-size: 16px; margin-top: var(--space-md); border-radius: var(--radius-md);">Submit Report</button>
         </form>
     </div>
 </section>
 
 <div class="loading-overlay" id="loader">
-    <div style="width: 48px; height: 48px; border: 4px solid var(--primary-light); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
-    <p style="margin-top: 16px; font-weight: 600; color: var(--secondary-dark);">Uploading reports...</p>
+    <div class="spinner"></div>
+    <p style="margin-top: var(--space-md); font-weight: 600; color: var(--white);">Uploading report...</p>
 </div>
 
 <footer style="margin-top: 60px;">
-    <p class="copy">&copy; 2026 Antecessum Group. All Rights Reserved.</p>
+    <div class="footer-logo">Praxis</div>
+    <p class="copy">&copy; 2026 Praxis NGO. All Rights Reserved.</p>
 </footer>
 
 <script>
-    // Preview logic
     const mediaInput = document.getElementById('media_url');
     const preview = document.getElementById('preview-container');
     
     mediaInput.addEventListener('input', () => {
-        const val = mediaInput.value;
+        const val = mediaInput.value.trim();
         if(val) {
             preview.style.display = 'block';
             if(val.includes('.mp4') || val.includes('.webm')) {
@@ -117,22 +149,24 @@
             }
         } else {
             preview.style.display = 'none';
+            preview.innerHTML = '';
         }
     });
 
-    // Geolocation helpers
     document.getElementById('geo-btn').addEventListener('click', () => {
         if(navigator.geolocation) {
+            document.getElementById('location').placeholder = "Locating...";
             navigator.geolocation.getCurrentPosition(pos => {
                 document.getElementById('location').value = `Geo: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
+            }, err => {
+                document.getElementById('location').placeholder = "e.g. Sector 12, Main Road";
+                alert("Could not access location. Please enter manually.");
             });
+        } else {
+            alert("Geolocation is not supported by your browser.");
         }
     });
 </script>
-
-<style>
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-</style>
 
 </body>
 </html>

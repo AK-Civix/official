@@ -1,122 +1,452 @@
-<!-- new/index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Antecessum — Civic Engineering, Reimagined.</title>
-    <meta name="description" content="Report, track, and resolve community issues in real-time. Join thousands of citizens making neighborhoods better.">
-    <link rel="stylesheet" href="styles/main.css">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Praxis | Collective Civic Action in Pune</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <script src="js/app.js" type="module"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#0053db",
+                        "on-background": "#191c1e",
+                        "on-secondary-container": "#fffbff",
+                        "outline-variant": "#c3c6d7",
+                        "on-tertiary-fixed": "#131b2e",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-surface": "#191c1e",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container": "#eceef0",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#4d556b",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-error-container": "#93000a",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#e2dfff",
+                        "on-surface-variant": "#434655",
+                        "on-secondary-fixed": "#0f0069",
+                        "on-secondary-fixed-variant": "#3323cc",
+                        "primary": "#004ac6",
+                        "surface-variant": "#e0e3e5",
+                        "secondary-container": "#645efb",
+                        "secondary": "#4b41e1",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-container": "#2563eb",
+                        "surface-container-low": "#f2f4f6",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "outline": "#737686",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-bright": "#f7f9fb",
+                        "inverse-surface": "#2d3133",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "on-error": "#ffffff",
+                        "background": "#f7f9fb",
+                        "on-primary-container": "#eeefff",
+                        "tertiary-container": "#656d84",
+                        "on-tertiary-container": "#eef0ff",
+                        "secondary-fixed-dim": "#c3c0ff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-dim": "#d8dadc",
+                        "surface": "#f7f9fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "48px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "max-width": "1440px",
+                        "gutter": "24px",
+                        "md": "16px",
+                        "margin-mobile": "16px",
+                        "xl": "40px",
+                        "base": "4px",
+                        "sm": "8px",
+                        "2xl": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display": ["Inter"],
+                        "code": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "code": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f7f9fb;
+            background-image: 
+                linear-gradient(#f1f5f9 1px, transparent 1px),
+                linear-gradient(90deg, #f1f5f9 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+        .technical-gradient {
+            background: radial-gradient(circle at 100% 100%, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
+        }
+        .linear-shadow {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+        }
+        .linear-shadow-hover:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+        }
+        .inner-highlight {
+            box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+        }
+        .divider-x {
+            border-left: 1px solid #e2e8f0;
+        }
+        .float-fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            background: #2563eb;
+            color: white;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+            cursor: pointer;
+            z-index: 1000;
+            border: none;
+            font-size: 24px;
+            transition: all 0.15s ease;
+        }
+        .float-fab:hover {
+            transform: translateY(-2px);
+            background: #1d4ed8;
+        }
+    </style>
 </head>
-<body>
-
-<nav class="navbar">
-    <div class="nav-brand">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><path d="M3 14h18M3 10h18M3 6h18M3 18h18"/></svg>
-        Antecessum
-    </div>
-    <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="feed.html">Explore Feed</a></li>
-        <li><a href="contact.html">Contact Us</a></li>
-        <li><a href="donate.html">Support Us</a></li>
-    </ul>
-    <a href="report.html" class="cta-btn">Report an Issue</a>
-</nav>
-
-<!-- HERO -->
-<header class="hero">
-    <div class="hero-content reveal">
-        <span class="badge">PROACTIVE CIVIC ENGAGEMENT</span>
-        <h1>Community Care,<br>One Report at a Time.</h1>
-        <p>Antecessum empowers citizens to identify and track neighborhood issues in real-time. From potholes to public safety, we bridge the gap between reporting and resolution.</p>
-        <div style="display: flex; gap: 16px; justify-content: center;">
-            <a href="report.html" class="cta-btn" style="padding: 16px 32px; font-size: 18px;">Get Started</a>
-            <a href="feed.html" class="cta-btn" style="background: var(--white); color: var(--secondary-dark); padding: 16px 32px; font-size: 18px;">Explore Reports</a>
+<body class="font-body-md text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- Header Navigation -->
+<header class="fixed top-0 w-full bg-surface/80 backdrop-blur-md border-b border-outline-variant z-50">
+    <nav class="max-w-max-width mx-auto px-margin-desktop flex justify-between items-center h-16">
+        <div class="flex items-center gap-xl cursor-pointer" onclick="location.href='index.html'">
+            <div class="flex items-center gap-sm">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span class="text-headline-sm font-headline-sm font-bold text-primary">Praxis</span>
+            </div>
         </div>
-    </div>
-    
-    <div class="hero-image reveal">
-        <img src="assets/hero.png" alt="Antecessum Neighborhood">
-    </div>
+        <div class="hidden lg:flex gap-lg">
+            <a class="font-body-md text-primary font-bold border-b-2 border-primary pb-1" href="index.html">Home</a>
+            <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="feed.html">Explore Feed</a>
+            <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="report.html">Report Issue</a>
+            <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="donate.html">Support Us</a>
+        </div>
+        <div class="flex items-center gap-md">
+            <button class="font-label-md text-on-surface hover:bg-surface-container-low px-md py-sm rounded transition-all duration-200" onclick="location.href='contact.html'">Contact Us</button>
+            <button class="bg-primary-container text-on-primary-container font-label-md px-lg py-sm rounded-lg inner-highlight active:scale-95 transition-transform" onclick="location.href='report.html'">Report Issue</button>
+        </div>
+    </nav>
 </header>
-
-<!-- STATS -->
-<section class="stats">
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3 id="stat-total">0</h3>
-            <p>Active Issues Reported</p>
+<main class="pt-32 pb-2xl overflow-x-hidden">
+    <!-- Hero Section -->
+    <section class="max-w-max-width mx-auto px-margin-desktop mb-2xl">
+        <div class="grid lg:grid-cols-2 gap-2xl items-center">
+            <div class="relative z-10">
+                <div class="inline-flex items-center gap-sm bg-surface-container-low border border-outline-variant rounded-full px-md py-xs mb-lg">
+                    <span class="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+                    <span class="font-label-sm text-on-surface-variant">COMMUNITY ACTION FOR A CLEANER PUNE</span>
+                </div>
+                <h1 class="font-display text-display text-on-background mb-lg leading-tight">
+                    Cleaning Up and Improving Our <span class="text-primary-container">Neighborhoods</span>
+                </h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant mb-xl max-w-lg">
+                    A citizen-led NGO keeping Pune's streets clean, safe, and beautiful. Join local cleanup drives, report garbage piles or potholes, and track neighborhood improvements.
+                </p>
+                <div class="flex flex-wrap gap-md">
+                    <button class="bg-primary-container text-on-primary-container font-label-md px-xl py-md rounded-lg shadow-sm hover:opacity-90 active:scale-95 transition-all flex items-center gap-sm" onclick="location.href='feed.html'">
+                        Explore Cleanup Feed
+                        <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                    </button>
+                    <button class="bg-surface-container-lowest border border-outline-variant text-on-surface font-label-md px-xl py-md rounded-lg hover:bg-surface-container-low transition-all" onclick="location.href='complaint_reports.html'">
+                        Reports Database
+                    </button>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="absolute inset-0 bg-primary/5 rounded-full blur-3xl -z-10"></div>
+                <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-sm linear-shadow overflow-hidden group">
+                    <div class="bg-surface-container-low border border-outline-variant rounded-lg aspect-[4/3] relative overflow-hidden">
+                        <img class="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="A local community cleanup scene in Pune, featuring enthusiastic volunteers in safety vests cleaning up a street together, with trees and local buildings in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChwG01a4FM5MxO6HM4mrtrcskrt19l3SEwAypUqBDAWdBUiCORbVJsXF5atrMa7i9hoS7DjZ9zdC8LSBCOifvXNzjyuC_zXMfivMTg6QDk66vS7O4bGbnOef1o_Ob_Boy-vwJfsyMJpQ_z72t6puq6JFmApDIqybPjbYEmmGf7dtB_LWdv2R4NUzTQuZ_6ozP1FyzcAheWT_viE4zv6EDRgKgXpeqSdsESofW374rAcAS6ciyuYbhKlo5Act8-roz0Uc8DBwz8vmU2"/>
+                        <div class="absolute top-4 right-4 bg-surface-container-lowest/90 backdrop-blur border border-outline-variant rounded px-sm py-xs">
+                            <span class="font-code text-code text-primary">PRAXIS PUNE CHAPTER</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Decorative Floating Elements -->
+                <div class="absolute -bottom-8 -left-8 bg-surface-container-lowest p-md border border-outline-variant rounded-lg linear-shadow hidden xl:block">
+                    <div class="flex items-center gap-md">
+                        <div class="bg-primary/10 p-sm rounded">
+                            <span class="material-symbols-outlined text-primary">volunteer_activism</span>
+                        </div>
+                        <div>
+                            <p class="font-label-sm text-on-surface-variant">Active Volunteers</p>
+                            <p class="font-headline-sm text-primary">350+ Strong</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="stat-card">
-            <h3 id="stat-resolved">0</h3>
-            <p>Issues Successfully Fixed</p>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="border-y border-outline-variant bg-surface-container-lowest py-xl">
+        <div class="max-w-max-width mx-auto px-margin-desktop grid md:grid-cols-4 gap-xl">
+            <div class="space-y-xs">
+                <p class="font-display text-headline-lg text-primary">12+</p>
+                <p class="font-label-sm text-on-surface-variant uppercase tracking-widest">Areas Cleaned</p>
+            </div>
+            <div class="space-y-xs md:divider-x md:pl-xl">
+                <p class="font-display text-headline-lg text-primary">350+</p>
+                <p class="font-label-sm text-on-surface-variant uppercase tracking-widest">Active Volunteers</p>
+            </div>
+            <div class="space-y-xs md:divider-x md:pl-xl">
+                <p class="font-display text-headline-lg text-primary" id="stat-total">0</p>
+                <p class="font-label-sm text-on-surface-variant uppercase tracking-widest">Issues Reported</p>
+            </div>
+            <div class="space-y-xs md:divider-x md:pl-xl">
+                <p class="font-display text-headline-lg text-primary" id="stat-resolved">0</p>
+                <p class="font-label-sm text-on-surface-variant uppercase tracking-widest">Issues Fixed</p>
+            </div>
         </div>
-        <div class="stat-card">
-            <h3>24/7</h3>
-            <p>Community Monitoring</p>
+    </section>
+    
+    <!-- The Civic Action Loop -->
+    <section class="py-2xl max-w-max-width mx-auto px-margin-desktop">
+        <div class="mb-2xl text-center max-w-2xl mx-auto">
+            <span class="font-label-sm text-primary font-bold mb-sm block uppercase tracking-widest">How We Work</span>
+            <h2 class="font-headline-lg text-headline-lg mb-md">The Civic Action Loop</h2>
+            <p class="font-body-md text-on-surface-variant">How we work together to clean up and improve neighborhoods in Pune.</p>
         </div>
-        <div class="stat-card">
-            <h3>< 48h</h3>
-            <p>Avg. Response Time</p>
+        <div class="grid lg:grid-cols-3 gap-lg relative">
+            <!-- Decorative Connector Line -->
+            <div class="hidden lg:block absolute top-12 left-0 w-full h-[1px] bg-outline-variant -z-10"></div>
+            <div class="bg-surface-container-lowest p-lg border border-outline-variant rounded-xl linear-shadow linear-shadow-hover transition-all">
+                <div class="bg-primary w-12 h-12 rounded-lg flex items-center justify-center mb-lg inner-highlight">
+                    <span class="material-symbols-outlined text-on-primary">add_a_photo</span>
+                </div>
+                <h3 class="font-headline-sm text-headline-sm mb-sm">1. Spot</h3>
+                <p class="font-body-sm text-on-surface-variant leading-relaxed">Citizens report garbage spots, potholes, or broken facilities directly on the platform with photo and location details.</p>
+            </div>
+            <div class="bg-surface-container-lowest p-lg border border-outline-variant rounded-xl linear-shadow linear-shadow-hover transition-all">
+                <div class="bg-primary w-12 h-12 rounded-lg flex items-center justify-center mb-lg inner-highlight">
+                    <span class="material-symbols-outlined text-on-primary">groups</span>
+                </div>
+                <h3 class="font-headline-sm text-headline-sm mb-sm">2. Mobilize</h3>
+                <p class="font-body-sm text-on-surface-variant leading-relaxed">We organize local volunteers, gather cleanup supplies (brooms, gloves, bags), and coordinate the schedule.</p>
+            </div>
+            <div class="bg-surface-container-lowest p-lg border border-outline-variant rounded-xl linear-shadow linear-shadow-hover transition-all">
+                <div class="bg-primary w-12 h-12 rounded-lg flex items-center justify-center mb-lg inner-highlight">
+                    <span class="material-symbols-outlined text-on-primary">done_all</span>
+                </div>
+                <h3 class="font-headline-sm text-headline-sm mb-sm">3. Resolve</h3>
+                <p class="font-body-sm text-on-surface-variant leading-relaxed">Our community drives clean up the reported issue, document the resolution, and follow up with local authorities.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Active Campaigns / Listings -->
+    <section class="bg-surface-container-low py-2xl">
+        <div class="max-w-max-width mx-auto px-margin-desktop">
+            <div class="flex justify-between items-end mb-2xl">
+                <div>
+                    <span class="font-label-sm text-primary font-bold mb-sm block uppercase tracking-widest">Get Involved</span>
+                    <h2 class="font-headline-lg text-headline-lg">Active Drives &amp; Listings</h2>
+                </div>
+                <a class="font-label-md text-primary flex items-center gap-xs hover:underline" href="feed.html">
+                    View All Reports <span class="material-symbols-outlined text-sm">arrow_outward</span>
+                </a>
+            </div>
+            <div class="grid md:grid-cols-3 gap-lg">
+                <!-- Listing 1 -->
+                <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group cursor-pointer linear-shadow-hover transition-all" onclick="location.href='feed.html'">
+                    <div class="aspect-video overflow-hidden">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A garbage pile near Pune railway station undergoing sorting and cleaning." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-StW7PPbDPlyWIfIv9GmwaF5RpP6HBOTougZoArvBObEJlUlw0v35mCNROslryop1sx5rkCDMeOh6YNimf6sjwaFV0nprFumVwiCwYkh8c-zp_UKPWlv1bjUJbhhacx56PKTsInlhd9bFXc118PTP5LuH0-xNQ1D9NJUXF2vHD_0K5o7WJetLYpMbiFoDTNLZ_Z3WX3yXWiUWwtaHCeRIOV6jWy7szzVq5B0qY7TICJnN-7g-HrcD39QhbsBskgJTc8-t4_bWITgh"/>
+                    </div>
+                    <div class="p-lg flex-1">
+                        <span class="font-label-sm text-on-surface-variant mb-sm block">VOLUNTEER DRIVE • PUNE STATION</span>
+                        <h4 class="font-headline-sm text-headline-sm mb-md group-hover:text-primary transition-colors">Pune Station Garbage Clean Drive</h4>
+                        <p class="font-body-sm text-on-surface-variant mb-xl">Kicking off this Sunday to clean up the main waste dumping spot near Pune Station. Brooms and garbage bags will be provided.</p>
+                        <button class="mt-auto font-label-md text-primary flex items-center gap-xs">Join Drive <span class="material-symbols-outlined text-sm">chevron_right</span></button>
+                    </div>
+                </div>
+                <!-- Listing 2 -->
+                <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group cursor-pointer linear-shadow-hover transition-all" onclick="location.href='feed.html'">
+                    <div class="aspect-video overflow-hidden">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Citizens filling potholes in a road with temporary gravel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuUpLfcwGgcYwQj8sr52aA0sHYSLm75OaACL8sKbLa3dQ6KnNFKuiHlp83MRa-HQr4EkmSTvoP-xuzzaMP09LWrXqsn_CtKj_Jri8NxTRfRqamyHmxSq7pNQdnaeMp3xKGo0v--LTD-OpsRJVPHn6V47wZ_8h3lh15ENDw3wePEeaqMpR-TNpD-G08CAe8OoAnEHwK77T3xHB3l5xjmXr5UfOnd06rCsIz9KQk_Ot1w0asT8cOEukUZOeA0rV8BuoPbPXLmr9zvARbn"/>
+                    </div>
+                    <div class="p-lg flex-1">
+                        <span class="font-label-sm text-on-surface-variant mb-sm block">NEIGHBORHOOD DRIVE • KOREGAON PARK</span>
+                        <h4 class="font-headline-sm text-headline-sm mb-md group-hover:text-primary transition-colors">Koregaon Park Pothole Fix Initiative</h4>
+                        <p class="font-body-sm text-on-surface-variant mb-xl">Volunteers joining forces with local contractors to temporarily fill dangerous potholes along KP Lane 7.</p>
+                        <button class="mt-auto font-label-md text-primary flex items-center gap-xs">Join Drive <span class="material-symbols-outlined text-sm">chevron_right</span></button>
+                    </div>
+                </div>
+                <!-- Listing 3 -->
+                <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group cursor-pointer linear-shadow-hover transition-all" onclick="location.href='feed.html'">
+                    <div class="aspect-video overflow-hidden">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Lake cleanup activity with bags of trash collected on the bank." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBGANnzw48Itx4nED7uYDz8SHhEp8REiFlN5y5Pir9c4VXMnDG8fHamEvCBOw8-7X_OZLCnfMb70pVA94asTnvWAAYllafzlgom-QLK3n8MH9V8FL6nVoTk1-LhPbFXWGR6eEOMru9YV4r1PEd0E1FdP_0kIHRk9hzngY866GsU0lFn9vLaxszN8H1jmKCkYqzvciPtYtIanz6JWqQuzWhDYBWkIkA8n1kQQ6Z0oqkdceHbNUX7JTTANv-UZaJ70sT0O8zt0AngETG"/>
+                    </div>
+                    <div class="p-lg flex-1">
+                        <span class="font-label-sm text-on-surface-variant mb-sm block">LAKE CLEANUP • KATRAJ</span>
+                        <h4 class="font-headline-sm text-headline-sm mb-md group-hover:text-primary transition-colors">Katraj Lake Waste Cleanup Campaign</h4>
+                        <p class="font-body-sm text-on-surface-variant mb-xl">A plastic-collection drive around Katraj Lake to prevent water pollution and protect local wildlife.</p>
+                        <button class="mt-auto font-label-md text-primary flex items-center gap-xs">Join Drive <span class="material-symbols-outlined text-sm">chevron_right</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Final CTA -->
+    <section class="py-2xl max-w-max-width mx-auto px-margin-desktop">
+        <div class="bg-primary-container rounded-2xl p-2xl text-center relative overflow-hidden">
+            <!-- Decorative pattern -->
+            <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#ffffff 2px, transparent 2px); background-size: 32px 32px;"></div>
+            <div class="relative z-10">
+                <h2 class="font-display text-display text-on-primary mb-lg">Build a Cleaner Pune Together</h2>
+                <p class="text-on-primary/80 font-body-lg text-body-lg max-w-2xl mx-auto mb-xl">
+                    Join hundreds of active residents and neighborhood leaders who are making a real difference.
+                </p>
+                <div class="flex flex-wrap justify-center gap-md">
+                    <button class="bg-surface-container-lowest text-primary font-label-md px-xl py-md rounded-lg shadow-lg hover:scale-105 transition-transform" onclick="location.href='report.html'">
+                        Report an Issue
+                    </button>
+                    <button class="bg-transparent border border-on-primary/30 text-on-primary font-label-md px-xl py-md rounded-lg hover:bg-on-primary/10 transition-all flex items-center gap-sm" onclick="location.href='contact.html'">
+                        <span class="material-symbols-outlined">groups</span>
+                        Contact NGO Coordinators
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low border-t border-outline-variant w-full">
+    <div class="max-w-max-width mx-auto px-margin-desktop py-2xl grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-gutter">
+        <div class="col-span-2 space-y-md">
+            <div class="flex items-center gap-sm">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span class="text-headline-sm font-bold text-on-surface">Praxis</span>
+            </div>
+            <p class="font-body-sm text-on-surface-variant max-w-xs">
+                Empowering communities for a cleaner, safer, and better Pune. Collective civic action at scale.
+            </p>
+        </div>
+        <div class="space-y-md">
+            <h5 class="font-label-md text-on-surface">NGO Action</h5>
+            <ul class="space-y-sm">
+                <li><a class="font-body-sm text-on-surface-variant hover:text-primary hover:underline" href="feed.html">Explore Feed</a></li>
+                <li><a class="font-body-sm text-on-surface-variant hover:text-primary hover:underline" href="report.html">Report Spot</a></li>
+                <li><a class="font-body-sm text-on-surface-variant hover:text-primary hover:underline" href="donate.html">Donate Supplies</a></li>
+            </ul>
+        </div>
+        <div class="space-y-md">
+            <h5 class="font-label-md text-on-surface">Campaigns</h5>
+            <ul class="space-y-sm">
+                <li><a class="font-body-sm text-on-surface-variant hover:text-primary hover:underline" href="feed.html">Pune Station Clean</a></li>
+                <li><a class="font-body-sm text-on-surface-variant hover:text-primary hover:underline" href="feed.html">KP Potholes Initiative</a></li>
+                <li><a class="font-body-sm text-on-surface-variant hover:text-primary hover:underline" href="complaint_reports.html">Reports Database</a></li>
+            </ul>
+        </div>
+        <div class="space-y-md">
+            <h5 class="font-label-md text-on-surface">Get in Touch</h5>
+            <ul class="space-y-sm">
+                <li><a class="font-body-sm text-on-surface-variant hover:text-primary hover:underline" href="contact.html">Contact Us</a></li>
+                <li><a class="font-body-sm text-on-surface-variant hover:text-primary hover:underline" href="contact.html">Volunteer Info</a></li>
+            </ul>
+        </div>
+        <div class="space-y-md">
+            <h5 class="font-label-md text-on-surface">Follow</h5>
+            <ul class="space-y-sm">
+                <li><a class="font-body-sm text-on-surface-variant hover:text-primary hover:underline" href="#">Instagram</a></li>
+                <li><a class="font-body-sm text-on-surface-variant hover:text-primary hover:underline" href="#">Twitter</a></li>
+            </ul>
         </div>
     </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="section">
-    <div class="section-header reveal">
-        <span class="badge" style="background: #f1f5f9; color: #64748b;">OUR PROCESS</span>
-        <h2>How Antecessum Works</h2>
-    </div>
-    <div class="card-grid">
-        <div class="glass-card reveal">
-            <div class="card-icon">1</div>
-            <h3>Capture & Tag</h3>
-            <p>Snap a photo or video of the issue. Our platform automatically tags the GPS location and categorizes the problem for processing.</p>
-        </div>
-        <div class="glass-card reveal">
-            <div class="card-icon">2</div>
-            <h3>Identify & Verify</h3>
-            <p>Community members can verify reports, adding credibility and ensuring that urgent issues rise to the top of the priority list.</p>
-        </div>
-        <div class="glass-card reveal">
-            <div class="card-icon">3</div>
-            <h3>Assign & Resolve</h3>
-            <p>Verified reports are routed to local authorities or community volunteers. Track the progress from 'Reported' to 'Fixed' in real-time.</p>
+    <div class="max-w-max-width mx-auto px-margin-desktop py-lg border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-md">
+        <p class="font-body-sm text-on-surface-variant">© 2026 Praxis NGO. All rights reserved. Registered under NGO act.</p>
+        <div class="flex items-center gap-lg">
+            <div class="flex items-center gap-xs">
+                <span class="flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                <span class="font-label-sm text-on-surface-variant uppercase tracking-tighter">Campaigns Active</span>
+            </div>
         </div>
     </div>
-</section>
-
-<!-- RECENT REPORTS -->
-<section class="section" style="background: #f8fafc; border-top: 1px solid #f1f5f9;">
-    <div class="section-header reveal">
-        <span class="badge">LIVE FEED</span>
-        <h2>Recent Community Reports</h2>
-    </div>
-    <div id="feed-grid" class="card-grid">
-        <!-- JS will populate this -->
-    </div>
-    <div style="text-align: center; margin-top: 50px;" class="reveal">
-        <a href="feed.html" class="cta-btn" style="background: #f1f5f9; color: #475569;">View Full Feed</a>
-    </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-    <div class="footer-logo">Antecessum</div>
-    <div class="footer-nav">
-        <a href="index.html">Home</a>
-        <a href="feed.html">Feed</a>
-        <a href="contact.html">Contact</a>
-        <a href="donate.html">Donate</a>
-        <a href="report.html">Report Issue</a>
-    </div>
-    <p class="copy">&copy; 2026 Antecessum Group. All Rights Reserved. Built with care for AK-Civix.</p>
 </footer>
 
-<button class="float-fab" title="Report an Issue" onclick="location.href='report.html'">+</button>
+<button class="float-fab" title="Report a Spot" onclick="location.href='report.html'">+</button>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.linear-shadow-hover');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0px)';
+            });
+        });
+
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-8');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-8');
+            observer.observe(section);
+        });
+    });
+</script>
 </body>
 </html>

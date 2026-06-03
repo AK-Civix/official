@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Antecessum | Neo-Brutalist Light Concept</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;family=Chivo:wght@300..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#201c02",
+                        "primary-fixed-dim": "#4ae176",
+                        "secondary-fixed-dim": "#eec200",
+                        "surface-variant": "#ede3b8",
+                        "on-tertiary-container": "#404040",
+                        "tertiary-container": "#acacac",
+                        "on-primary": "#ffffff",
+                        "secondary": "#735c00",
+                        "tertiary": "#5e5e5e",
+                        "primary-fixed": "#6bff8f",
+                        "on-primary-container": "#004b1e",
+                        "inverse-on-surface": "#fcf1c5",
+                        "on-surface": "#201c02",
+                        "background": "#fff9ec",
+                        "on-primary-fixed-variant": "#005321",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-secondary-fixed-variant": "#574500",
+                        "on-primary-fixed": "#002109",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fff9ec",
+                        "secondary-container": "#fed01b",
+                        "primary-container": "#22c55e",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#fff4c8",
+                        "surface-container": "#f9eec2",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#231b00",
+                        "surface-container-high": "#f3e8bd",
+                        "on-surface-variant": "#3d4a3d",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "primary": "#006e2f",
+                        "on-secondary-container": "#6f5900",
+                        "outline": "#6d7b6c",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "outline-variant": "#bccbb9",
+                        "inverse-surface": "#363113",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#ede3b8",
+                        "inverse-primary": "#4ae176",
+                        "surface-tint": "#006e2f",
+                        "surface-bright": "#fff9ec",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#e5dab0",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#ffe083",
+                        "on-tertiary-fixed": "#1b1b1b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "stack-lg": "48px",
+                        "stack-md": "24px",
+                        "margin": "48px",
+                        "unit": "4px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Chivo"],
+                        "headline-lg": ["Space Grotesk"],
+                        "headline-xl": ["Space Grotesk"],
+                        "headline-md": ["Space Grotesk"],
+                        "body-md": ["Chivo"],
+                        "headline-lg-mobile": ["Space Grotesk"],
+                        "label-md": ["JetBrains Mono"],
+                        "button-text": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "headline-xl": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "button-text": ["16px", {"lineHeight": "1", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #fff9ec; /* Match specified hero bg */
+            color: #201c02;
+            overflow-x: hidden;
+        }
+        .neo-shadow {
+            box-shadow: 4px 4px 0px #000000;
+        }
+        .neo-shadow-active:active {
+            box-shadow: 0px 0px 0px #000000;
+            transform: translate(4px, 4px);
+        }
+        .neo-border {
+            border: 3px solid #000000;
+        }
+        .neo-border-thin {
+            border: 2px solid #000000;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- Navigation -->
+<nav class="flex justify-between items-center px-margin py-stack-sm max-w-full mx-auto bg-background w-full border-b-[3px] border-on-background sticky top-0 z-50">
+<div class="flex items-center gap-4 cursor-pointer" onclick="location.href='index.html'">
+<img alt="Antecessum Logo" class="h-10 w-10" src="https://lh3.googleusercontent.com/aida/ADBb0ujXhVJynBql2FypEHJY9igA6TwwcgzuFGQsehxjoWQucTznpH7ga2swvWMpYI_fem07j7ni4VtgBei8XdDZbRgAhv6gXXxDYoUGZtvOmFZwDoWMcjLLHxqGrxYTHxlRRdz7H7HArc6d_SPhEq5taRjC1HNJcnGWr1nCknnUabm_EjdqCaxc0nvQM2EF9pnwiLBPEGb2SH2I-9RF6y1c-Gib85JRUnSsq04Ar8yCPj48rGubtsSHEp6EiXd6"/>
+<span class="font-headline-md text-headline-md font-bold tracking-tighter text-on-surface uppercase">Antecessum</span>
+</div>
+<div class="hidden md:flex gap-gutter items-center">
+<a class="text-primary border-b-[3px] border-primary pb-1 font-button-text text-button-text" href="index.html">Home</a>
+<a class="text-on-surface hover:text-primary transition-colors font-button-text text-button-text" href="feed.html">Explore Feed</a>
+<a class="text-on-surface hover:text-primary transition-colors font-button-text text-button-text" href="report.html">Report Issue</a>
+<a class="text-on-surface hover:text-primary transition-colors font-button-text text-button-text" href="donate.html">Support Us</a>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-3 font-button-text text-button-text bg-background neo-border neo-shadow hover:bg-secondary-container transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none" onclick="location.href='contact.html'">CONTACT</button>
+<button class="px-6 py-3 font-button-text text-button-text bg-primary-container neo-border neo-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none" onclick="location.href='report.html'">REPORT</button>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="px-margin py-stack-lg min-h-[80vh] flex flex-col justify-center bg-background border-b-[3px] border-on-background relative overflow-hidden">
+<!-- Decorative grid pattern -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"></div>
+<div class="grid grid-cols-12 gap-gutter relative z-10">
+<div class="col-span-12 md:col-span-8 flex flex-col justify-center">
+<h1 class="font-headline-xl text-headline-xl mb-stack-md max-w-4xl uppercase">
+                        Engineering the Future of Civic Infrastructure
+                    </h1>
+<p class="font-body-lg text-body-lg mb-stack-lg max-w-2xl border-l-[3px] border-primary pl-6">
+                        Revolutionizing urban planning with hard-coded reliability. Antecessum provides the architectural blueprint for the next century of interconnected metropolitan systems.
+                    </p>
+<div class="flex flex-wrap gap-stack-md">
+<button class="px-10 py-5 bg-primary-container text-on-primary-container neo-border neo-shadow font-headline-md text-[20px] uppercase hover:bg-primary-fixed transition-all neo-shadow-active" onclick="location.href='report.html'">
+                            Initialize Project
+                        </button>
+<button class="px-10 py-5 bg-surface text-on-surface neo-border neo-shadow font-headline-md text-[20px] uppercase hover:bg-surface-container transition-all neo-shadow-active" onclick="location.href='feed.html'">
+                            Read Blueprint
+                        </button>
+</div>
+</div>
+<div class="hidden md:col-span-4 md:flex items-center justify-center">
+<div class="w-full aspect-square neo-border bg-secondary-container neo-shadow flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-[120px] opacity-20">architecture</span>
+</div>
+<img class="w-4/5 h-4/5 object-cover neo-border relative z-10" data-alt="A highly detailed 3D technical blueprint of a futuristic city grid with vibrant green glowing circuits. The image is rendered in a minimalist architectural style with sharp black outlines, set against a warm light-mode cream background. Industrial design elements and structural lines dominate the composition to emphasize civic engineering precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmzk4fEhhijX7k3CTJXCrsh2mQeGDV_wl5WDjmrHdbfGy3r8sfjIQVd793wokE5Vp7TkecTxGUMobrKfqoVnC81Uy1nxcz1FAjijDaWufZN1RY9Aa93gA89NbL8RG12KHnTNij9sA4OCNpuBkwXrBRAEgCnGLgsAuTn0shnm-l6PQtcXpNqSJa16DRYCjlhDunRLw9W2QuB_pUu5Dum_5OO0vmObwgwfMyQsE8vlHmZO_RRMmzB8k4cVF2M0GiHiMIO_5J0lY0QA70"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Section -->
+<section class="px-margin py-stack-lg bg-surface-container-low border-b-[3px] border-on-background">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-background neo-border neo-shadow p-stack-md flex flex-col gap-4">
+<span class="font-label-md text-label-md text-primary bg-primary-container/10 w-fit px-3 py-1 neo-border-thin">DEPLOYMENT</span>
+<h2 class="font-headline-xl text-[56px] text-on-surface">500+</h2>
+<p class="font-headline-md text-headline-md uppercase">Cities Optimized</p>
+<div class="h-1 bg-on-background w-12 mt-auto"></div>
+</div>
+<div class="bg-secondary-container neo-border neo-shadow p-stack-md flex flex-col gap-4">
+<span class="font-label-md text-label-md text-on-secondary-container bg-background/50 w-fit px-3 py-1 neo-border-thin">EFFICIENCY</span>
+<h2 class="font-headline-xl text-[56px] text-on-surface">40%</h2>
+<p class="font-headline-md text-headline-md uppercase">Cost Reduction</p>
+<div class="h-1 bg-on-background w-12 mt-auto"></div>
+</div>
+<div class="bg-primary-container neo-border neo-shadow p-stack-md flex flex-col gap-4">
+<span class="font-label-md text-label-md text-on-primary-container bg-background/50 w-fit px-3 py-1 neo-border-thin">PERFORMANCE</span>
+<h2 class="font-headline-xl text-[56px] text-on-primary-container">12ms</h2>
+<p class="font-headline-md text-headline-md uppercase">Analysis Latency</p>
+<div class="h-1 bg-on-background w-12 mt-auto"></div>
+</div>
+</div>
+</section>
+<!-- Workflow Section -->
+<section class="px-margin py-stack-lg bg-background overflow-hidden border-b-[3px] border-on-background">
+<h2 class="font-headline-xl text-headline-xl mb-stack-lg uppercase text-center">Modern Engineering Lifecycle</h2>
+<div class="relative flex flex-col md:flex-row items-center justify-between gap-gutter py-stack-md">
+<!-- SVG Connector Line for Desktop -->
+<svg class="hidden md:block absolute top-1/2 left-0 w-full h-1 z-0" style="transform: translateY(-50%);">
+<line stroke="black" stroke-dasharray="12 12" stroke-width="6" x1="0" x2="100%" y1="0" y2="0"></line>
+</svg>
+<div class="z-10 bg-surface neo-border neo-shadow p-stack-md w-full md:w-1/4 text-center group hover:-translate-y-2 transition-transform">
+<div class="w-16 h-16 bg-secondary-container neo-border neo-shadow mx-auto mb-4 flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl">database</span>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase mb-2">Ingest</h3>
+<p class="font-body-md text-body-md">Universal data capture from IoT sensors, legacy traffic systems, and environmental nodes.</p>
+</div>
+<div class="z-10 bg-primary-container neo-border neo-shadow p-stack-md w-full md:w-1/4 text-center group hover:-translate-y-2 transition-transform">
+<div class="w-16 h-16 bg-background neo-border neo-shadow mx-auto mb-4 flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl">analytics</span>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase mb-2">Analyze</h3>
+<p class="font-body-md text-body-md">High-fidelity predictive modeling using industrial-grade structural algorithms.</p>
+</div>
+<div class="z-10 bg-surface neo-border neo-shadow p-stack-md w-full md:w-1/4 text-center group hover:-translate-y-2 transition-transform">
+<div class="w-16 h-16 bg-secondary-container neo-border neo-shadow mx-auto mb-4 flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl">settings_suggest</span>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase mb-2">Automate</h3>
+<p class="font-body-md text-body-md">Real-time infrastructure adjustments with zero-latency execution protocols.</p>
+</div>
+</div>
+</section>
+<!-- Featured Insights -->
+<section class="px-margin py-stack-lg bg-surface-container-highest">
+<div class="flex justify-between items-end mb-stack-lg">
+<h2 class="font-headline-xl text-headline-xl uppercase">Featured Insights</h2>
+<a class="font-label-md text-label-md flex items-center gap-2 hover:underline" href="feed.html">
+                    VIEW ALL REPORTS <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Paper 1 -->
+<div class="group bg-background neo-border neo-shadow flex flex-col md:flex-row overflow-hidden">
+<div class="md:w-2/5 h-64 md:h-auto border-r-[3px] border-on-background relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A macro photograph of structural steel beams and reinforced concrete textures, showcasing industrial raw beauty. High contrast lighting with deep shadows and bright sunlit surfaces. The aesthetic is brutalist and minimalist, emphasizing the strength and texture of civic engineering materials in a modern urban context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlYqcYjny3ZtWE3GtvC0hGlLonmkffDPD4YxAZ7680Po1DpLVF8L2S5HMqM0hnLRpjhQKkLEVeKhbvt9tkJ_t_pJLQfxao8ZAMwwHVwqBRm8rhsBcJC6EvWaGzc57pBXJNBofY87wk8ufFz59JXURqqvL8H-amv7AF9n1OD1wxh_60-zghj8cybXH_RZqvLosNGX8oORGqCrfWM0nq8GuCTR2yTeuryCvGVqojXbvZTeQoPpzWxrezMPlwchax48-KW7hzX657VMXk"/>
+</div>
+<div class="md:w-3/5 p-stack-md flex flex-col">
+<span class="font-label-md text-label-md text-secondary mb-2 uppercase">Whitepaper / 2024</span>
+<h3 class="font-headline-md text-headline-md mb-4 uppercase leading-tight">The 100-Year Resilience Protocol</h3>
+<p class="font-body-md text-body-md mb-6 flex-grow">A technical deep dive into building infrastructure that outlasts geopolitical cycles and climate shifts.</p>
+<button class="w-fit px-6 py-2 neo-border-thin font-button-text hover:bg-on-background hover:text-background transition-colors" onclick="location.href='feed.html'">DOWNLOAD PDF</button>
+</div>
+</div>
+<!-- Paper 2 -->
+<div class="group bg-background neo-border neo-shadow flex flex-col md:flex-row overflow-hidden">
+<div class="md:w-2/5 h-64 md:h-auto border-r-[3px] border-on-background relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="An overhead drone shot of an ultra-modern city intersection at night, where traffic lanes are replaced by glowing data streams. The lighting is dominated by electric green and deep amber, set against a dark paved road. The composition is highly geometric and symmetrical, representing the fusion of civil engineering and digital automation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmMleAkq-YTueP3i9sfW7Kkgoq9IU1SzZHhbMf2P0CI2P-JOWPVPRDo98fhdXhiQ0wN3Tfs63FbtWZp8PmRRFfHpsxbcbS-wZ5tqa2t1ZrOT7KCcTMvePk4YEvcxioUZxjJ7b05Ajw1vusd2Me46M2CHt3eBmI2wWKgkPdE-l8nB5Zdg2VnqnXQM-rTq1GQRbwhH9_UuPPP-IYp8iJppCGfSGuyz314D9Wp4sG7EkHFJz4--Lze8AJ3p2RaOn7ahhPTKy0_zD-CL5F"/>
+</div>
+<div class="md:w-3/5 p-stack-md flex flex-col">
+<span class="font-label-md text-label-md text-secondary mb-2 uppercase">Case Study / Singapore</span>
+<h3 class="font-headline-md text-headline-md mb-4 uppercase leading-tight">Autonomous Traffic Synthesis</h3>
+<p class="font-body-md text-body-md mb-6 flex-grow">How Singapore achieved a 22% increase in arterial flow using Antecessum's predictive ingestion engine.</p>
+<button class="w-fit px-6 py-2 neo-border-thin font-button-text hover:bg-on-background hover:text-background transition-colors" onclick="location.href='feed.html'">READ MORE</button>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="px-margin py-stack-lg bg-background">
+<div class="bg-on-background text-background p-12 neo-border neo-shadow flex flex-col items-center text-center relative overflow-hidden">
+<!-- Structural Background Accents -->
+<div class="absolute top-0 left-0 w-32 h-32 border-r-[3px] border-b-[3px] border-background opacity-20"></div>
+<div class="absolute bottom-0 right-0 w-32 h-32 border-l-[3px] border-t-[3px] border-background opacity-20"></div>
+<h2 class="font-headline-xl text-headline-xl mb-stack-md uppercase max-w-3xl">
+                    Build the Foundation of Tomorrow
+                </h2>
+<p class="font-body-lg text-body-lg mb-stack-lg max-w-2xl text-surface-variant">
+                    Ready to deploy structural intelligence? Our engineering team is standing by to integrate your existing systems with the Antecessum core.
+                </p>
+<button class="px-12 py-6 bg-secondary-container text-on-background neo-border neo-shadow font-headline-md text-headline-md uppercase hover:bg-primary-container transition-all neo-shadow-active" onclick="location.href='report.html'">
+                    Schedule a Demo
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest w-full border-t-[3px] border-on-background">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter px-margin py-stack-lg max-w-full mx-auto">
+<div class="flex flex-col gap-6">
+<span class="font-headline-md text-headline-md font-black text-on-background uppercase tracking-tighter cursor-pointer" onclick="location.href='index.html'">ANTECESSUM</span>
+<p class="max-w-md font-body-md text-body-md text-on-surface-variant">
+                    Precision engineering for the modern world. We don't just plan cities; we architect the protocols that keep them alive.
+                </p>
+<div class="flex gap-4">
+<a class="w-10 h-10 neo-border neo-shadow bg-background flex items-center justify-center hover:bg-secondary-container transition-colors" href="#">
+<span class="material-symbols-outlined">public</span>
+</a>
+<a class="w-10 h-10 neo-border neo-shadow bg-background flex items-center justify-center hover:bg-secondary-container transition-colors" href="#">
+<span class="material-symbols-outlined">terminal</span>
+</a>
+<a class="w-10 h-10 neo-border neo-shadow bg-background flex items-center justify-center hover:bg-secondary-container transition-colors" href="#">
+<span class="material-symbols-outlined">hub</span>
+</a>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-stack-md">
+<div class="flex flex-col gap-4">
+<h4 class="font-label-md text-label-md font-bold uppercase border-b-2 border-on-background w-fit">Navigation</h4>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:underline transition-all" href="index.html">Home</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:underline transition-all" href="feed.html">Explore Feed</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:underline transition-all" href="report.html">Report Issue</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:underline transition-all" href="donate.html">Support Us</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-label-md text-label-md font-bold uppercase border-b-2 border-on-background w-fit">Governance</h4>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:underline transition-all" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:underline transition-all" href="#">Terms of Service</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:underline transition-all" href="#">Compliance</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:underline transition-all" href="contact.html">Contact</a>
+</div>
+</div>
+</div>
+<div class="px-margin py-stack-sm border-t-[3px] border-on-background flex justify-between items-center bg-on-background text-background">
+<span class="font-label-md text-[12px] uppercase opacity-80">© 2026 ANTECESSUM CIVIC ENGINEERING. ALL RIGHTS RESERVED.</span>
+<div class="flex gap-4">
+<span class="font-label-md text-[12px] uppercase px-2 bg-primary-container text-on-primary-container">SYSTEM STATUS: NOMINAL</span>
+<span class="font-label-md text-[12px] uppercase px-2 bg-secondary-container text-on-secondary-container">VERSION: 4.2.0_STABLE</span>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for hover states
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'translate(4px, 4px)';
+                button.style.boxShadow = '0px 0px 0px #000000';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = 'translate(2px, 2px)';
+                button.style.boxShadow = '2px 2px 0px #000000';
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = '';
+                button.style.boxShadow = '4px 4px 0px #000000';
+            });
+        });
+    </script>
+</body></html>

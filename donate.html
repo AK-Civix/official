@@ -1,4 +1,4 @@
-<!-- new/donate.html -->
+<!-- donate.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,57 +7,116 @@
     <title>Support Our Mission — Antecessum</title>
     <link rel="stylesheet" href="styles/main.css">
     <script src="js/app.js" type="module"></script>
+    <style>
+        .donate-header {
+            padding: 140px 24px 70px;
+            text-align: center;
+            background: radial-gradient(120% 60% at 50% 0%, rgba(37, 99, 235, 0.08) 0%, var(--bg-light) 60%);
+        }
+        .donate-header h1 {
+            font-size: clamp(32px, 5vw, 48px);
+            margin-bottom: var(--space-xs);
+        }
+        .donate-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary-light);
+            border: 1px solid var(--border-color);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .popular-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: #ffffff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            letter-spacing: 0.05em;
+        }
+    </style>
 </head>
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand">Antecessum</div>
+    <div class="nav-brand" onclick="location.href='index.html'">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Antecessum
+    </div>
     <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="feed.html">Explore Feed</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="donate.html" class="active">Support Us</a></li>
     </ul>
-    <a href="report.html" class="cta-btn">Report Issue</a>
+    <a href="report.html" class="cta-btn">Report a Spot</a>
 </nav>
 
-<div style="padding: 140px 24px 60px; text-align: center;">
+<div class="donate-header">
     <span class="badge">SUPPORT US</span>
-    <h1>Empower Your Community.</h1>
-    <p>Your contributions help us maintain the platform and provide support to local neighborhood leaders.</p>
+    <h1>Fund Local Drives</h1>
+    <p>Your contributions fund cleanup equipment, tools, safety gear, and support local neighborhood drives in Pune.</p>
 </div>
 
 <section class="section" style="padding-top: 0;">
     <div class="card-grid">
         <div class="glass-card reveal">
-            <h3>Seed Support</h3>
-            <p>Perfect for individual citizens wanting to help with maintenance costs.</p>
-            <div style="font-size: 32px; font-weight: 800; color: var(--primary-dark); margin: 16px 0;">$10<span style="font-size: 14px; font-weight: 500;">/mo</span></div>
-            <button class="cta-btn" style="width: 100%;" onclick="alert('Redirecting to secure payment...')">Support with $10</button>
+            <h3>Gear Sponsor</h3>
+            <p style="margin-bottom: var(--space-md); flex: 1;">Provides gloves, trash bags, and safety vests for 5 volunteers.</p>
+            <div style="font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 800; color: var(--primary); margin: var(--space-md) 0;">
+                $10<span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">/mo</span>
+            </div>
+            <button class="cta-btn secondary" style="width: 100%; border-radius: var(--radius-md);" onclick="alert('Redirecting to secure payment...')">Support with $10</button>
         </div>
-        <div class="glass-card reveal" style="border: 2px solid var(--primary);">
-            <div class="badge" style="position: absolute; top: 16px; right: 16px;">MOST POPULAR</div>
-            <h3>Community Pillar</h3>
-            <p>Significant support for local infrastructure verification and reports.</p>
-            <div style="font-size: 32px; font-weight: 800; color: var(--primary-dark); margin: 16px 0;">$25<span style="font-size: 14px; font-weight: 500;">/mo</span></div>
-            <button class="cta-btn" style="width: 100%;" onclick="alert('Redirecting to secure payment...')">Support with $25</button>
+        <div class="glass-card reveal" style="border: 2px solid var(--primary); box-shadow: var(--shadow-lg);">
+            <span class="popular-badge">MOST POPULAR</span>
+            <h3>Drive Leader</h3>
+            <p style="margin-bottom: var(--space-md); flex: 1;">Funds tools, garbage bins, and coordination for an entire local street cleanup.</p>
+            <div style="font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 800; color: var(--primary); margin: var(--space-md) 0;">
+                $25<span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">/mo</span>
+            </div>
+            <button class="cta-btn" style="width: 100%; border-radius: var(--radius-md);" onclick="alert('Redirecting to secure payment...')">Support with $25</button>
         </div>
         <div class="glass-card reveal">
-            <h3>Civic Champion</h3>
-            <p>For organizations and dedicated activists leading community change.</p>
-            <div style="font-size: 32px; font-weight: 800; color: var(--primary-dark); margin: 16px 0;">$100<span style="font-size: 14px; font-weight: 500;">/mo</span></div>
-            <button class="cta-btn" style="width: 100%;" onclick="alert('Redirecting to secure payment...')">Support with $100</button>
+            <h3>Neighborhood Patron</h3>
+            <p style="margin-bottom: var(--space-md); flex: 1;">Supports large-scale machinery rental or community awareness drives across multiple zones.</p>
+            <div style="font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 800; color: var(--primary); margin: var(--space-md) 0;">
+                $100<span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">/mo</span>
+            </div>
+            <button class="cta-btn secondary" style="width: 100%; border-radius: var(--radius-md);" onclick="alert('Redirecting to secure payment...')">Support with $100</button>
         </div>
     </div>
 
-    <div class="glass-card reveal" style="margin-top: 40px; text-align: center;">
+    <div class="glass-card reveal" style="margin-top: 40px; text-align: center; align-items: center;">
         <h3>Custom Amount?</h3>
-        <p>Every contribution counts. Whether it's $1 or $1000, your support keeps Antecessum running.</p>
-        <button class="cta-btn" style="background: var(--secondary-dark); margin-top: 24px;" onclick="alert('Redirecting to secure payment...')">Custom Donation</button>
+        <p style="max-width: 500px; margin-bottom: var(--space-md);">Every contribution counts. Whether it's $1 or $1000, your support keeps Praxis running.</p>
+        <button class="cta-btn secondary" style="margin-top: var(--space-sm); border-radius: var(--radius-md); padding: 12px 28px;" onclick="alert('Redirecting to secure payment...')">Custom Donation</button>
     </div>
 </section>
 
 <footer>
-    <p class="copy">&copy; 2026 Antecessum Group. All Rights Reserved.</p>
+    <div class="footer-logo">Praxis</div>
+    <div class="footer-nav">
+        <a href="index.html">Home</a>
+        <a href="feed.html">Feed</a>
+        <a href="contact.html">Contact</a>
+        <a href="donate.html">Donate</a>
+        <a href="report.html">Report Spot</a>
+    </div>
+    <p class="copy">&copy; 2026 Praxis NGO. All Rights Reserved.</p>
 </footer>
 
 </body>

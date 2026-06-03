@@ -1,51 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Antecessum - Generate Complaint Report</title>
-<style>
-  body { font-family: Arial, sans-serif; background:#f4f4f4; margin:0; padding:0; }
-  header { background:#333; color:white; padding:20px; text-align:center; font-size:24px; font-family:'Segoe UI', sans-serif; }
-  main { padding:30px; }
-  form { max-width:600px; margin:20px auto; background:white; padding:25px; border-radius:8px; box-shadow:0 0 12px rgba(0,0,0,0.15); }
-  input, textarea { width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:4px; }
-  button { padding:12px 25px; background:#333; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px; margin-top:10px; }
-  button:hover { background:#555; }
-  #reportSection { display:none; max-width:650px; margin:30px auto; padding:25px; background:white; border-left:6px solid #333; border-radius:8px; box-shadow:0 0 12px rgba(0,0,0,0.15); font-family:'Times New Roman', serif; }
-  #reportSection h3 { text-align:center; text-decoration:underline; margin-bottom:15px; }
-  #reportSection p { margin:8px 0; line-height:1.5; }
-  #reportSection .action-btns { display:flex; justify-content:center; gap:20px; margin-top:20px; }
-  footer { text-align:center; padding:15px; font-style:italic; color:#555; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antecessum - Generate Complaint Report</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        .generator-header {
+            padding: 140px 24px 60px;
+            text-align: center;
+            background: radial-gradient(120% 60% at 50% 0%, rgba(37, 99, 235, 0.08) 0%, var(--bg-light) 60%);
+        }
+        .generator-header h1 {
+            font-size: clamp(32px, 5vw, 48px);
+            margin-bottom: var(--space-xs);
+        }
+        .generator-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto var(--space-4);
+            background: var(--bg-surface);
+            padding: var(--space-4);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-premium);
+            border: 1px solid var(--border-color);
+        }
+        #reportSection {
+            display: none;
+            max-width: 650px;
+            margin: 30px auto;
+            padding: var(--space-4);
+            background: var(--bg-surface);
+            border-left: 6px solid var(--primary);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-premium);
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            font-family: 'Times New Roman', serif;
+            color: #000000;
+        }
+        #reportSection h3 {
+            text-align: center;
+            text-decoration: underline;
+            margin-bottom: 15px;
+            color: #000000;
+        }
+        #reportSection p {
+            margin: 8px 0;
+            line-height: 1.5;
+            color: #000000;
+        }
+        #reportSection .action-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 
-<header>Antecessum - Complaint Report Generator</header>
+<nav class="navbar">
+    <div class="nav-brand" onclick="location.href='index.html'">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Praxis
+    </div>
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="feed.html">Explore Feed</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="donate.html">Support Us</a></li>
+    </ul>
+    <a href="report.html" class="cta-btn">Report a Spot</a>
+</nav>
 
-<main>
-  <form id="complaintForm">
-    <label><strong>Full Name:</strong></label>
-    <input type="text" id="name" required>
+<div class="generator-header">
+    <span class="badge">DOCUMENT GENERATOR</span>
+    <h1>Report Generator</h1>
+    <p>Generate a formal physical copy of your neighborhood cleanup request.</p>
+</div>
 
-    <label><strong>Date:</strong></label>
-    <input type="date" id="date" required>
+<main class="section" style="padding-top: 0;">
+    <div class="form-container">
+        <form id="complaintForm">
+            <div class="form-group">
+                <label for="name"><strong>Full Name</strong></label>
+                <input type="text" id="name" class="form-control" placeholder="Enter your full name" required>
+            </div>
 
-    <label><strong>Location:</strong></label>
-    <input type="text" id="location" required>
+            <div class="form-group">
+                <label for="date"><strong>Date</strong></label>
+                <input type="date" id="date" class="form-control" required>
+            </div>
 
-    <label><strong>Complaint Details:</strong></label>
-    <textarea id="details" rows="5" required></textarea>
+            <div class="form-group">
+                <label for="location"><strong>Location</strong></label>
+                <input type="text" id="location" class="form-control" placeholder="e.g. Kalyani Nagar, Pune" required>
+            </div>
 
-    <button type="button" onclick="generateReport()">Generate Report</button>
-  </form>
+            <div class="form-group">
+                <label for="details"><strong>Complaint Details</strong></label>
+                <textarea id="details" rows="5" class="form-control" placeholder="Describe the structural or civic issues in detail..." required style="resize: vertical;"></textarea>
+            </div>
 
-  <div id="reportSection">
-    <!-- Generated report will appear here -->
-  </div>
+            <button type="button" class="cta-btn" style="width: 100%; padding: 12px; border-radius: var(--radius-sm); font-size: 16px;" onclick="generateReport()">Generate Report</button>
+        </form>
+    </div>
+
+    <div id="reportSection">
+        <!-- Generated report will appear here -->
+    </div>
 </main>
 
-<footer>Generated via Antecessum</footer>
+<footer>
+    <div class="footer-logo">Praxis</div>
+    <p class="copy">&copy; 2026 Praxis NGO. All Rights Reserved.</p>
+</footer>
 
 <script>
 function generateReport() {
@@ -68,14 +142,15 @@ function generateReport() {
     <br>
     <p style="text-align:right;"><strong>Authority Signature:</strong> ____________________</p>
     <div class="action-btns">
-      <button onclick="printReport()">Print Report</button>
-      <button onclick="goBack()">Back to Complaint Reports</button>
+      <button class="cta-btn" onclick="printReport()">Print Report</button>
+      <button class="cta-btn secondary" onclick="goBack()">Back to Reports Database</button>
     </div>
   `;
 
   const section = document.getElementById('reportSection');
   section.innerHTML = report;
   section.style.display = 'block';
+  section.scrollIntoView({ behavior: 'smooth' });
 }
 
 function printReport() {
@@ -85,6 +160,7 @@ function printReport() {
   document.body.innerHTML = reportContent;
   window.print();
   document.body.innerHTML = originalContent;
+  window.location.reload(); // Reload to restore page state and bindings safely
 }
 
 function goBack() {
