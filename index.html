@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="styles/main.css">
     <script src="js/app.js" type="module"></script>
     <script id="tailwind-config">
         tailwind.config = {
@@ -161,27 +162,31 @@
 </head>
 <body class="font-body-md text-on-surface selection:bg-primary-container selection:text-on-primary-container">
 <!-- Header Navigation -->
-<header class="fixed top-0 w-full bg-surface/90 backdrop-blur-md border-b border-outline-variant z-50">
-    <nav class="max-w-max-width mx-auto px-4 lg:px-margin-desktop flex flex-col lg:flex-row justify-between items-center py-2 lg:h-16 gap-2 lg:gap-0">
+<header class="fixed top-0 w-full bg-surface/95 backdrop-blur-md border-b border-outline-variant z-50">
+    <nav class="max-w-max-width mx-auto px-4 lg:px-margin-desktop flex flex-col lg:flex-row justify-between items-center py-2 lg:h-16 gap-1 lg:gap-0">
         <div class="flex justify-between items-center w-full lg:w-auto">
             <div class="flex items-center gap-sm cursor-pointer" onclick="location.href='index.html'">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 <span class="text-headline-sm font-headline-sm font-bold text-primary">Praxis</span>
             </div>
+            <!-- Show Report button on right for mobile -->
+            <button class="lg:hidden bg-primary-container text-on-primary-container font-label-md px-md py-1.5 rounded-lg inner-highlight active:scale-95 transition-transform text-xs" onclick="location.href='report.html'">Report Spot</button>
         </div>
-        <div class="flex flex-wrap justify-center gap-sm lg:gap-lg">
-            <a class="font-body-md text-primary font-bold border-b-2 border-primary pb-1" href="index.html">Home</a>
+        <!-- Scrollable Links on Mobile -->
+        <div class="flex flex-row overflow-x-auto whitespace-nowrap scrollbar-none gap-md lg:gap-lg max-w-full py-1.5 px-2 justify-start lg:justify-center w-full lg:w-auto border-t lg:border-t-0 border-outline-variant/30 mt-1 lg:mt-0">
+            <a class="font-body-md text-primary font-bold border-b-2 border-primary pb-1 text-sm lg:text-base" href="index.html">Home</a>
             <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors text-sm lg:text-base" href="feed.html">Explore Feed</a>
             <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors text-sm lg:text-base" href="report.html">Report Spot</a>
             <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors text-sm lg:text-base" href="donate.html">Support Us</a>
         </div>
-        <div class="flex items-center gap-sm lg:gap-md justify-center w-full lg:w-auto">
-            <button class="font-label-md text-on-surface hover:bg-surface-container-low px-md py-sm rounded transition-all duration-200 text-sm" onclick="location.href='contact.html'">Contact Us</button>
-            <button class="bg-primary-container text-on-primary-container font-label-md px-md lg:px-lg py-sm rounded-lg inner-highlight active:scale-95 transition-transform text-sm" onclick="location.href='report.html'">Report Spot</button>
+        <!-- Desktop Buttons -->
+        <div class="hidden lg:flex items-center gap-md">
+            <button class="font-label-md text-on-surface hover:bg-surface-container-low px-md py-sm rounded transition-all duration-200" onclick="location.href='contact.html'">Contact Us</button>
+            <button class="bg-primary-container text-on-primary-container font-label-md px-lg py-sm rounded-lg inner-highlight active:scale-95 transition-transform" onclick="location.href='report.html'">Report Spot</button>
         </div>
     </nav>
 </header>
-<main class="pt-48 lg:pt-32 pb-2xl overflow-x-hidden">
+<main class="pt-32 lg:pt-32 pb-2xl overflow-x-hidden">
     <!-- Hero Section -->
     <section class="max-w-max-width mx-auto px-margin-desktop mb-2xl">
         <div class="grid lg:grid-cols-2 gap-2xl items-center">

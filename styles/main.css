@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Geist:wght@400;500;600&display=swap');
 
 :root {
-    /* Color System — Antecessum Core Light Mode */
+    /* Color System — Praxis Core Light Mode */
     --primary: #004ac6;
     --primary-hover: #003ea8;
     --primary-light: rgba(37, 99, 235, 0.1);
@@ -615,37 +615,59 @@ footer {
 @media (max-width: 768px) {
     .navbar {
         height: auto;
-        flex-direction: column;
-        padding: var(--space-2) var(--space-3);
-        gap: var(--space-1);
-        align-items: stretch;
+        display: grid !important;
+        grid-template-areas: 
+            "brand cta"
+            "links links";
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        padding: 8px 16px;
+        gap: 8px;
         background: rgba(255, 255, 255, 0.96);
     }
     .nav-brand {
+        grid-area: brand;
         display: flex;
-        justify-content: center;
-        margin-bottom: 4px;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 0;
     }
     .nav-links {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
+        grid-area: links;
+        display: flex !important;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        overflow-x: auto;
+        white-space: nowrap;
         gap: var(--space-1);
-        margin-bottom: 4px;
+        margin-bottom: 0;
+        padding: 6px 0;
+        scrollbar-width: none; /* Firefox */
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        width: 100%;
+    }
+    .nav-links::-webkit-scrollbar {
+        display: none; /* Safari and Chrome */
     }
     .nav-links a {
-        padding: 4px 8px;
+        padding: 6px 10px;
         font-size: 13px;
+        display: inline-block;
     }
     .navbar .cta-btn {
-        width: 100%;
-        text-align: center;
+        grid-area: cta;
+        width: auto;
+        display: inline-flex !important;
+        padding: 6px 12px;
+        font-size: 12px;
+        align-self: center;
         justify-content: center;
     }
     
     /* Global Adjustments */
     .contact-header, .feed-header, .donate-header, .reports-header, .generator-header {
-        padding: 180px 16px 40px !important; /* Spacing for vertical nav height */
+        padding: 110px 16px 40px !important; /* Spacing for grid nav height */
     }
     
     .section {
@@ -672,4 +694,13 @@ footer {
     .filter-bar > div, .filter-bar select {
         width: 100% !important;
     }
+}
+
+/* Scrollbar hiding helper */
+.scrollbar-none {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-none::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
 }
