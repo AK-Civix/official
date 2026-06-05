@@ -161,27 +161,27 @@
 </head>
 <body class="font-body-md text-on-surface selection:bg-primary-container selection:text-on-primary-container">
 <!-- Header Navigation -->
-<header class="fixed top-0 w-full bg-surface/80 backdrop-blur-md border-b border-outline-variant z-50">
-    <nav class="max-w-max-width mx-auto px-margin-desktop flex justify-between items-center h-16">
-        <div class="flex items-center gap-xl cursor-pointer" onclick="location.href='index.html'">
-            <div class="flex items-center gap-sm">
+<header class="fixed top-0 w-full bg-surface/90 backdrop-blur-md border-b border-outline-variant z-50">
+    <nav class="max-w-max-width mx-auto px-4 lg:px-margin-desktop flex flex-col lg:flex-row justify-between items-center py-2 lg:h-16 gap-2 lg:gap-0">
+        <div class="flex justify-between items-center w-full lg:w-auto">
+            <div class="flex items-center gap-sm cursor-pointer" onclick="location.href='index.html'">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 <span class="text-headline-sm font-headline-sm font-bold text-primary">Praxis</span>
             </div>
         </div>
-        <div class="hidden lg:flex gap-lg">
+        <div class="flex flex-wrap justify-center gap-sm lg:gap-lg">
             <a class="font-body-md text-primary font-bold border-b-2 border-primary pb-1" href="index.html">Home</a>
-            <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="feed.html">Explore Feed</a>
-            <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="report.html">Report Issue</a>
-            <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="donate.html">Support Us</a>
+            <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors text-sm lg:text-base" href="feed.html">Explore Feed</a>
+            <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors text-sm lg:text-base" href="report.html">Report Spot</a>
+            <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors text-sm lg:text-base" href="donate.html">Support Us</a>
         </div>
-        <div class="flex items-center gap-md">
-            <button class="font-label-md text-on-surface hover:bg-surface-container-low px-md py-sm rounded transition-all duration-200" onclick="location.href='contact.html'">Contact Us</button>
-            <button class="bg-primary-container text-on-primary-container font-label-md px-lg py-sm rounded-lg inner-highlight active:scale-95 transition-transform" onclick="location.href='report.html'">Report Issue</button>
+        <div class="flex items-center gap-sm lg:gap-md justify-center w-full lg:w-auto">
+            <button class="font-label-md text-on-surface hover:bg-surface-container-low px-md py-sm rounded transition-all duration-200 text-sm" onclick="location.href='contact.html'">Contact Us</button>
+            <button class="bg-primary-container text-on-primary-container font-label-md px-md lg:px-lg py-sm rounded-lg inner-highlight active:scale-95 transition-transform text-sm" onclick="location.href='report.html'">Report Spot</button>
         </div>
     </nav>
 </header>
-<main class="pt-32 pb-2xl overflow-x-hidden">
+<main class="pt-48 lg:pt-32 pb-2xl overflow-x-hidden">
     <!-- Hero Section -->
     <section class="max-w-max-width mx-auto px-margin-desktop mb-2xl">
         <div class="grid lg:grid-cols-2 gap-2xl items-center">
