@@ -1,50 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Praxis - Complaint Reports</title>
-<style>
-  body { font-family: Arial, sans-serif; background:#f4f4f4; margin:0; padding:0; }
-  header { background:#333; color:white; padding:25px; text-align:center; font-size:28px; font-family:'Segoe UI', sans-serif; }
-  main { padding:40px; text-align:center; }
-  p { max-width:700px; margin:20px auto; font-size:16px; line-height:1.6; color:#333; }
-  button { padding:15px 35px; background:#333; color:white; border:none; border-radius:5px; cursor:pointer; font-size:18px; margin-top:20px; }
-  button:hover { background:#555; }
-  .example-reports { max-width:800px; margin:40px auto; text-align:left; background:white; padding:20px; border-radius:8px; box-shadow:0 0 12px rgba(0,0,0,0.15); }
-  .example-reports h3 { text-align:center; text-decoration:underline; margin-bottom:15px; }
-  .example-reports p { margin:10px 0; }
-  footer { text-align:center; padding:20px; font-style:italic; color:#555; margin-top:40px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Reports — Praxis</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        .reports-header {
+            padding: 140px 24px 70px;
+            text-align: center;
+            background: radial-gradient(120% 60% at 50% 0%, rgba(37, 99, 235, 0.08) 0%, var(--bg-light) 60%);
+        }
+        .reports-header h1 {
+            font-size: clamp(32px, 5vw, 48px);
+            margin-bottom: var(--space-xs);
+            font-weight: 700;
+        }
+        .reports-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        .example-reports {
+            max-width: 800px;
+            margin: 40px auto;
+            text-align: left;
+            background: var(--bg-surface);
+            padding: var(--space-4);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-premium);
+            border: 1px solid var(--border-color);
+        }
+        .example-reports h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 20px;
+        }
+        .report-item {
+            padding: var(--space-3);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: var(--space-2);
+        }
+        .report-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary-light);
+            border: 1px solid var(--border-color);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+    </style>
 </head>
 <body>
 
-<header>Praxis - Complaint Reports</header>
+<nav class="navbar">
+    <div class="nav-brand" onclick="location.href='index.html'">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Praxis
+    </div>
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="feed.html">Explore Feed</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="donate.html">Support Us</a></li>
+    </ul>
+    <a href="report.html" class="cta-btn">Report a Spot</a>
+</nav>
 
-<main>
-  <p>Welcome to the Praxis Complaint Reports portal. Here, you can view formal complaint reports or generate your own official complaint document. Use the button below to generate a report and sub[...]
+<div class="reports-header">
+    <span class="badge">REPORTS SYSTEM</span>
+    <h1>Praxis Complaint Reports</h1>
+    <p>Welcome to the Praxis Complaint Reports portal. View formal reports or generate your own official complaint document.</p>
+</div>
 
 <main class="section" style="padding-top: 0; text-align: center;">
-    <p style="max-width:700px; margin:20px auto; font-size:16px; color: var(--text-secondary);">
-        Welcome to the Praxis Complaint Reports portal. Here, you can view formal complaint reports or generate your own official complaint document. Use the button below to generate a report and submit your complaint in a professional format.
+    <p style="max-width: 700px; margin: 20px auto; font-size: 16px; line-height: 1.6; color: var(--text-secondary);">
+        Generate an official, nicely-formatted PDF complaint report detailing issues like garbage piles or potholes to submit to Pune Municipal Corporation (PMC).
     </p>
 
-    <a href="generate_report.html" style="text-decoration: none;"><button class="cta-btn" style="padding: 12px 28px; border-radius: var(--radius-md); font-size: 16px;">Generate Your Own Report</button></a>
+    <div style="margin: 30px 0;">
+        <a href="generate_report.html" style="text-decoration: none;">
+            <button class="cta-btn" style="padding: 12px 28px; border-radius: var(--radius-md); font-size: 16px; font-weight: 600;">
+                Generate Official PMC Report
+            </button>
+        </a>
+    </div>
 
-    <div class="example-reports">
-        <h3>Example Complaint Reports</h3>
+    <div class="example-reports reveal active">
+        <h3>Example Reference Reports</h3>
         <div class="report-item">
-            <p><strong>Report #001:</strong> Complaint regarding faulty streetlights in downtown area. Submitted on 2026-03-25.</p>
+            <p><strong>Report #001:</strong> Complaint regarding faulty streetlights in Baner Hill area. Submitted on 2026-03-25.</p>
         </div>
         <div class="report-item">
-            <p><strong>Report #002:</strong> Complaint about water leakage in public park facilities. Submitted on 2026-03-26.</p>
+            <p><strong>Report #002:</strong> Complaint about garbage overflow near Kothrud Depot. Submitted on 2026-03-26.</p>
         </div>
-        <p style="font-style: italic; color: var(--text-muted); font-size: 13px; margin-top: 15px; text-align: center;">Note: Example reports are for reference only.</p>
+        <p style="font-style: italic; color: var(--text-muted); font-size: 13px; margin-top: 15px; text-align: center;">
+            Note: Examples are for citizen reference when crafting new reports.
+        </p>
     </div>
 </main>
 
 <footer>
     <div class="footer-logo">Praxis</div>
+    <div class="footer-nav">
+        <a href="index.html">Home</a>
+        <a href="feed.html">Feed</a>
+        <a href="contact.html">Contact</a>
+        <a href="donate.html">Donate</a>
+        <a href="report.html">Report Spot</a>
+    </div>
     <p class="copy">&copy; 2026 Praxis NGO. All Rights Reserved.</p>
 </footer>
 

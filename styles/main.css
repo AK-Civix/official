@@ -694,6 +694,17 @@ footer {
     .filter-bar > div, .filter-bar select {
         width: 100% !important;
     }
+
+    /* Prevent clipping on cards and forms on mobile */
+    .glass-card, .form-card, .form-container, .example-reports {
+        padding: var(--space-2) !important;
+    }
+    .issue-content {
+        padding: var(--space-2) !important;
+    }
+    .comments-container {
+        margin: 0 -16px -16px -16px !important;
+    }
 }
 
 /* Scrollbar hiding helper */
