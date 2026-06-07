@@ -14,6 +14,7 @@
         .contact-header h1 {
             font-size: clamp(32px, 5vw, 48px);
             margin-bottom: var(--space-xs);
+            font-weight: 800;
         }
         .contact-header p {
             color: var(--text-secondary);
@@ -21,33 +22,74 @@
         }
         .contact-grid {
             display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: var(--space-xl);
-            max-width: 1200px;
+            grid-template-columns: 1.1fr 1.4fr;
+            gap: var(--space-lg);
+            max-width: 1100px;
             margin: 0 auto;
+            align-items: start;
+        }
+        .info-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
         }
         .coordinator-card {
             display: flex;
             align-items: center;
             gap: 16px;
-            padding: 16px;
+            padding: 18px;
             background: var(--bg-surface);
             border-radius: var(--radius-md);
             border: 1px solid var(--border-color);
-            margin-bottom: 16px;
+            transition: border-color var(--transition-fast);
+        }
+        .coordinator-card:hover {
+            border-color: var(--border-hover);
         }
         .coordinator-avatar {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: var(--radius-full);
-            background: var(--primary-light);
+            background: linear-gradient(135deg, var(--primary-light) 0%, rgba(37, 99, 235, 0.2) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
             color: var(--primary);
+            font-size: 16px;
+            box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
         }
-        @media (max-width: 768px) {
+        
+        .contact-icon-list {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .contact-icon-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 13.5px;
+            color: var(--text-secondary);
+        }
+        .contact-icon-item strong {
+            color: var(--text-primary);
+        }
+        .icon-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+        
+        @media (max-width: 820px) {
             .contact-grid {
                 grid-template-columns: 1fr;
             }
@@ -73,52 +115,84 @@
 <div class="contact-header">
     <span class="badge">GET IN TOUCH</span>
     <h1>Connect With Praxis Pune</h1>
-    <p>Reach out to volunteer, register a drive in your society, or suggest cleanups.</p>
+    <p>Reach out to volunteer, suggest cleanups, or ask general questions.</p>
 </div>
 
 <section class="section" style="padding-top: 0;">
     <div class="contact-grid">
-        <div class="reveal active">
-            <!-- Emergency Card -->
-            <div class="glass-card" style="margin-bottom: var(--space-lg); border-left: 4px solid #ef4444;">
-                <h3 style="color: #ef4444; font-weight: 700;">Reporting Urgent Danger?</h3>
-                <p style="margin-bottom: var(--space-md); font-size: 13px;">If you see open live wires, major toxic chemical spills, or immediate infrastructure collapse, call disaster management or police.</p>
-                <a href="tel:112" class="cta-btn" style="background: #ef4444; border-radius: var(--radius-md); text-align: center; color: white; font-weight: 700; width: 100%;">Call Local Help (112)</a>
+        <!-- left side info sidebar -->
+        <div class="info-sidebar reveal active">
+            <!-- Emergency Alert Card -->
+            <div class="glass-card" style="border-left: 4px solid #ef4444; background: rgba(239, 68, 68, 0.02);">
+                <h3 style="color: #ef4444; font-weight: 700; font-size: 16px; margin-bottom: 8px;">Reporting Urgent Danger?</h3>
+                <p style="margin-bottom: var(--space-md); font-size: 13px; color: var(--text-secondary);">
+                    If you see open live wires, major toxic chemical spills, or immediate infrastructure collapse, call local disaster management or police.
+                </p>
+                <a href="tel:112" class="cta-btn" style="background: #ef4444; border-radius: var(--radius-sm); text-align: center; color: white; font-weight: 700; width: 100%; font-size: 13px;">
+                    Call Emergency Services (112)
+                </a>
             </div>
 
-            <!-- coordinator profiles -->
-            <h3 style="margin-bottom: 16px; font-weight: 700;">NGO Coordinators</h3>
-            <div class="coordinator-card">
-                <div class="coordinator-avatar">AK</div>
-                <div>
-                    <h4 style="font-weight: 600;">Aniruddh Kumar</h4>
-                    <p style="font-size: 12px; color: var(--text-muted);">Lead Coordinator, Pune Chapter</p>
-                    <a href="mailto:aniruddh@praxisngo.org" style="font-size: 12px; color: var(--primary);">aniruddh@praxisngo.org</a>
-                </div>
-            </div>
-            <div class="coordinator-card">
-                <div class="coordinator-avatar">SD</div>
-                <div>
-                    <h4 style="font-weight: 600;">Soham Dalvi</h4>
-                    <p style="font-size: 12px; color: var(--text-muted);">Volunteer Drive Head</p>
-                    <a href="mailto:soham@praxisngo.org" style="font-size: 12px; color: var(--primary);">soham@praxisngo.org</a>
+            <!-- coordinators panel -->
+            <div class="glass-card">
+                <h3 style="margin-bottom: 16px; font-weight: 700; font-size: 16px;">NGO Coordinator</h3>
+                <div class="coordinator-card">
+                    <div class="coordinator-avatar">AK</div>
+                    <div>
+                        <h4 style="font-weight: 700; font-size: 14.5px; color: var(--text-primary);">Aniruddh Kumar</h4>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Lead Coordinator, Pune Chapter</p>
+                        <a href="mailto:aniruddh@praxisngo.org" style="font-size: 12.5px; color: var(--primary); font-weight: 600; text-decoration: none;">aniruddh@praxisngo.org</a>
+                    </div>
                 </div>
             </div>
 
             <!-- office details -->
-            <div class="glass-card" style="margin-top: 24px;">
-                <h3>Praxis HQ Pune</h3>
-                <p style="margin-bottom: var(--space-md); font-size: 13px; line-height: 1.6;">
-                    Plot 14, Lane 5, Kalyani Nagar,<br>
-                    Pune, Maharashtra 411006
+            <div class="glass-card">
+                <h3 style="margin-bottom: 12px; font-weight: 700; font-size: 16px;">Praxis HQ Pune</h3>
+                <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                    Our coordination office handles operations, volunteer materials deployment, and liaison work with Pune Municipal Corporation (PMC).
                 </p>
-                <p style="font-size: 13px;"><strong>Office Hours:</strong> 9 AM - 6 PM Daily</p>
+                
+                <div class="contact-icon-list">
+                    <div class="contact-icon-item">
+                        <div class="icon-circle">📍</div>
+                        <div>
+                            <strong>Office Address</strong><br>
+                            Plot 14, Lane 5, Kalyani Nagar,<br>
+                            Pune, Maharashtra 411006
+                        </div>
+                    </div>
+                    <div class="contact-icon-item">
+                        <div class="icon-circle">📞</div>
+                        <div>
+                            <strong>Phone Number</strong><br>
+                            +91 7019844552
+                        </div>
+                    </div>
+                    <div class="contact-icon-item">
+                        <div class="icon-circle">✉️</div>
+                        <div>
+                            <strong>General Inquiries</strong><br>
+                            <a href="mailto:support@praxisngo.org" style="color: var(--primary); font-weight: 600; text-decoration: none;">support@praxisngo.org</a>
+                        </div>
+                    </div>
+                    <div class="contact-icon-item">
+                        <div class="icon-circle">⏰</div>
+                        <div>
+                            <strong>Office Hours</strong><br>
+                            9:00 AM – 6:00 PM Daily
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- message form -->
-        <div class="form-card reveal active">
-            <h3 style="margin-bottom: 20px; font-weight: 700;">Send a Message</h3>
+        <!-- right side contact message form -->
+        <div class="form-card reveal active" style="margin: 0;">
+            <h3 style="margin-bottom: 8px; font-weight: 700; font-size: 18px;">Send a Message</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">
+                Have questions about our events or want to suggest a cleanup area? Drop us a line.
+            </p>
             <form onsubmit="event.preventDefault(); alert('Message sent successfully! Our Pune coordinator will connect with you.'); window.location.href='index.html';">
                 <div class="form-group">
                     <label>Full Name</label>
@@ -143,10 +217,10 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Message details</label>
+                    <label>Message Details</label>
                     <textarea class="form-control" rows="5" placeholder="Share how you want to contribute or details of your society cleanup request..." required style="resize: vertical;"></textarea>
                 </div>
-                <button type="submit" class="cta-btn" style="width: 100%; padding: 14px; border-radius: var(--radius-md); font-size: 15px;">Submit Inquiry</button>
+                <button type="submit" class="cta-btn" style="width: 100%; padding: 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700;">Submit Inquiry</button>
             </form>
         </div>
     </div>
