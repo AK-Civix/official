@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleaning Drive Registration — Praxis</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="js/app.js" type="module"></script>
+    <style>
+        .register-header {
+            padding: 130px 24px 40px;
+            text-align: center;
+            background: radial-gradient(120% 60% at 50% 0%, rgba(37, 99, 235, 0.08) 0%, var(--bg-light) 60%);
+        }
+        .register-header h1 {
+            font-size: clamp(30px, 4.5vw, 42px);
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        
+        /* Gamified Multi-Step Container */
+        .game-container {
+            max-width: 680px;
+            margin: 0 auto 60px;
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-premium);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Progress Dashboard */
+        .dashboard {
+            background: rgba(37, 99, 235, 0.03);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+        .xp-counter {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
+        }
+        .tree-visualizer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tree-icon {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+        .bar-container {
+            flex: 1;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 99px;
+            overflow: hidden;
+            max-width: 250px;
+        }
+        .bar-fill {
+            height: 100%;
+            width: 25%;
+            background: linear-gradient(90deg, var(--primary) 0%, #10b981 100%);
+            border-radius: 99px;
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Form Wizard Steps */
+        .step-panel {
+            padding: 30px;
+            display: none;
+        }
+        .step-panel.active {
+            display: block;
+            animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        /* Interactive Selection Cards */
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        @media (max-width: 480px) {
+            .selection-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .card-opt {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            position: relative;
+        }
+        .card-opt:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        .card-opt.selected {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+        }
+        .card-opt.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #10b981;
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .card-title {
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .card-desc {
+            font-size: 11.5px;
+            color: var(--text-secondary);
+        }
+
+        /* Conditional Section Wrapper */
+        .conditional-box {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            opacity: 0;
+        }
+        .conditional-box.show {
+            max-height: 120px;
+            opacity: 1;
+            margin-bottom: 24px;
+        }
+
+        /* Nav buttons */
+        .btn-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-top: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.01);
+        }
+
+        /* Checkbox styling */
+        .custom-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 13.5px;
+            user-select: none;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-surface);
+        }
+        .custom-check input {
+            margin-top: 3px;
+        }
+
+        /* Success screen */
+        .success-panel {
+            text-align: center;
+            padding: 40px 30px;
+            display: none;
+        }
+        .badge-box {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            background: radial-gradient(circle, var(--primary-light) 0%, rgba(37, 99, 235, 0.2) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            border: 2px dashed var(--primary);
+            animation: bounce 2s infinite alternate;
+        }
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); }
+        }
+
+        /* Particle Confetti canvas */
+        #confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand" onclick="location.href='index.html'">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Praxis
+    </div>
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="feed.html">Explore Feed</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="donate.html">Support Us</a></li>
+    </ul>
+    <a href="report.html" class="cta-btn">Report a Spot</a>
+</nav>
+
+<div class="register-header">
+    <span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.2);">MEGA CLEANUP 2026</span>
+    <h1>Mission Registration</h1>
+    <p>Complete your environmental profile to enlist for the Pune Mega Clean Drive.</p>
+</div>
+
+<section class="section" style="padding-top: 0;">
+    <div class="game-container">
+        <canvas id="confetti"></canvas>
+        
+        <!-- Interactive Dashboard -->
+        <div class="dashboard">
+            <div class="tree-visualizer">
+                <span class="tree-icon" id="tree-stage">🌱</span>
+                <span style="font-size: 13px; font-weight: 600; color: var(--text-secondary);" id="tree-text">Seedling Planted</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" id="form-progress"></div>
+            </div>
+            <div class="xp-counter" id="xp-display">25 / 100 XP</div>
+        </div>
+
+        <form id="mission-form">
+            <!-- Step 1: Contact Detail -->
+            <div class="step-panel active" id="step-1">
+                <div class="step-title"><span>1.</span> Challenger Profile 📞</div>
+                
+                <div class="form-group">
+                    <label for="reg-name">Full Name</label>
+                    <input type="text" id="reg-name" class="form-control" placeholder="Enter your first and last name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reg-email">Email Address</label>
+                    <input type="email" id="reg-email" class="form-control" placeholder="yourname@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reg-phone">Phone Number</label>
+                    <input type="tel" id="reg-phone" class="form-control" placeholder="e.g. +91 98765 43210" required>
+                </div>
+
+                <div class="form-group">
+                    <label style="margin-bottom: 10px;">Age Group</label>
+                    <input type="hidden" id="age_group" required>
+                    <div class="selection-grid">
+                        <div class="card-opt" data-val="Under 18" onclick="setAge(this)">
+                            <div class="card-title">🎒 Under 18</div>
+                            <div class="card-desc">Need safety companion</div>
+                        </div>
+                        <div class="card-opt" data-val="18-25" onclick="setAge(this)">
+                            <div class="card-title">⚡ 18–25</div>
+                            <div class="card-desc">Active force</div>
+                        </div>
+                        <div class="card-opt" data-val="26-40" onclick="setAge(this)">
+                            <div class="card-title">🌟 26–40</div>
+                            <div class="card-desc">Leader block</div>
+                        </div>
+                        <div class="card-opt" data-val="41+" onclick="setAge(this)">
+                            <div class="card-title">👴 41+</div>
+                            <div class="card-desc">Veteran advisors</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Logistics / Location -->
+            <div class="step-panel" id="step-2">
+                <div class="step-title"><span>2.</span> Deployment Details 📍</div>
+                
+                <div class="form-group">
+                    <label style="margin-bottom: 10px;">Are you registering as:</label>
+                    <input type="hidden" id="reg_type" required>
+                    <div class="selection-grid">
+                        <div class="card-opt" data-val="Individual" onclick="setRegType(this)">
+                            <div class="card-title">👤 Individual</div>
+                            <div class="card-desc">Solo explorer</div>
+                        </div>
+                        <div class="card-opt" data-val="Group" onclick="setRegType(this)">
+                            <div class="card-title">👥 Group / Family</div>
+                            <div class="card-desc">Clean up with friends</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conditional-box" id="group-size-box">
+                    <div class="form-group">
+                        <label for="group_size">How many people will attend in your group?</label>
+                        <input type="number" id="group_size" class="form-control" min="2" max="100" value="2">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cleanup_location">Choose Cleanup Sector</label>
+                    <select id="cleanup_location" class="form-control" required>
+                        <option value="">Select a location sector</option>
+                        <option value="Pune Station Outer Hub">Pune Station Area (Hub A)</option>
+                        <option value="Kothrud Depot Perimeter">Kothrud Depot Sector (Hub B)</option>
+                        <option value="Baner Hill Trailway">Baner Hill trail (Hub C)</option>
+                        <option value="Kalyani Nagar Riverside">Kalyani Nagar riverside (Hub D)</option>
+                        <option value="Viman Nagar Joggers Sector">Viman Nagar park perimeter (Hub E)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Step 3: Role Strategy -->
+            <div class="step-panel" id="step-3">
+                <div class="step-title"><span>3.</span> Availability & Role 🤝</div>
+                
+                <div class="form-group">
+                    <label style="margin-bottom: 10px;">What is your availability?</label>
+                    <input type="hidden" id="availability" required>
+                    <div class="selection-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <div class="card-opt" data-val="Morning" onclick="setAvailability(this)">
+                            <div class="card-title">🌅 Morning</div>
+                            <div class="card-desc">7 AM – 11 AM</div>
+                        </div>
+                        <div class="card-opt" data-val="Afternoon" onclick="setAvailability(this)">
+                            <div class="card-title">☀️ Afternoon</div>
+                            <div class="card-desc">11 AM – 3 PM</div>
+                        </div>
+                        <div class="card-opt" data-val="Full Event" onclick="setAvailability(this)">
+                            <div class="card-title">📅 Full Day</div>
+                            <div class="card-desc">7 AM – 3 PM</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="margin-bottom: 10px;">Preferred Cleanup Role</label>
+                    <input type="hidden" id="preferred_role" required>
+                    <div class="selection-grid">
+                        <div class="card-opt" data-val="General Cleanup" onclick="setRole(this)">
+                            <div class="card-title">🧹 General Cleanup</div>
+                            <div class="card-desc">Brooming & collecting waste</div>
+                        </div>
+                        <div class="card-opt" data-val="Waste Segregation" onclick="setRole(this)">
+                            <div class="card-title">♻️ Segregation</div>
+                            <div class="card-desc">Sorting recyclables & dry trash</div>
+                        </div>
+                        <div class="card-opt" data-val="Logistics Support" onclick="setRole(this)">
+                            <div class="card-title">📦 Logistics Support</div>
+                            <div class="card-desc">Handling waters, gloves & bags</div>
+                        </div>
+                        <div class="card-opt" data-val="Photography/Media" onclick="setRole(this)">
+                            <div class="card-title">📸 Media Crew</div>
+                            <div class="card-desc">Documenting progress pictures</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="emergency_contact">Emergency Contact Number</label>
+                    <input type="tel" id="emergency_contact" class="form-control" placeholder="Contact number of kin/guardian" required>
+                </div>
+            </div>
+
+            <!-- Step 4: Final Consent -->
+            <div class="step-panel" id="step-4">
+                <div class="step-title"><span>4.</span> Launch Enlistment 🚀</div>
+
+                <div class="form-group">
+                    <label for="referral_source">How did you hear about this event?</label>
+                    <select id="referral_source" class="form-control">
+                        <option value="">Select an option</option>
+                        <option value="Social Media">Instagram / Twitter</option>
+                        <option value="Friends/Family">Friends or Family</option>
+                        <option value="Newspaper">Local Newspaper</option>
+                        <option value="Praxis website">Praxis Portal Feed</option>
+                        <option value="Other">Other Community group</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="comments">Any comments or questions? (Optional)</label>
+                    <textarea id="comments" class="form-control" placeholder="Special requirements, medical details, etc." rows="3" style="resize: vertical;"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="custom-check">
+                        <input type="checkbox" id="safety_agreement" required>
+                        <span><strong>I agree to follow all safety instructions</strong> provided by the drive coordinators (wearing gloves, avoiding hazardous elements, staying in designated sectors). <span style="color: #ef4444;">*</span></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="btn-wrapper">
+                <button type="button" class="cta-btn secondary" id="prev-btn" style="visibility: hidden;">Back</button>
+                <button type="button" class="cta-btn" id="next-btn">Continue</button>
+            </div>
+        </form>
+
+        <!-- Success Dashboard -->
+        <div class="success-panel" id="success-view">
+            <div class="badge-box">🥇</div>
+            <h2 style="font-weight: 800; font-size: 26px; color: #10b981; margin-bottom: 8px;">Registration Complete!</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto;">
+                Congratulations! You are officially enwrapped as a Praxis Pune Volunteer. An email card with coordinates has been deployed to you.
+            </p>
+            <div style="background: var(--bg-light); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); display: inline-block; margin-bottom: 24px;">
+                <p style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 4px;">🎯 REWARD EARNED</p>
+                <p style="font-size: 16px; font-weight: 800;">"Pune Green Ranger" Badge</p>
+            </div>
+            <div>
+                <button class="cta-btn" onclick="location.href='feed.html'">View Explore Feed</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-logo">Praxis</div>
+    <div class="footer-nav">
+        <a href="index.html">Home</a>
+        <a href="feed.html">Feed</a>
+        <a href="contact.html">Contact</a>
+        <a href="donate.html">Donate</a>
+        <a href="report.html">Report Spot</a>
+    </div>
+    <p class="copy">&copy; 2026 Praxis NGO. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+    import { supabase } from './js/supabase.js';
+
+    let currentStep = 1;
+    const totalSteps = 4;
+
+    const steps = [
+        { id: 'step-1', xp: 25, progress: '25%', emoji: '🌱', text: 'Seedling Planted' },
+        { id: 'step-2', xp: 50, progress: '50%', emoji: '🌿', text: 'Leafs Growing' },
+        { id: 'step-3', xp: 75, progress: '75%', emoji: '🌳', text: 'Sapling Formed' },
+        { id: 'step-4', xp: 100, progress: '100%', emoji: '🌸', text: 'Tree Blooming!' }
+    ];
+
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const form = document.getElementById('mission-form');
+
+    // Selection functions
+    window.setAge = function(element) {
+        document.querySelectorAll('#step-1 .card-opt').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('age_group').value = element.getAttribute('data-val');
+    };
+
+    window.setRegType = function(element) {
+        document.querySelectorAll('#step-2 .card-opt').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        const val = element.getAttribute('data-val');
+        document.getElementById('reg_type').value = val;
+        
+        const gBox = document.getElementById('group-size-box');
+        if (val === 'Group') {
+            gBox.classList.add('show');
+        } else {
+            gBox.classList.remove('show');
+        }
+    };
+
+    window.setAvailability = function(element) {
+        document.querySelectorAll('#step-3 .selection-grid:first-of-type .card-opt').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('availability').value = element.getAttribute('data-val');
+    };
+
+    window.setRole = function(element) {
+        document.querySelectorAll('#step-3 .selection-grid:last-of-type .card-opt').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('preferred_role').value = element.getAttribute('data-val');
+    };
+
+    // Navigation and validation
+    nextBtn.addEventListener('click', () => {
+        if (validateStep(currentStep)) {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateWizard();
+            } else {
+                submitForm();
+            }
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentStep > 1) {
+            currentStep--;
+            updateWizard();
+        }
+    });
+
+    function validateStep(step) {
+        // Step 1 Validation
+        if (step === 1) {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const phone = document.getElementById('reg-phone').value;
+            const ageGroup = document.getElementById('age_group').value;
+            
+            if (!name || !email || !phone || !ageGroup) {
+                alert('Please fill out all contact info and select your Age Group.');
+                return false;
+            }
+        }
+        // Step 2 Validation
+        if (step === 2) {
+            const regType = document.getElementById('reg_type').value;
+            const location = document.getElementById('cleanup_location').value;
+            
+            if (!regType || !location) {
+                alert('Please select your registration type and preferred location.');
+                return false;
+            }
+        }
+        // Step 3 Validation
+        if (step === 3) {
+            const availability = document.getElementById('availability').value;
+            const role = document.getElementById('preferred_role').value;
+            const emergency = document.getElementById('emergency_contact').value;
+            
+            if (!availability || !role || !emergency) {
+                alert('Please select availability, preferred role, and emergency contact.');
+                return false;
+            }
+        }
+        // Step 4 Validation
+        if (step === 4) {
+            const safety = document.getElementById('safety_agreement').checked;
+            if (!safety) {
+                alert('You must agree to the safety rules to join this drive.');
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function updateWizard() {
+        // Hide/Show panels
+        document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(`step-${currentStep}`).classList.add('active');
+
+        // Update dashboard
+        const currentData = steps[currentStep - 1];
+        document.getElementById('tree-stage').innerText = currentData.emoji;
+        document.getElementById('tree-text').innerText = currentData.text;
+        document.getElementById('form-progress').style.width = currentData.progress;
+        document.getElementById('xp-display').innerText = `${currentData.xp} / 100 XP`;
+
+        // Update buttons
+        prevBtn.style.visibility = (currentStep === 1) ? 'hidden' : 'visible';
+        nextBtn.innerText = (currentStep === totalSteps) ? 'Launch Mission 🚀' : 'Continue';
+    }
+
+    async function submitForm() {
+        if (!supabase) {
+            alert('Supabase client connection missing.');
+            return;
+        }
+
+        const nextBtnText = nextBtn.innerText;
+        nextBtn.disabled = true;
+        nextBtn.innerText = 'Submitting Profile...';
+
+        const payload = {
+            full_name: document.getElementById('reg-name').value,
+            email: document.getElementById('reg-email').value,
+            phone: document.getElementById('reg-phone').value,
+            age_group: document.getElementById('age_group').value,
+            registration_type: document.getElementById('reg_type').value,
+            group_size: document.getElementById('reg_type').value === 'Group' ? parseInt(document.getElementById('group_size').value) : 1,
+            cleanup_location: document.getElementById('cleanup_location').value,
+            availability: document.getElementById('availability').value,
+            preferred_role: document.getElementById('preferred_role').value,
+            emergency_contact: document.getElementById('emergency_contact').value,
+            referral_source: document.getElementById('referral_source').value || null,
+            comments: document.getElementById('comments').value || null
+        };
+
+        try {
+            const { error } = await supabase
+                .from('event_registrations')
+                .insert([payload]);
+
+            if (error) throw error;
+
+            // Trigger success view
+            form.style.display = 'none';
+            document.querySelector('.btn-wrapper').style.display = 'none';
+            document.getElementById('success-view').style.display = 'block';
+            
+            // Adjust progress
+            document.getElementById('form-progress').style.width = '100%';
+            document.getElementById('tree-stage').innerText = '👑';
+            document.getElementById('tree-text').innerText = 'Pune Green Ranger!';
+            document.getElementById('xp-display').innerText = '100 / 100 XP';
+            
+            runConfetti();
+
+        } catch (err) {
+            console.error('Registration insertion error:', err);
+            alert('Enlistment failed. Please check your network or try again.');
+            nextBtn.disabled = false;
+            nextBtn.innerText = nextBtnText;
+        }
+    }
+
+    // Canvas Confetti
+    function runConfetti() {
+        const canvas = document.getElementById('confetti');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = canvas.parentElement.offsetHeight;
+
+        const colors = ['#2563eb', '#10b981', '#f59e0b', '#ec4899', '#3b82f6'];
+        const particles = [];
+
+        for (let i = 0; i < 120; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                r: Math.random() * 4 + 3,
+                d: Math.random() * canvas.height,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                tilt: Math.random() * 10 - 5,
+                tiltAngleIncremental: Math.random() * 0.07 + 0.02,
+                tiltAngle: 0
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, idx) => {
+                p.tiltAngle += p.tiltAngleIncremental;
+                p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+                p.x += Math.sin(p.tiltAngle);
+                p.tilt = Math.sin(p.tiltAngle - (idx / 3)) * 15;
+
+                ctx.beginPath();
+                ctx.lineWidth = p.r;
+                ctx.strokeStyle = p.color;
+                ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+                ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+                ctx.stroke();
+            });
+
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+</script>
+</body>
+</html>

@@ -18,6 +18,7 @@ export default defineConfig({
         generate: './generate_report.html',
         fixcontact: './fixmyarea+contact.html',
         fixdonate: './fixmyarea+donation.html',
+        register: './register.html',
       }
     },
     outDir: 'dist',
