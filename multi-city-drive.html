@@ -24,9 +24,49 @@
     </script>
     <style>
         body { background: #fafafa; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .announcement-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 36px;
+            background: #eab308;
+            overflow: hidden;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+        }
+        .announcement-track {
+            display: flex;
+            white-space: nowrap;
+            animation: scrollAnnouncement 25s linear infinite;
+        }
+        .announcement-item {
+            flex-shrink: 0;
+            padding: 0 48px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #0a0a0a;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+        @keyframes scrollAnnouncement {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-33.333%); }
+        }
+        header { margin-top: 36px; }
     </style>
 </head>
 <body class="text-on-surface antialiased">
+
+<!-- Announcement Bar -->
+<div class="announcement-bar">
+    <div class="announcement-track">
+        <span class="announcement-item">&#9733; Upcoming Event: Multi-City CleanUp Drive — 4th July 2026 &#9733;</span>
+        <span class="announcement-item">&#9733; Upcoming Event: Multi-City CleanUp Drive — 4th July 2026 &#9733;</span>
+        <span class="announcement-item">&#9733; Upcoming Event: Multi-City CleanUp Drive — 4th July 2026 &#9733;</span>
+    </div>
+</div>
 
 <header class="fixed top-0 w-full bg-white/85 backdrop-blur-xl z-50 border-b border-border" style="box-shadow: 0 1px 2px rgba(0,0,0,.03);">
     <nav class="max-w-6xl mx-auto px-5 md:px-10 flex items-center justify-between h-16">
@@ -56,7 +96,7 @@
         <div class="max-w-5xl mx-auto px-5 md:px-10 py-24 md:py-32 relative z-10 text-center">
             <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest" style="color: rgba(255,255,255,0.6);">
                 <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
-                Coming up · July 2026
+                Coming up · 4th July
             </span>
             <h1 class="text-[clamp(32px,6vw,56px)] font-extrabold tracking-[-0.03em] leading-[1.05] text-white mt-4">
                 Multi-City CleanUp Drive
@@ -65,7 +105,7 @@
                 One day. Six cities. Hundreds of volunteers. A nationwide push to clean up our neighborhoods — together.
             </p>
             <div class="flex flex-wrap items-center justify-center gap-4 mt-8 text-sm" style="color: rgba(255,255,255,0.55);">
-                <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-base" style="color: rgba(255,255,255,0.35);">calendar_month</span> Last Saturday of July 2026</span>
+                <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-base" style="color: rgba(255,255,255,0.35);">calendar_month</span> 4th July 2026 (Saturday)</span>
                 <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-base" style="color: rgba(255,255,255,0.35);">schedule</span> 7:00 AM – 9:00 AM</span>
                 <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-base" style="color: rgba(255,255,255,0.35);">location_on</span> All 6 cities</span>
                 <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-base" style="color: rgba(255,255,255,0.35);">groups</span> 200+ volunteers</span>
@@ -106,7 +146,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm font-semibold text-on-surface">Date &amp; Time</p>
-                                    <p class="text-xs text-on-surface-variant">Last Saturday of July 2026<br/>7:00 AM – 9:00 AM (local time)</p>
+                                    <p class="text-xs text-on-surface-variant">4th July 2026 (Saturday)<br/>7:00 AM – 9:00 AM (local time)</p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-3">
@@ -196,6 +236,13 @@
                     <h3 class="text-sm font-bold text-on-surface">Puducherry</h3>
                     <p class="text-xs text-on-surface-variant mt-0.5">Coastal chapter</p>
                 </div>
+            </div>
+            <div class="text-center mt-10">
+                <p class="text-sm text-on-surface-variant mb-4">Your city not on the list? We're expanding to more cities for future drives.</p>
+                <a href="contact.html" class="inline-flex items-center gap-2 bg-primary text-white font-semibold text-sm px-6 py-3 rounded-xl hover:opacity-90 transition-all">
+                    <span class="material-symbols-outlined text-base">add_location</span>
+                    Register Your City
+                </a>
             </div>
         </div>
     </section>
