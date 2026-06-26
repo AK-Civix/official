@@ -9,11 +9,12 @@
         .donate-header {
             padding: 140px 24px 70px;
             text-align: center;
-            background: radial-gradient(120% 60% at 50% 0%, rgba(37, 99, 235, 0.08) 0%, var(--bg-light) 60%);
+            background: linear-gradient(180deg, rgba(0, 74, 198, 0.04) 0%, var(--bg-light) 100%);
+            border-bottom: 1px solid var(--border-color);
         }
         .donate-header h1 {
             font-size: clamp(32px, 5vw, 48px);
-            margin-bottom: var(--space-xs);
+            margin-bottom: var(--space-1);
         }
         .donate-header p {
             color: var(--text-secondary);
@@ -62,10 +63,10 @@
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand" onclick="location.href='index.html'">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        For The People
-    </div>
+<div class="nav-brand" onclick="location.href='index.html'">
+    <img src="logo.png" alt="For The People" class="nav-logo">
+    For The People
+</div>
     <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="index.html">Explore Feed</a></li>
@@ -86,8 +87,8 @@
     <div class="card-grid">
         <div class="glass-card reveal active">
             <h3>Gear Sponsor</h3>
-            <p style="margin-bottom: var(--space-md); flex: 1;">Provides safety gloves, reflective jackets, masks, and garbage disposal sacks for 5 volunteers.</p>
-            <div style="font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 800; color: var(--primary); margin: var(--space-md) 0;">
+            <p style="margin-bottom: var(--space-2); flex: 1;">Provides safety gloves, reflective jackets, masks, and garbage disposal sacks for 5 volunteers.</p>
+            <div style="font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 800; color: var(--primary); margin: var(--space-2) 0;">
                 $10<span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">/one-time</span>
             </div>
             <button class="cta-btn secondary" style="width: 100%; border-radius: var(--radius-md);" onclick="alert('Redirecting to secure payment gateway for Gear Sponsor ($10)...')">Sponsor $10</button>
@@ -95,16 +96,16 @@
         <div class="glass-card reveal active" style="border: 2px solid var(--primary); box-shadow: var(--shadow-premium); position: relative;">
             <span class="popular-badge">MOST POPULAR</span>
             <h3>Drive Leader</h3>
-            <p style="margin-bottom: var(--space-md); flex: 1;">Covers high-grade iron brooms, metal pickers, safety signs, and refreshment packages for a local street team drive.</p>
-            <div style="font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 800; color: var(--primary); margin: var(--space-md) 0;">
+            <p style="margin-bottom: var(--space-2); flex: 1;">Covers high-grade iron brooms, metal pickers, safety signs, and refreshment packages for a local street team drive.</p>
+            <div style="font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 800; color: var(--primary); margin: var(--space-2) 0;">
                 $25<span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">/one-time</span>
             </div>
             <button class="cta-btn" style="width: 100%; border-radius: var(--radius-md);" onclick="alert('Redirecting to secure payment gateway for Drive Leader ($25)...')">Sponsor $25</button>
         </div>
         <div class="glass-card reveal active">
             <h3>Neighborhood Patron</h3>
-            <p style="margin-bottom: var(--space-md); flex: 1;">Funds tractor rental for debris transit, community banner printings, and larger public awareness campaigns across multiple societies.</p>
-            <div style="font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 800; color: var(--primary); margin: var(--space-md) 0;">
+            <p style="margin-bottom: var(--space-2); flex: 1;">Funds tractor rental for debris transit, community banner printings, and larger public awareness campaigns across multiple societies.</p>
+            <div style="font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 800; color: var(--primary); margin: var(--space-2) 0;">
                 $100<span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">/one-time</span>
             </div>
             <button class="cta-btn secondary" style="width: 100%; border-radius: var(--radius-md);" onclick="alert('Redirecting to secure payment gateway for Neighborhood Patron ($100)...')">Sponsor $100</button>
@@ -114,7 +115,7 @@
     <!-- Custom Donation & UPI QR -->
     <div class="glass-card reveal active" style="margin-top: 40px; text-align: center; align-items: center; justify-content: center; padding: 32px;">
         <h3>Custom Amount Contribution</h3>
-        <p style="max-width: 500px; margin-bottom: var(--space-md); font-size: 14px; color: var(--text-secondary);">
+        <p style="max-width: 500px; margin-bottom: var(--space-2); font-size: 14px; color: var(--text-secondary);">
             Every contribution counts. Whether you donate $1 or $1000, your support keeps our drives running and equipment stocked.
         </p>
         <div style="display: flex; gap: 8px; margin-bottom: 16px; max-width: 320px; width: 100%;">

@@ -11,11 +11,12 @@
         .report-header {
             padding: 140px 24px 60px;
             text-align: center;
-            background: radial-gradient(120% 60% at 50% 0%, rgba(37, 99, 235, 0.08) 0%, var(--bg-light) 60%);
+            background: linear-gradient(180deg, rgba(0, 74, 198, 0.04) 0%, var(--bg-light) 100%);
+            border-bottom: 1px solid var(--border-color);
         }
         .report-header h1 {
             font-size: clamp(32px, 5vw, 48px);
-            margin-bottom: var(--space-xs);
+            margin-bottom: var(--space-1);
         }
         .report-header p {
             color: var(--text-secondary);
@@ -36,7 +37,7 @@
             margin-bottom: 16px;
         }
         #preview-container {
-            margin-top: var(--space-md);
+            margin-top: var(--space-2);
             max-width: 100%;
             border-radius: var(--radius-md);
             overflow: hidden;
@@ -55,7 +56,7 @@
             flex-direction: column; align-items: center; justify-content: center; z-index: 2000;
         }
         .spinner {
-            width: 48px; height: 48px; border: 3px solid rgba(37, 99, 235, 0.1); border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            width: 48px; height: 48px;             border: 3px solid rgba(0, 74, 198, 0.1); border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
@@ -63,10 +64,10 @@
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand" onclick="location.href='index.html'">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        For The People
-    </div>
+<div class="nav-brand" onclick="location.href='index.html'">
+    <img src="logo.png" alt="For The People" class="nav-logo">
+    For The People
+</div>
     <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="feed-Jamshedpur.html">Explore Feed</a></li>
@@ -114,7 +115,7 @@
             
             <div class="form-group">
                 <label for="location">Location</label>
-                <div style="display: flex; gap: var(--space-xs);">
+                <div style="display: flex; gap: var(--space-1);">
                     <input type="text" id="location" class="form-control" placeholder="e.g. Kalyani Nagar, near HDFC Bank" required style="flex: 1;">
                     <button type="button" id="geo-btn" class="cta-btn secondary" style="width: 44px; height: 44px; padding: 0; border-radius: var(--radius-md); font-size: 16px;" title="Get Location">📍</button>
                 </div>
@@ -132,14 +133,14 @@
                 <div id="preview-container"></div>
             </div>
 
-            <button type="submit" class="cta-btn" style="width: 100%; padding: 14px; font-size: 16px; margin-top: var(--space-md); border-radius: var(--radius-md);">Submit Report</button>
+            <button type="submit" class="cta-btn" style="width: 100%; padding: 14px; font-size: 16px; margin-top: var(--space-2); border-radius: var(--radius-md);">Submit Report</button>
         </form>
     </div>
 </section>
 
 <div class="loading-overlay" id="loader">
     <div class="spinner"></div>
-    <p style="margin-top: var(--space-md); font-weight: 600; color: var(--white);">Uploading report...</p>
+    <p style="margin-top: var(--space-2); font-weight: 600; color: var(--white);">Uploading report...</p>
 </div>
 
 <footer style="margin-top: 60px;">

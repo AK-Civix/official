@@ -10,65 +10,80 @@
         .register-header {
             padding: 130px 24px 40px;
             text-align: center;
-            background: radial-gradient(120% 60% at 50% 0%, rgba(37, 99, 235, 0.08) 0%, var(--bg-light) 60%);
+            background: linear-gradient(180deg, rgba(0, 74, 198, 0.04) 0%, var(--bg-light) 100%);
+            border-bottom: 1px solid var(--border-color);
         }
         .register-header h1 {
             font-size: clamp(30px, 4.5vw, 42px);
             font-weight: 800;
             margin-bottom: 8px;
+            letter-spacing: -0.03em;
+        }
+        .register-header p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            max-width: 540px;
+            margin: 0 auto;
+            line-height: 1.7;
         }
         
         /* Multi-Step Container */
         .step-container {
             max-width: 680px;
-            margin: 0 auto 60px;
+            margin: -28px auto 60px;
             background: var(--bg-surface);
             border-radius: var(--radius-lg);
             border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-premium);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
             overflow: hidden;
             position: relative;
         }
 
         /* Progress Dashboard */
         .dashboard {
-            background: rgba(37, 99, 235, 0.03);
+            background: #ffffff;
             border-bottom: 1px solid var(--border-color);
-            padding: 20px;
+            padding: 20px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 16px;
         }
         .progress-indicator {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--primary);
-            background: var(--primary-light);
-            padding: 6px 12px;
+            background: rgba(0, 74, 198, 0.06);
+            padding: 4px 10px;
             border-radius: var(--radius-full);
             white-space: nowrap;
+            letter-spacing: 0.02em;
         }
         .progress-step {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.02em;
+        }
         .bar-container {
             flex: 1;
-            height: 8px;
-            background: var(--border-color);
+            height: 6px;
+            background: #e8ecf2;
             border-radius: 99px;
             overflow: hidden;
-            max-width: 250px;
+            max-width: 240px;
         }
         .bar-fill {
             height: 100%;
             width: 25%;
-            background: linear-gradient(90deg, var(--primary) 0%, #10b981 100%);
+            background: linear-gradient(90deg, var(--primary) 0%, #0042b0 100%);
             border-radius: 99px;
             transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         /* Form Wizard Steps */
         .step-panel {
-            padding: 30px;
+            padding: 32px 30px;
             display: none;
         }
         .step-panel.active {
@@ -77,27 +92,39 @@
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .step-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             margin-bottom: 24px;
             color: var(--text-primary);
             display: flex;
             align-items: center;
             gap: 8px;
-            border-bottom: 1px dashed var(--border-color);
+            border-bottom: 1px solid var(--border-color);
             padding-bottom: 12px;
+        }
+        .step-title span {
+            width: 26px;
+            height: 26px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Interactive Selection Cards */
         .selection-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 24px;
         }
         @media (max-width: 480px) {
@@ -106,33 +133,33 @@
             }
         }
         .card-opt {
-            background: var(--bg-surface);
+            background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
-            padding: 16px;
+            padding: 14px 16px;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
             position: relative;
         }
         .card-opt:hover {
             border-color: var(--primary);
-            background: var(--primary-light);
-            transform: translateY(-2px);
+            background: rgba(0, 74, 198, 0.03);
+            transform: translateY(-1px);
         }
         .card-opt.selected {
-            border-color: #10b981;
-            background: rgba(16, 185, 129, 0.05);
-            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+            border-color: var(--primary);
+            background: rgba(0, 74, 198, 0.04);
+            box-shadow: 0 0 0 2px rgba(0, 74, 198, 0.12);
         }
         .card-opt.selected::after {
             content: '✓';
             position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #10b981;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
             color: white;
             width: 18px;
             height: 18px;
@@ -140,16 +167,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
         }
         .card-title {
-            font-weight: 700;
+            font-weight: 600;
             font-size: 14px;
+            color: var(--text-primary);
         }
         .card-desc {
             font-size: 11.5px;
-            color: var(--text-secondary);
+            color: var(--text-muted);
         }
 
         /* Conditional Section Wrapper */
@@ -172,7 +200,22 @@
             align-items: center;
             padding: 20px 30px;
             border-top: 1px solid var(--border-color);
-            background: rgba(0, 0, 0, 0.01);
+            background: #f9fafb;
+        }
+        .btn-wrapper .cta-btn {
+            border-radius: 6px;
+            padding: 10px 22px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .btn-wrapper .cta-btn.secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+        .btn-wrapper .cta-btn.secondary:hover {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: var(--border-hover);
         }
 
         /* Checkbox styling */
@@ -181,39 +224,72 @@
             align-items: flex-start;
             gap: 10px;
             cursor: pointer;
-            font-size: 13.5px;
+            font-size: 13px;
             user-select: none;
-            padding: 12px;
+            padding: 14px 16px;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
-            background: var(--bg-surface);
+            background: #ffffff;
+            line-height: 1.5;
+            transition: border-color 0.2s ease;
+        }
+        .custom-check:hover {
+            border-color: var(--border-hover);
         }
         .custom-check input {
             margin-top: 3px;
+            accent-color: var(--primary);
+        }
+
+        /* Form controls inside steps */
+        .step-panel .form-control {
+            border-radius: 6px;
+            padding: 11px 14px;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .step-panel .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 74, 198, 0.08);
+        }
+        .step-panel .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
         }
 
         /* Success screen */
         .success-panel {
             text-align: center;
-            padding: 40px 30px;
+            padding: 48px 30px 40px;
             display: none;
         }
         .certificate-box {
-            width: 120px;
-            height: 120px;
+            width: 80px;
+            height: 80px;
             margin: 0 auto 20px;
-            background: radial-gradient(circle, var(--primary-light) 0%, rgba(37, 99, 235, 0.2) 100%);
+            background: linear-gradient(135deg, rgba(0, 74, 198, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
-            border: 2px dashed var(--primary);
-            animation: bounce 2s infinite alternate;
+            font-size: 36px;
+            border: 2px solid rgba(0, 74, 198, 0.15);
         }
-        @keyframes bounce {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-8px); }
+        .success-panel h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .success-panel > p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            max-width: 460px;
+            margin: 0 auto 20px;
+            line-height: 1.7;
         }
 
         /* Particle Confetti canvas */
@@ -231,10 +307,10 @@
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand" onclick="location.href='index.html'">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        For The People
-    </div>
+<div class="nav-brand" onclick="location.href='index.html'">
+    <img src="logo.png" alt="For The People" class="nav-logo">
+    For The People
+</div>
     <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="index.html">Explore Feed</a></li>
@@ -439,29 +515,27 @@
         <!-- Success Confirmation -->
         <div class="success-panel" id="success-view">
             <div class="certificate-box">&#x2705;</div>
-            <h2 style="font-weight: 800; font-size: 26px; color: #10b981; margin-bottom: 8px;">Registration Confirmed!</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 16px; max-width: 480px; margin-left: auto; margin-right: auto;">
-                You are now registered for the Multi-City CleanUp Drive. A confirmation email with event details and your assigned sector will be sent shortly.
+            <h2>Registration Confirmed!</h2>
+            <p>
+                You are now registered for the Multi-City CleanUp Drive. We'll send you a confirmation email with event details and your assigned sector.
             </p>
-            <div style="background: var(--bg-light); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); display: inline-block; margin-bottom: 16px; text-align: left;">
-                <p style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 6px;">ABOUT THE DRIVE</p>
-                <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;">
-                    A coordinated cleanup spanning Pune, Bengaluru, Hyderabad, Jamshedpur, Kendrapara, and Puducherry.<br>
-                    <strong>Date:</strong> Last Saturday of July 2026<br>
-                    <strong>Time:</strong> 7 AM – 3 PM (all cities)<br>
-                    <strong>Volunteers expected:</strong> 200+
+            <div style="background: #f6f8fc; border: 1px solid #e2e8f0; padding: 16px 20px; border-radius: 8px; display: inline-block; margin-bottom: 16px; text-align: left; max-width: 400px;">
+                <p style="font-size: 11px; font-weight: 700; color: var(--primary); margin-bottom: 6px; letter-spacing: 0.04em; text-transform: uppercase;">About the Drive</p>
+                <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                    <strong>6 cities</strong> coordinated cleanup &middot; <strong>200+</strong> volunteers<br>
+                    <strong>Date:</strong> Last Saturday, July 2026 &middot; <strong>7 AM – 3 PM</strong>
                 </p>
             </div>
-            <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.15); padding: 16px; border-radius: var(--radius-md); display: inline-block; margin-bottom: 24px; text-align: left;">
-                <p style="font-size: 13px; font-weight: 700; color: #10b981; margin-bottom: 6px;">STUDENT VOLUNTEER BENEFITS</p>
-                <ul style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.7; padding-left: 16px; margin: 0;">
+            <div style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.15); padding: 16px 20px; border-radius: 8px; display: inline-block; margin-bottom: 28px; text-align: left; max-width: 400px;">
+                <p style="font-size: 11px; font-weight: 700; color: #10b981; margin-bottom: 6px; letter-spacing: 0.04em; text-transform: uppercase;">Student Benefits</p>
+                <ul style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.8; padding-left: 16px; margin: 0;">
                     <li>Verified volunteer hours certificate</li>
                     <li>Internship credits with partner NGOs</li>
                     <li>College recommendation letter upon completion</li>
                 </ul>
             </div>
             <div>
-                <button class="cta-btn" onclick="location.href='index.html'">View Explore Feed</button>
+                <button class="cta-btn" onclick="location.href='index.html'" style="border-radius: 6px; padding: 10px 24px;">View Explore Feed</button>
             </div>
         </div>
     </div>
@@ -657,7 +731,7 @@
         canvas.width = canvas.parentElement.offsetWidth;
         canvas.height = canvas.parentElement.offsetHeight;
 
-        const colors = ['#2563eb', '#10b981', '#f59e0b', '#ec4899', '#3b82f6'];
+        const colors = ['#004ac6', '#10b981', '#f59e0b', '#ec4899', '#3b82f6'];
         const particles = [];
 
         for (let i = 0; i < 120; i++) {

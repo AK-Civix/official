@@ -11,7 +11,8 @@
         .feed-header {
             padding: 140px 24px 70px;
             text-align: center;
-            background: radial-gradient(120% 60% at 50% 0%, rgba(37, 99, 235, 0.08) 0%, var(--bg-light) 60%);
+            background: linear-gradient(180deg, rgba(0, 74, 198, 0.04) 0%, var(--bg-light) 100%);
+            border-bottom: 1px solid var(--border-color);
         }
         .feed-header h1 {
             font-size: clamp(32px, 5vw, 48px);
@@ -42,10 +43,10 @@
 
 <div id="city-filter" data-city="Pune" style="display:none"></div>
 <nav class="navbar">
-    <div class="nav-brand" onclick="location.href='index.html'">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        For The People
-    </div>
+<div class="nav-brand" onclick="location.href='index.html'">
+    <img src="logo.png" alt="For The People" class="nav-logo">
+    For The People
+</div>
     <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="feed.html" class="active">Pune Feed</a></li>
