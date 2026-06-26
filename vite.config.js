@@ -19,6 +19,7 @@ export default defineConfig({
         fixcontact: './fixmyarea+contact.html',
         fixdonate: './fixmyarea+donation.html',
         register: './register.html',
+        multidrive: './multi-city-drive.html',
       }
     },
     outDir: 'dist',
