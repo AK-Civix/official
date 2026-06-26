@@ -10,7 +10,7 @@
         .register-header {
             padding: 130px 24px 40px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(0, 74, 198, 0.04) 0%, var(--bg-light) 100%);
+            background: linear-gradient(180deg, rgba(234, 179, 8, 0.04) 0%, var(--bg-light) 100%);
             border-bottom: 1px solid var(--border-color);
         }
         .register-header h1 {
@@ -53,7 +53,7 @@
             font-size: 12px;
             font-weight: 700;
             color: var(--primary);
-            background: rgba(0, 74, 198, 0.06);
+            background: rgba(234, 179, 8, 0.06);
             padding: 4px 10px;
             border-radius: var(--radius-full);
             white-space: nowrap;
@@ -146,13 +146,13 @@
         }
         .card-opt:hover {
             border-color: var(--primary);
-            background: rgba(0, 74, 198, 0.03);
+            background: rgba(234, 179, 8, 0.03);
             transform: translateY(-1px);
         }
         .card-opt.selected {
             border-color: var(--primary);
-            background: rgba(0, 74, 198, 0.04);
-            box-shadow: 0 0 0 2px rgba(0, 74, 198, 0.12);
+            background: rgba(234, 179, 8, 0.04);
+            box-shadow: 0 0 0 2px rgba(234, 179, 8, 0.12);
         }
         .card-opt.selected::after {
             content: '✓';
@@ -252,7 +252,7 @@
         }
         .step-panel .form-control:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 74, 198, 0.08);
+            box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.08);
         }
         .step-panel .form-group label {
             font-size: 13px;
@@ -271,13 +271,13 @@
             width: 80px;
             height: 80px;
             margin: 0 auto 20px;
-            background: linear-gradient(135deg, rgba(0, 74, 198, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.08) 0%, rgba(234, 179, 8, 0.08) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 36px;
-            border: 2px solid rgba(0, 74, 198, 0.15);
+            border: 2px solid rgba(234, 179, 8, 0.15);
         }
         .success-panel h2 {
             font-size: 24px;
@@ -321,7 +321,7 @@
 </nav>
 
 <div class="register-header">
-    <span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.2);">MULTI-CITY CLEANUP 2026</span>
+    <span class="badge" style="background: rgba(234, 179, 8, 0.1); color: #eab308; border-color: rgba(234, 179, 8, 0.2);">MULTI-CITY CLEANUP 2026</span>
     <h1>Volunteer Registration</h1>
     <p>Register for the Multi-City CleanUp Drive across all 6 cities. Student volunteers receive verified hours, NGO certificates, and recommendation letters.</p>
 </div>
@@ -526,8 +526,8 @@
                     <strong>Date:</strong> Last Saturday, July 2026 &middot; <strong>7 AM – 3 PM</strong>
                 </p>
             </div>
-            <div style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.15); padding: 16px 20px; border-radius: 8px; display: inline-block; margin-bottom: 28px; text-align: left; max-width: 400px;">
-                <p style="font-size: 11px; font-weight: 700; color: #10b981; margin-bottom: 6px; letter-spacing: 0.04em; text-transform: uppercase;">Student Benefits</p>
+            <div style="background: rgba(234, 179, 8, 0.04); border: 1px solid rgba(234, 179, 8, 0.15); padding: 16px 20px; border-radius: 8px; display: inline-block; margin-bottom: 28px; text-align: left; max-width: 400px;">
+                <p style="font-size: 11px; font-weight: 700; color: #eab308; margin-bottom: 6px; letter-spacing: 0.04em; text-transform: uppercase;">Student Benefits</p>
                 <ul style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.8; padding-left: 16px; margin: 0;">
                     <li>Verified volunteer hours certificate</li>
                     <li>Internship credits with partner NGOs</li>
@@ -542,15 +542,19 @@
 </section>
 
 <footer>
-    <div class="footer-logo">For The People</div>
-    <div class="footer-nav">
-        <a href="index.html">Home</a>
-        <a href="index.html">Feed</a>
-        <a href="contact.html">Contact</a>
-        <a href="donate.html">Donate</a>
-        <a href="report.html">Report Spot</a>
+    <div class="max-w-5xl mx-auto px-5 md:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 py-8">
+        <div class="flex items-center gap-2.5">
+            <img src="logo.png" alt="For The People" style="height: 22px; width: auto;">
+            <span style="font-size: 13px; font-weight: 700; color: #0f1419;">For The People</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1" style="font-size: 12px; color: #5a5e6b;">
+            <a href="index.html" style="text-decoration: none;">Home</a>
+            <a href="feed.html" style="text-decoration: none;">Feed</a>
+            <a href="report.html" style="text-decoration: none;">Report</a>
+            <a href="contact.html" style="text-decoration: none;">Contact</a>
+        </div>
+        <p style="font-size: 11px; color: #a1a1aa;">&copy; 2026 For The People</p>
     </div>
-    <p class="copy">&copy; 2026 For The People. All Rights Reserved. — Pune, India.</p>
 </footer>
 
 <script type="module">
@@ -731,7 +735,7 @@
         canvas.width = canvas.parentElement.offsetWidth;
         canvas.height = canvas.parentElement.offsetHeight;
 
-        const colors = ['#004ac6', '#10b981', '#f59e0b', '#ec4899', '#3b82f6'];
+        const colors = ['#eab308', '#0a0a0a', '#ffffff', '#ca8a04', '#facc15'];
         const particles = [];
 
         for (let i = 0; i < 120; i++) {

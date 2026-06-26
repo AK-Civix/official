@@ -11,7 +11,7 @@
         .feed-header {
             padding: 140px 24px 70px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(0, 74, 198, 0.04) 0%, var(--bg-light) 100%);
+            background: linear-gradient(180deg, rgba(234, 179, 8, 0.04) 0%, var(--bg-light) 100%);
             border-bottom: 1px solid var(--border-color);
         }
         .feed-header h1 {
@@ -88,15 +88,19 @@
 </section>
 
 <footer>
-    <div class="footer-logo">For The People</div>
-    <div class="footer-nav">
-        <a href="index.html">Home</a>
-        <a href="feed-Kendrapara.html">Feed</a>
-        <a href="contact.html">Contact</a>
-        <a href="donate.html">Donate</a>
-        <a href="report-Kendrapara.html">Report Spot</a>
+    <div class="max-w-5xl mx-auto px-5 md:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 py-8">
+        <div class="flex items-center gap-2.5">
+            <img src="logo.png" alt="For The People" class="h-6 w-auto" style="height: 22px; width: auto;">
+            <span class="text-sm font-bold text-on-surface">For The People — Kendrapara</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-on-surface-variant">
+            <a class="hover:text-primary" href="index.html">Home</a>
+            <a class="hover:text-primary" href="feed-Kendrapara.html">Feed</a>
+            <a class="hover:text-primary" href="report-Kendrapara.html">Report</a>
+            <a class="hover:text-primary" href="contact.html">Contact</a>
+        </div>
+        <p class="text-xs text-on-surface-variant">&copy; 2026 For The People — Kendrapara</p>
     </div>
-    <p class="copy">&copy; 2026 For The People. All Rights Reserved. — Pune, India.</p>
 </footer>
 
 <script>

@@ -11,7 +11,7 @@
         .feed-header {
             padding: 140px 24px 70px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(0, 74, 198, 0.04) 0%, var(--bg-light) 100%);
+            background: linear-gradient(180deg, rgba(234, 179, 8, 0.04) 0%, var(--bg-light) 100%);
             border-bottom: 1px solid var(--border-color);
         }
         .feed-header h1 {
@@ -60,7 +60,7 @@
     <span class="badge">LIVE FEED</span>
     <h1>Puducherry Cleanup Progress</h1>
     <p>Real-time updates from volunteer drives across Puducherry.</p>
-    <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.15);padding:6px 14px;border-radius:9999px;font-size:11px;font-weight:600;color:#059669;">
+    <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.15);padding:6px 14px;border-radius:9999px;font-size:11px;font-weight:600;color:#ca8a04;">
         <span>🤝</span> In Partnership with SPARC
     </div>
 </div>
@@ -91,15 +91,19 @@
 </section>
 
 <footer>
-    <div class="footer-logo">For The People</div>
-    <div class="footer-nav">
-        <a href="index.html">Home</a>
-        <a href="feed-Puducherry.html">Feed</a>
-        <a href="contact.html">Contact</a>
-        <a href="donate.html">Donate</a>
-        <a href="report-Puducherry.html">Report Spot</a>
+    <div class="max-w-5xl mx-auto px-5 md:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 py-8">
+        <div class="flex items-center gap-2.5">
+            <img src="logo.png" alt="For The People" class="h-6 w-auto" style="height: 22px; width: auto;">
+            <span class="text-sm font-bold text-on-surface">For The People — Puducherry</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-on-surface-variant">
+            <a class="hover:text-primary" href="index.html">Home</a>
+            <a class="hover:text-primary" href="feed-Puducherry.html">Feed</a>
+            <a class="hover:text-primary" href="report-Puducherry.html">Report</a>
+            <a class="hover:text-primary" href="contact.html">Contact</a>
+        </div>
+        <p class="text-xs text-on-surface-variant">&copy; 2026 For The People — Puducherry</p>
     </div>
-    <p class="copy">&copy; 2026 For The People. All Rights Reserved. — Pune, India.</p>
 </footer>
 
 <script>
