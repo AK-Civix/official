@@ -362,6 +362,37 @@
                 </div>
 
                 <div class="form-group">
+                    <label style="margin-bottom: 10px;">Select Your City</label>
+                    <input type="hidden" id="reg_city" required>
+                    <div class="selection-grid">
+                        <div class="card-opt" data-val="Pune" onclick="setCity(this)">
+                            <div class="card-title">Pune</div>
+                            <div class="card-desc">Headquarters</div>
+                        </div>
+                        <div class="card-opt" data-val="Bengaluru" onclick="setCity(this)">
+                            <div class="card-title">Bengaluru</div>
+                            <div class="card-desc">Tech city chapter</div>
+                        </div>
+                        <div class="card-opt" data-val="Hyderabad" onclick="setCity(this)">
+                            <div class="card-title">Hyderabad</div>
+                            <div class="card-desc">Pearl city chapter</div>
+                        </div>
+                        <div class="card-opt" data-val="Jamshedpur" onclick="setCity(this)">
+                            <div class="card-title">Jamshedpur</div>
+                            <div class="card-desc">Steel city chapter</div>
+                        </div>
+                        <div class="card-opt" data-val="Kendrapara" onclick="setCity(this)">
+                            <div class="card-title">Kendrapara</div>
+                            <div class="card-desc">Coastal chapter</div>
+                        </div>
+                        <div class="card-opt" data-val="Puducherry" onclick="setCity(this)">
+                            <div class="card-title">Puducherry</div>
+                            <div class="card-desc">Coastal chapter</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label style="margin-bottom: 10px;">Age Group</label>
                     <input type="hidden" id="age_group" required>
                     <div class="selection-grid">
@@ -568,6 +599,12 @@
     const form = document.getElementById('registration-form');
 
     // Selection functions
+    window.setCity = function(element) {
+        document.querySelectorAll('#step-1 .selection-grid .card-opt').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('reg_city').value = element.getAttribute('data-val');
+    };
+
     window.setAge = function(element) {
         document.querySelectorAll('#step-1 .card-opt').forEach(el => el.classList.remove('selected'));
         element.classList.add('selected');
@@ -625,10 +662,11 @@
             const name = document.getElementById('reg-name').value;
             const email = document.getElementById('reg-email').value;
             const phone = document.getElementById('reg-phone').value;
+            const city = document.getElementById('reg_city').value;
             const ageGroup = document.getElementById('age_group').value;
             
-            if (!name || !email || !phone || !ageGroup) {
-                alert('Please fill out all contact info and select your Age Group.');
+            if (!name || !email || !phone || !city || !ageGroup) {
+                alert('Please fill out all contact info and select your City and Age Group.');
                 return false;
             }
         }
@@ -691,6 +729,7 @@
             full_name: document.getElementById('reg-name').value,
             email: document.getElementById('reg-email').value,
             phone: document.getElementById('reg-phone').value,
+            city: document.getElementById('reg_city').value,
             age_group: document.getElementById('age_group').value,
             registration_type: document.getElementById('reg_type').value,
             group_size: document.getElementById('reg_type').value === 'Group' ? parseInt(document.getElementById('group_size').value) : 1,
