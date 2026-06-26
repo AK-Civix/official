@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Geist:wght@400;500;600&display=swap');
 
 :root {
-    /* Color System — Praxis Core Light Mode */
+    /* Color System — For The People Light Mode */
     --primary: #004ac6;
     --primary-hover: #003ea8;
     --primary-light: rgba(37, 99, 235, 0.1);
@@ -18,7 +18,7 @@
     --text-secondary: #434655;
     --text-muted: #737686;
     --text-light: #737686;
-    --white: #191c1e;
+    --on-surface: #191c1e;
     --bg-light: #f7f9fb;
     --accent: #2563eb;
 
@@ -303,11 +303,25 @@ h1, h2, h3, h4 {
     color: var(--text-muted);
 }
 
+.city-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--primary-light);
+    border: 1px solid var(--border-color);
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 9999px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
 .issue-title {
     font-size: 16px;
     font-weight: 700;
     margin-bottom: var(--space-1);
-    color: var(--white);
+    color: var(--on-surface);
 }
 
 .issue-desc {
@@ -373,7 +387,7 @@ h1, h2, h3, h4 {
     display: block;
     font-weight: 600;
     font-size: 13px;
-    color: var(--white);
+    color: var(--on-surface);
     margin-bottom: var(--space-1);
 }
 
@@ -509,7 +523,7 @@ select.form-control {
 
 .comment-toggle-btn:hover {
     background: rgba(255, 255, 255, 0.05);
-    color: var(--white);
+    color: var(--on-surface);
 }
 
 /* FLOAT FAB */
@@ -541,7 +555,7 @@ select.form-control {
 /* FOOTER */
 footer {
     padding: var(--space-8) var(--space-4);
-    background: #000000;
+    background: var(--bg-surface);
     color: var(--text-secondary);
     text-align: center;
     border-top: 1px solid var(--border-color);
@@ -553,7 +567,7 @@ footer {
     font-weight: 900;
     margin-bottom: var(--space-2);
     letter-spacing: -0.04em;
-    color: var(--white);
+    color: var(--on-surface);
 }
 
 .footer-nav {
@@ -572,7 +586,7 @@ footer {
 }
 
 .footer-nav a:hover {
-    color: var(--white);
+    color: var(--on-surface);
 }
 
 .copy {

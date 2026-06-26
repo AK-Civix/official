@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cleaning Drive Registration — Praxis</title>
+    <title>Volunteer Registration — For The People</title>
     <link rel="stylesheet" href="styles/main.css">
     <script src="js/app.js" type="module"></script>
     <style>
@@ -18,8 +18,8 @@
             margin-bottom: 8px;
         }
         
-        /* Gamified Multi-Step Container */
-        .game-container {
+        /* Multi-Step Container */
+        .step-container {
             max-width: 680px;
             margin: 0 auto 60px;
             background: var(--bg-surface);
@@ -40,7 +40,7 @@
             align-items: center;
             gap: 16px;
         }
-        .xp-counter {
+        .progress-indicator {
             font-size: 13px;
             font-weight: 700;
             color: var(--primary);
@@ -49,15 +49,7 @@
             border-radius: var(--radius-full);
             white-space: nowrap;
         }
-        .tree-visualizer {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .tree-icon {
-            font-size: 24px;
-            transition: transform 0.3s ease;
-        }
+        .progress-step {
         .bar-container {
             flex: 1;
             height: 8px;
@@ -206,7 +198,7 @@
             padding: 40px 30px;
             display: none;
         }
-        .badge-box {
+        .certificate-box {
             width: 120px;
             height: 120px;
             margin: 0 auto 20px;
@@ -241,11 +233,11 @@
 <nav class="navbar">
     <div class="nav-brand" onclick="location.href='index.html'">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        Praxis
+        For The People
     </div>
     <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="feed.html">Explore Feed</a></li>
+        <li><a href="index.html">Explore Feed</a></li>
         <li><a href="contact.html">Contact Us</a></li>
         <li><a href="donate.html">Support Us</a></li>
     </ul>
@@ -253,31 +245,30 @@
 </nav>
 
 <div class="register-header">
-    <span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.2);">MEGA CLEANUP 2026</span>
-    <h1>Mission Registration</h1>
-    <p>Complete your environmental profile to enlist for the Pune Mega Clean Drive.</p>
+    <span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.2);">MULTI-CITY CLEANUP 2026</span>
+    <h1>Volunteer Registration</h1>
+    <p>Register for the Multi-City CleanUp Drive across all 6 cities. Student volunteers receive verified hours, NGO certificates, and recommendation letters.</p>
 </div>
 
 <section class="section" style="padding-top: 0;">
-    <div class="game-container">
+    <div class="step-container">
         <canvas id="confetti"></canvas>
         
-        <!-- Interactive Dashboard -->
+        <!-- Progress Dashboard -->
         <div class="dashboard">
-            <div class="tree-visualizer">
-                <span class="tree-icon" id="tree-stage">🌱</span>
-                <span style="font-size: 13px; font-weight: 600; color: var(--text-secondary);" id="tree-text">Seedling Planted</span>
+            <div class="progress-step">
+                <span style="font-size: 13px; font-weight: 600; color: var(--text-secondary);">Step <span id="step-number">1</span> of 4</span>
             </div>
             <div class="bar-container">
                 <div class="bar-fill" id="form-progress"></div>
             </div>
-            <div class="xp-counter" id="xp-display">25 / 100 XP</div>
+            <div class="progress-indicator" id="progress-label">25%</div>
         </div>
 
-        <form id="mission-form">
+        <form id="registration-form">
             <!-- Step 1: Contact Detail -->
             <div class="step-panel active" id="step-1">
-                <div class="step-title"><span>1.</span> Challenger Profile 📞</div>
+                <div class="step-title"><span>1.</span> Personal Details</div>
                 
                 <div class="form-group">
                     <label for="reg-name">Full Name</label>
@@ -299,40 +290,40 @@
                     <input type="hidden" id="age_group" required>
                     <div class="selection-grid">
                         <div class="card-opt" data-val="Under 18" onclick="setAge(this)">
-                            <div class="card-title">🎒 Under 18</div>
-                            <div class="card-desc">Need safety companion</div>
+                            <div class="card-title">Under 18</div>
+                            <div class="card-desc">With guardian consent</div>
                         </div>
                         <div class="card-opt" data-val="18-25" onclick="setAge(this)">
-                            <div class="card-title">⚡ 18–25</div>
-                            <div class="card-desc">Active force</div>
+                            <div class="card-title">18–25</div>
+                            <div class="card-desc">Student / Young professional</div>
                         </div>
                         <div class="card-opt" data-val="26-40" onclick="setAge(this)">
-                            <div class="card-title">🌟 26–40</div>
-                            <div class="card-desc">Leader block</div>
+                            <div class="card-title">26–40</div>
+                            <div class="card-desc">Working professional</div>
                         </div>
                         <div class="card-opt" data-val="41+" onclick="setAge(this)">
-                            <div class="card-title">👴 41+</div>
-                            <div class="card-desc">Veteran advisors</div>
+                            <div class="card-title">41+</div>
+                            <div class="card-desc">Community leader</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Step 2: Logistics / Location -->
+            <!-- Step 2: Logistics -->
             <div class="step-panel" id="step-2">
-                <div class="step-title"><span>2.</span> Deployment Details 📍</div>
+                <div class="step-title"><span>2.</span> Event Preferences</div>
                 
                 <div class="form-group">
                     <label style="margin-bottom: 10px;">Are you registering as:</label>
                     <input type="hidden" id="reg_type" required>
                     <div class="selection-grid">
                         <div class="card-opt" data-val="Individual" onclick="setRegType(this)">
-                            <div class="card-title">👤 Individual</div>
-                            <div class="card-desc">Solo explorer</div>
+                            <div class="card-title">Individual</div>
+                            <div class="card-desc">Volunteering alone</div>
                         </div>
                         <div class="card-opt" data-val="Group" onclick="setRegType(this)">
-                            <div class="card-title">👥 Group / Family</div>
-                            <div class="card-desc">Clean up with friends</div>
+                            <div class="card-title">Group / Family</div>
+                            <div class="card-desc">Volunteering with others</div>
                         </div>
                     </div>
                 </div>
@@ -348,33 +339,33 @@
                     <label for="cleanup_location">Choose Cleanup Sector</label>
                     <select id="cleanup_location" class="form-control" required>
                         <option value="">Select a location sector</option>
-                        <option value="Pune Station Outer Hub">Pune Station Area (Hub A)</option>
-                        <option value="Kothrud Depot Perimeter">Kothrud Depot Sector (Hub B)</option>
-                        <option value="Baner Hill Trailway">Baner Hill trail (Hub C)</option>
-                        <option value="Kalyani Nagar Riverside">Kalyani Nagar riverside (Hub D)</option>
-                        <option value="Viman Nagar Joggers Sector">Viman Nagar park perimeter (Hub E)</option>
+                        <option value="Pune Station Area">Pune Station Area</option>
+                        <option value="Kothrud Depot">Kothrud Depot</option>
+                        <option value="Baner Hill Trail">Baner Hill Trail</option>
+                        <option value="Kalyani Nagar Riverside">Kalyani Nagar Riverside</option>
+                        <option value="Viman Nagar Park Perimeter">Viman Nagar Park Perimeter</option>
                     </select>
                 </div>
             </div>
 
             <!-- Step 3: Role Strategy -->
             <div class="step-panel" id="step-3">
-                <div class="step-title"><span>3.</span> Availability & Role 🤝</div>
+                <div class="step-title"><span>3.</span> Availability & Role</div>
                 
                 <div class="form-group">
                     <label style="margin-bottom: 10px;">What is your availability?</label>
                     <input type="hidden" id="availability" required>
                     <div class="selection-grid" style="grid-template-columns: repeat(3, 1fr);">
                         <div class="card-opt" data-val="Morning" onclick="setAvailability(this)">
-                            <div class="card-title">🌅 Morning</div>
+                            <div class="card-title">Morning</div>
                             <div class="card-desc">7 AM – 11 AM</div>
                         </div>
                         <div class="card-opt" data-val="Afternoon" onclick="setAvailability(this)">
-                            <div class="card-title">☀️ Afternoon</div>
+                            <div class="card-title">Afternoon</div>
                             <div class="card-desc">11 AM – 3 PM</div>
                         </div>
                         <div class="card-opt" data-val="Full Event" onclick="setAvailability(this)">
-                            <div class="card-title">📅 Full Day</div>
+                            <div class="card-title">Full Day</div>
                             <div class="card-desc">7 AM – 3 PM</div>
                         </div>
                     </div>
@@ -385,20 +376,20 @@
                     <input type="hidden" id="preferred_role" required>
                     <div class="selection-grid">
                         <div class="card-opt" data-val="General Cleanup" onclick="setRole(this)">
-                            <div class="card-title">🧹 General Cleanup</div>
-                            <div class="card-desc">Brooming & collecting waste</div>
+                            <div class="card-title">General Cleanup</div>
+                            <div class="card-desc">Brooming and collecting waste</div>
                         </div>
                         <div class="card-opt" data-val="Waste Segregation" onclick="setRole(this)">
-                            <div class="card-title">♻️ Segregation</div>
-                            <div class="card-desc">Sorting recyclables & dry trash</div>
+                            <div class="card-title">Segregation</div>
+                            <div class="card-desc">Sorting recyclables and dry waste</div>
                         </div>
                         <div class="card-opt" data-val="Logistics Support" onclick="setRole(this)">
-                            <div class="card-title">📦 Logistics Support</div>
-                            <div class="card-desc">Handling waters, gloves & bags</div>
+                            <div class="card-title">Logistics Support</div>
+                            <div class="card-desc">Handling supplies and equipment</div>
                         </div>
                         <div class="card-opt" data-val="Photography/Media" onclick="setRole(this)">
-                            <div class="card-title">📸 Media Crew</div>
-                            <div class="card-desc">Documenting progress pictures</div>
+                            <div class="card-title">Media Coverage</div>
+                            <div class="card-desc">Documenting the drive</div>
                         </div>
                     </div>
                 </div>
@@ -411,7 +402,7 @@
 
             <!-- Step 4: Final Consent -->
             <div class="step-panel" id="step-4">
-                <div class="step-title"><span>4.</span> Launch Enlistment 🚀</div>
+                <div class="step-title"><span>4.</span> Review & Confirm</div>
 
                 <div class="form-group">
                     <label for="referral_source">How did you hear about this event?</label>
@@ -420,7 +411,7 @@
                         <option value="Social Media">Instagram / Twitter</option>
                         <option value="Friends/Family">Friends or Family</option>
                         <option value="Newspaper">Local Newspaper</option>
-                        <option value="Praxis website">Praxis Portal Feed</option>
+                        <option value="For The People website">For The People Portal Feed</option>
                         <option value="Other">Other Community group</option>
                     </select>
                 </div>
@@ -445,34 +436,47 @@
             </div>
         </form>
 
-        <!-- Success Dashboard -->
+        <!-- Success Confirmation -->
         <div class="success-panel" id="success-view">
-            <div class="badge-box">🥇</div>
-            <h2 style="font-weight: 800; font-size: 26px; color: #10b981; margin-bottom: 8px;">Registration Complete!</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto;">
-                Congratulations! You are officially enwrapped as a Praxis Pune Volunteer. An email card with coordinates has been deployed to you.
+            <div class="certificate-box">&#x2705;</div>
+            <h2 style="font-weight: 800; font-size: 26px; color: #10b981; margin-bottom: 8px;">Registration Confirmed!</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 16px; max-width: 480px; margin-left: auto; margin-right: auto;">
+                You are now registered for the Multi-City CleanUp Drive. A confirmation email with event details and your assigned sector will be sent shortly.
             </p>
-            <div style="background: var(--bg-light); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); display: inline-block; margin-bottom: 24px;">
-                <p style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 4px;">🎯 REWARD EARNED</p>
-                <p style="font-size: 16px; font-weight: 800;">"Pune Green Ranger" Badge</p>
+            <div style="background: var(--bg-light); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); display: inline-block; margin-bottom: 16px; text-align: left;">
+                <p style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 6px;">ABOUT THE DRIVE</p>
+                <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;">
+                    A coordinated cleanup spanning Pune, Bengaluru, Hyderabad, Jamshedpur, Kendrapara, and Puducherry.<br>
+                    <strong>Date:</strong> Last Saturday of July 2026<br>
+                    <strong>Time:</strong> 7 AM – 3 PM (all cities)<br>
+                    <strong>Volunteers expected:</strong> 200+
+                </p>
+            </div>
+            <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.15); padding: 16px; border-radius: var(--radius-md); display: inline-block; margin-bottom: 24px; text-align: left;">
+                <p style="font-size: 13px; font-weight: 700; color: #10b981; margin-bottom: 6px;">STUDENT VOLUNTEER BENEFITS</p>
+                <ul style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.7; padding-left: 16px; margin: 0;">
+                    <li>Verified volunteer hours certificate</li>
+                    <li>Internship credits with partner NGOs</li>
+                    <li>College recommendation letter upon completion</li>
+                </ul>
             </div>
             <div>
-                <button class="cta-btn" onclick="location.href='feed.html'">View Explore Feed</button>
+                <button class="cta-btn" onclick="location.href='index.html'">View Explore Feed</button>
             </div>
         </div>
     </div>
 </section>
 
 <footer>
-    <div class="footer-logo">Praxis</div>
+    <div class="footer-logo">For The People</div>
     <div class="footer-nav">
         <a href="index.html">Home</a>
-        <a href="feed.html">Feed</a>
+        <a href="index.html">Feed</a>
         <a href="contact.html">Contact</a>
         <a href="donate.html">Donate</a>
         <a href="report.html">Report Spot</a>
     </div>
-    <p class="copy">&copy; 2026 Praxis NGO. All Rights Reserved.</p>
+    <p class="copy">&copy; 2026 For The People. All Rights Reserved. — Pune, India.</p>
 </footer>
 
 <script type="module">
@@ -481,16 +485,9 @@
     let currentStep = 1;
     const totalSteps = 4;
 
-    const steps = [
-        { id: 'step-1', xp: 25, progress: '25%', emoji: '🌱', text: 'Seedling Planted' },
-        { id: 'step-2', xp: 50, progress: '50%', emoji: '🌿', text: 'Leafs Growing' },
-        { id: 'step-3', xp: 75, progress: '75%', emoji: '🌳', text: 'Sapling Formed' },
-        { id: 'step-4', xp: 100, progress: '100%', emoji: '🌸', text: 'Tree Blooming!' }
-    ];
-
     const nextBtn = document.getElementById('next-btn');
     const prevBtn = document.getElementById('prev-btn');
-    const form = document.getElementById('mission-form');
+    const form = document.getElementById('registration-form');
 
     // Selection functions
     window.setAge = function(element) {
@@ -590,20 +587,16 @@
     }
 
     function updateWizard() {
-        // Hide/Show panels
         document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
         document.getElementById(`step-${currentStep}`).classList.add('active');
 
-        // Update dashboard
-        const currentData = steps[currentStep - 1];
-        document.getElementById('tree-stage').innerText = currentData.emoji;
-        document.getElementById('tree-text').innerText = currentData.text;
-        document.getElementById('form-progress').style.width = currentData.progress;
-        document.getElementById('xp-display').innerText = `${currentData.xp} / 100 XP`;
+        const pct = Math.round((currentStep / totalSteps) * 100);
+        document.getElementById('step-number').innerText = currentStep;
+        document.getElementById('form-progress').style.width = pct + '%';
+        document.getElementById('progress-label').innerText = pct + '%';
 
-        // Update buttons
         prevBtn.style.visibility = (currentStep === 1) ? 'hidden' : 'visible';
-        nextBtn.innerText = (currentStep === totalSteps) ? 'Launch Mission 🚀' : 'Continue';
+        nextBtn.innerText = (currentStep === totalSteps) ? 'Complete Registration' : 'Continue';
     }
 
     async function submitForm() {
@@ -614,7 +607,7 @@
 
         const nextBtnText = nextBtn.innerText;
         nextBtn.disabled = true;
-        nextBtn.innerText = 'Submitting Profile...';
+        nextBtn.innerText = 'Submitting...';
 
         const payload = {
             full_name: document.getElementById('reg-name').value,
@@ -638,22 +631,20 @@
 
             if (error) throw error;
 
-            // Trigger success view
+            // Show success view
             form.style.display = 'none';
             document.querySelector('.btn-wrapper').style.display = 'none';
             document.getElementById('success-view').style.display = 'block';
             
-            // Adjust progress
             document.getElementById('form-progress').style.width = '100%';
-            document.getElementById('tree-stage').innerText = '👑';
-            document.getElementById('tree-text').innerText = 'Pune Green Ranger!';
-            document.getElementById('xp-display').innerText = '100 / 100 XP';
-            
+            document.getElementById('progress-label').innerText = '100%';
+            document.getElementById('step-number').innerText = '4';
+
             runConfetti();
 
         } catch (err) {
             console.error('Registration insertion error:', err);
-            alert('Enlistment failed. Please check your network or try again.');
+            alert('Registration failed. Please check your network and try again.');
             nextBtn.disabled = false;
             nextBtn.innerText = nextBtnText;
         }

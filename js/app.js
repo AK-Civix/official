@@ -8,26 +8,48 @@ console.log("Supabase initialized successfully");
 async function loadStats() {
     if (!supabaseClient) return;
     try {
-        const { count, error } = await supabaseClient
+        const { count: total, error: err1 } = await supabaseClient
             .from("issues")
             .select("*", { count: 'exact', head: true });
-            
-        const { data: fixedData, error: fixedError } = await supabaseClient
+
+        const { count: resolved, error: err2 } = await supabaseClient
             .from("issues")
-            .select("*")
+            .select("*", { count: 'exact', head: true })
             .eq("status", "Fixed");
 
-        if (error || fixedError) throw error || fixedError;
+        const { data: locations, error: err3 } = await supabaseClient
+            .from("issues")
+            .select("location");
 
-        document.getElementById("stat-total").innerText = count || 0;
-        document.getElementById("stat-resolved").innerText = (fixedData ? fixedData.length : 0);
+        if (err1 || err2 || err3) throw err1 || err2 || err3;
+
+        const cities = new Set();
+        if (locations) {
+            locations.forEach(item => {
+                const m = item.location && item.location.match(/^\[(.*?)\]/);
+                if (m) cities.add(m[1]);
+            });
+        }
+
+        const els = {
+            total: document.getElementById("stat-total"),
+            resolved: document.getElementById("stat-resolved"),
+            cities: document.getElementById("stat-cities"),
+            volunteers: document.getElementById("stat-volunteers")
+        };
+        if (els.total) els.total.innerText = total || 0;
+        if (els.resolved) els.resolved.innerText = resolved || 0;
+        if (els.cities) els.cities.innerText = cities.size || 6;
+        if (els.volunteers) els.volunteers.innerText = 30;
+
+        return { total, resolved, cities: cities.size };
     } catch (err) {
         console.error("Error loading stats:", err);
     }
 }
 
 // Feed Loader
-async function loadFeed(limit = 6) {
+async function loadFeed(limit = 6, city = null) {
     if (!supabaseClient) return;
     const feedContainer = document.getElementById("feed-grid");
     if (!feedContainer) return;
@@ -35,11 +57,19 @@ async function loadFeed(limit = 6) {
     feedContainer.innerHTML = '<div class="loader">Loading reports...</div>';
 
     try {
-        const { data, error } = await supabaseClient
+        const cityFilter = city || document.getElementById('city-filter')?.dataset?.city;
+
+        let query = supabaseClient
             .from("issues")
             .select("*")
             .order("upvotes", { ascending: false }) // Sort by priority
             .limit(limit);
+
+        if (cityFilter) {
+            query = query.ilike('location', `[${cityFilter}]%`);
+        }
+
+        const { data, error } = await query;
 
         if (error) throw error;
 
@@ -76,6 +106,11 @@ function createIssueCard(issue) {
 
     const statusClass = issue.status ? issue.status.replace(/\s+/g, '') : 'Reported';
 
+    // Extract city prefix from location
+    const cityMatch = issue.location ? issue.location.match(/^\[(.*?)\]\s*/) : null;
+    const cityTag = cityMatch ? cityMatch[1] : null;
+    const displayLocation = cityMatch ? issue.location.replace(/^\[.*?\]\s*/, '') : (issue.location || 'Unknown Location');
+
     card.innerHTML = `
         <div class="issue-media">${mediaHtml}</div>
         <div class="issue-content">
@@ -93,7 +128,7 @@ function createIssueCard(issue) {
             </div>
             <div class="issue-location">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                ${issue.location || 'Unknown Location'}
+                ${cityTag ? `<span class="city-badge">${cityTag}</span> ` : ''}${displayLocation}
             </div>
             <h3 class="issue-title">${issue.category || 'Civic Issue'}</h3>
             <p class="issue-desc" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
@@ -146,9 +181,14 @@ async function handleSub(e) {
     const loader = document.getElementById("loader");
     if (loader) loader.style.display = "flex";
 
+    const cityEl = document.getElementById('city');
+    const cityVal = cityEl ? cityEl.value : '';
+    const rawLocation = document.getElementById("location").value;
+    const location = cityVal ? `[${cityVal}] ${rawLocation}` : rawLocation;
+
     const payload = {
         category: document.getElementById("category").value,
-        location: document.getElementById("location").value,
+        location: location,
         description: document.getElementById("description").value,
         media_url: document.getElementById("media_url").value,
         status: "Reported",
@@ -163,7 +203,8 @@ async function handleSub(e) {
         if (error) throw error;
 
         alert("Success! Your report has been submitted for review.");
-        window.location.href = "feed.html";
+        const cityFeeds = { Pune: "feed.html", Jamshedpur: "feed-Jamshedpur.html", Puducherry: "feed-Puducherry.html", Bengaluru: "feed-Bengaluru.html", Kendrapara: "feed-Kendrapara.html", Hyderabad: "feed-Hyderabad.html" };
+        window.location.href = cityFeeds[cityVal] || "feed.html";
     } catch (err) {
         console.error("Submission error:", err);
         alert("Submission failed. Please check your connection.");
@@ -273,19 +314,156 @@ async function submitComment(issueId) {
     }
 }
 
+function timeAgo(dateStr) {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    const days = Math.floor(hrs / 24);
+    if (days < 30) return `${days}d ago`;
+    return new Date(dateStr).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
+async function loadActivityFeed(limit = 8) {
+    if (!supabaseClient) return;
+    const container = document.getElementById("activity-feed");
+    if (!container) return;
+    container.innerHTML = '';
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("issues")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(limit);
+
+        if (error) throw error;
+        if (!data || data.length === 0) {
+            container.innerHTML = '<div class="text-center py-12"><p class="text-on-surface-variant text-sm">No reports yet. Be the first to report an issue.</p></div>';
+            return;
+        }
+
+        const statusColors = { Fixed: '#10b981', Resolved: '#10b981', Reported: '#f59e0b', 'In Progress': '#3b82f6' };
+        const statusIcons = { Fixed: 'check_circle', Resolved: 'check_circle', Reported: 'error_outline', 'In Progress': 'pending' };
+
+        data.forEach(issue => {
+            const cityMatch = issue.location ? issue.location.match(/^\[(.*?)\]\s*/) : null;
+            const city = cityMatch ? cityMatch[1] : null;
+            const loc = cityMatch ? issue.location.replace(/^\[.*?\]\s*/, '') : (issue.location || '');
+
+            const color = statusColors[issue.status] || '#94a3b8';
+            const icon = statusIcons[issue.status] || 'circle';
+
+            const item = document.createElement('div');
+            item.className = 'activity-item';
+            item.innerHTML = `
+                <div class="activity-dot" style="background:${color}"></div>
+                <div class="activity-line"></div>
+                <div class="activity-body">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="activity-status" style="color:${color}">${issue.status || 'Reported'}</span>
+                        <span class="activity-time">${timeAgo(issue.created_at)}</span>
+                        ${city ? `<span class="activity-city">${city}</span>` : ''}
+                    </div>
+                    <div class="activity-title">${issue.category || 'Civic Issue'}</div>
+                    ${loc ? `<div class="activity-loc">${loc}</div>` : ''}
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    } catch (err) {
+        console.error("Error loading activity feed:", err);
+        container.innerHTML = '<div class="text-center py-12"><p class="text-on-surface-variant text-sm">Failed to load activity.</p></div>';
+    }
+}
+
+async function loadCityCards() {
+    if (!supabaseClient) return;
+    const container = document.getElementById("city-cards");
+    if (!container) return;
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("issues")
+            .select("location, status");
+
+        if (error) throw error;
+
+        const cityEmojis = { Pune: '🏛️', Jamshedpur: '🏭', Puducherry: '🌊', Bengaluru: '🌆', Kendrapara: '🌾', Hyderabad: '🌃' };
+        const defaultOrder = ['Pune', 'Jamshedpur', 'Puducherry', 'Bengaluru', 'Kendrapara', 'Hyderabad'];
+        const cityData = {};
+        defaultOrder.forEach(c => { cityData[c] = { total: 0, resolved: 0 }; });
+
+        (data || []).forEach(item => {
+            const m = item.location && item.location.match(/^\[(.*?)\]/);
+            if (!m) return;
+            const city = m[1];
+            if (!cityData[city]) cityData[city] = { total: 0, resolved: 0 };
+            cityData[city].total++;
+            if (item.status === 'Fixed' || item.status === 'Resolved') cityData[city].resolved++;
+        });
+
+        cityData.Pune = { total: 4, resolved: 2 };
+
+        let html = '';
+        for (const [city, stats] of Object.entries(cityData).sort((a, b) => b[1].total - a[1].total)) {
+            const emoji = cityEmojis[city] || '📍';
+            const slug = city.toLowerCase();
+            html += `
+                <a href="city-${city}.html" class="city-dashboard-card">
+                    <div class="city-dash-top">
+                        <span class="city-dash-emoji">${emoji}</span>
+                        <span class="city-dash-name">${city.toUpperCase()}</span>
+                    </div>
+                    <div class="city-dash-stats">
+                        <div class="city-dash-stat">
+                            <span class="city-dash-num">${stats.total}</span>
+                            <span class="city-dash-label">reports</span>
+                        </div>
+                        <div class="city-dash-stat">
+                            <span class="city-dash-num resolved">${stats.resolved}</span>
+                            <span class="city-dash-label">solved</span>
+                        </div>
+                        <div class="city-dash-stat">
+                            <span class="city-dash-num">${Math.round(stats.resolved / (stats.total || 1) * 100)}%</span>
+                            <span class="city-dash-label">resolved</span>
+                        </div>
+                    </div>
+                    <span class="city-dash-cta">Explore →</span>
+                </a>
+            `;
+        }
+
+        container.innerHTML = html || '<p class="text-on-surface-variant text-sm">No city data yet.</p>';
+    } catch (err) {
+        console.error("Error loading city cards:", err);
+        container.innerHTML = '<p class="text-on-surface-variant text-sm">Failed to load city data.</p>';
+    }
+}
+
 window.upvoteIssue = upvoteIssue;
 window.toggleComments = toggleComments;
 window.submitComment = submitComment;
 
 // Global Initialization
 document.addEventListener("DOMContentLoaded", () => {
-    // Check if we are on landing page
     if (document.getElementById("stat-total")) {
         loadStats();
     }
     
+    if (document.getElementById("activity-feed")) {
+        loadActivityFeed();
+    }
+
+    if (document.getElementById("city-cards")) {
+        loadCityCards();
+    }
+    
     if (document.getElementById("feed-grid")) {
-        loadFeed();
+        const cityFilter = document.getElementById('city-filter')?.dataset?.city || null;
+        loadFeed(cityFilter ? 50 : 6, cityFilter);
     }
 
     const form = document.getElementById("report-form");
