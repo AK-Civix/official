@@ -108,18 +108,8 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.03em;
-        }
-        .status-badge.confirmed {
             background: rgba(34, 197, 94, 0.1);
             color: #16a34a;
-        }
-        .status-badge.pending {
-            background: rgba(234, 179, 8, 0.1);
-            color: #ca8a04;
-        }
-        .status-badge.cancelled {
-            background: rgba(239, 68, 68, 0.1);
-            color: #dc2626;
         }
 
         /* Search and filter */
@@ -172,6 +162,31 @@
             letter-spacing: 0.05em;
             font-weight: 600;
         }
+
+        /* Loading state */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: #eab308;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #a1a1aa;
+        }
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body class="text-on-surface antialiased">
@@ -217,7 +232,7 @@
                     Registered <span class="text-primary">Volunteers</span> for Multi-City CleanUp Drive
                 </h1>
                 <p class="text-base md:text-lg text-on-surface-variant mt-6 max-w-2xl leading-relaxed">
-                    View all volunteers registered for our upcoming mega cleanup event across 6 cities.
+                    View all volunteers registered for our upcoming mega cleanup event across all cities.
                 </p>
             </div>
         </div>
@@ -228,20 +243,20 @@
         <div class="max-w-6xl mx-auto px-5 md:px-10">
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-number" id="total-registrations">—</div>
+                    <div class="stat-number" id="total-registrations">0</div>
                     <div class="stat-label">Total Registrations</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="confirmed-count">—</div>
-                    <div class="stat-label">Confirmed</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="pending-count">—</div>
-                    <div class="stat-label">Pending</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="cities-represented">—</div>
+                    <div class="stat-number" id="total-cities">0</div>
                     <div class="stat-label">Cities Represented</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="total-volunteers">0</div>
+                    <div class="stat-label">Total Volunteers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="latest-registration">—</div>
+                    <div class="stat-label">Latest Registration</div>
                 </div>
             </div>
         </div>
@@ -261,22 +276,10 @@
                     type="text" 
                     class="search-input" 
                     id="searchInput" 
-                    placeholder="Search by name, email, or city..."
+                    placeholder="Search by name or email..."
                 >
                 <select class="search-input" id="cityFilter" style="max-width: 200px;">
                     <option value="">All Cities</option>
-                    <option value="Pune">Pune</option>
-                    <option value="Bengaluru">Bengaluru</option>
-                    <option value="Hyderabad">Hyderabad</option>
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="Delhi">Delhi</option>
-                    <option value="Chennai">Chennai</option>
-                </select>
-                <select class="search-input" id="statusFilter" style="max-width: 150px;">
-                    <option value="">All Status</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="pending">Pending</option>
-                    <option value="cancelled">Cancelled</option>
                 </select>
             </div>
 
@@ -289,16 +292,17 @@
                             <th>Email</th>
                             <th>Phone</th>
                             <th>City</th>
+                            <th>Age Group</th>
+                            <th>Preferred Role</th>
+                            <th>Availability</th>
                             <th>Registration Date</th>
-                            <th>Status</th>
-                            <th>Volunteer Role</th>
                         </tr>
                     </thead>
                     <tbody id="registrationsTableBody">
-                        <!-- Sample data will be populated here -->
                         <tr>
-                            <td colspan="7" style="text-align: center; padding: 40px 16px; color: #a1a1aa;">
-                                Loading registration data...
+                            <td colspan="8" style="text-align: center; padding: 40px 16px;">
+                                <div class="loading-spinner" style="margin: 0 auto 12px;"></div>
+                                <p style="color: #a1a1aa;">Loading registration data...</p>
                             </td>
                         </tr>
                     </tbody>
@@ -306,9 +310,11 @@
             </div>
 
             <!-- Empty State -->
-            <div id="emptyState" style="display: none; text-align: center; padding: 40px 16px;">
-                <span class="material-symbols-outlined" style="font-size: 48px; color: #e4e4e7; display: block; margin-bottom: 16px;">search_off</span>
-                <p class="text-on-surface-variant" style="font-size: 16px;">No registrations found matching your filters.</p>
+            <div id="emptyState" style="display: none;">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔍</div>
+                    <p style="font-size: 16px;">No registrations found matching your filters.</p>
+                </div>
             </div>
 
             <!-- Pagination -->
@@ -322,7 +328,6 @@
     <section class="py-20 md:py-28 border-t border-border">
         <div class="max-w-6xl mx-auto px-5 md:px-10">
             <div class="rounded-2xl overflow-hidden" style="background: linear-gradient(135deg, #0a0a0a 0%, #eab308 60%, #1a1a1a 100%);">
-                <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 20px 20px; position: absolute;"></div>
                 <div class="p-8 md:p-12 relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                     <div>
                         <h3 class="text-2xl font-bold text-white">Download Registration Report</h3>
@@ -376,183 +381,209 @@
     </div>
 </footer>
 
-<script>
-// Sample registration data
-const registrationData = [
-    { id: 1, name: "Priya Sharma", email: "priya.sharma@email.com", phone: "+91-98765-43210", city: "Pune", registrationDate: "2026-06-15", status: "confirmed", role: "Team Lead" },
-    { id: 2, name: "Rajesh Kumar", email: "rajesh.kumar@email.com", phone: "+91-97654-32109", city: "Bengaluru", registrationDate: "2026-06-16", status: "confirmed", role: "Volunteer" },
-    { id: 3, name: "Anita Desai", email: "anita.desai@email.com", phone: "+91-96543-21098", city: "Hyderabad", registrationDate: "2026-06-17", status: "pending", role: "Volunteer" },
-    { id: 4, name: "Vikram Singh", email: "vikram.singh@email.com", phone: "+91-95432-10987", city: "Mumbai", registrationDate: "2026-06-18", status: "confirmed", role: "Coordinator" },
-    { id: 5, name: "Neha Patel", email: "neha.patel@email.com", phone: "+91-94321-09876", city: "Delhi", registrationDate: "2026-06-19", status: "confirmed", role: "Volunteer" },
-    { id: 6, name: "Arjun Verma", email: "arjun.verma@email.com", phone: "+91-93210-98765", city: "Pune", registrationDate: "2026-06-20", status: "cancelled", role: "Volunteer" },
-    { id: 7, name: "Sanya Malhotra", email: "sanya.malhotra@email.com", phone: "+91-92109-87654", city: "Chennai", registrationDate: "2026-06-21", status: "confirmed", role: "Volunteer" },
-    { id: 8, name: "Rohan Gupta", email: "rohan.gupta@email.com", phone: "+91-91098-76543", city: "Bengaluru", registrationDate: "2026-06-22", status: "pending", role: "Volunteer" },
-    { id: 9, name: "Divya Nair", email: "divya.nair@email.com", phone: "+91-90987-65432", city: "Hyderabad", registrationDate: "2026-06-23", status: "confirmed", role: "Team Lead" },
-    { id: 10, name: "Karan Chopra", email: "karan.chopra@email.com", phone: "+91-89876-54321", city: "Delhi", registrationDate: "2026-06-24", status: "confirmed", role: "Volunteer" },
-];
+<script type="module">
+    import { supabase } from './js/supabase.js';
 
-let filteredData = [...registrationData];
-const itemsPerPage = 10;
-let currentPage = 1;
+    let allData = [];
+    let filteredData = [];
+    const itemsPerPage = 10;
+    let currentPage = 1;
 
-// Initialize page
-document.addEventListener('DOMContentLoaded', () => {
-    updateStats();
-    renderTable();
-    setupFilters();
-});
-
-// Update statistics
-function updateStats() {
-    const total = registrationData.length;
-    const confirmed = registrationData.filter(r => r.status === 'confirmed').length;
-    const pending = registrationData.filter(r => r.status === 'pending').length;
-    const cities = new Set(registrationData.map(r => r.city)).size;
-
-    document.getElementById('total-registrations').textContent = total;
-    document.getElementById('confirmed-count').textContent = confirmed;
-    document.getElementById('pending-count').textContent = pending;
-    document.getElementById('cities-represented').textContent = cities;
-}
-
-// Setup filters
-function setupFilters() {
-    document.getElementById('searchInput').addEventListener('input', applyFilters);
-    document.getElementById('cityFilter').addEventListener('change', applyFilters);
-    document.getElementById('statusFilter').addEventListener('change', applyFilters);
-}
-
-// Apply filters
-function applyFilters() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const cityFilter = document.getElementById('cityFilter').value;
-    const statusFilter = document.getElementById('statusFilter').value;
-
-    filteredData = registrationData.filter(record => {
-        const matchesSearch = record.name.toLowerCase().includes(searchTerm) || 
-                            record.email.toLowerCase().includes(searchTerm) ||
-                            record.city.toLowerCase().includes(searchTerm);
-        const matchesCity = !cityFilter || record.city === cityFilter;
-        const matchesStatus = !statusFilter || record.status === statusFilter;
-
-        return matchesSearch && matchesCity && matchesStatus;
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchRegistrations();
+        setupFilters();
     });
 
-    currentPage = 1;
-    renderTable();
-}
+    // Fetch registrations from Supabase
+    async function fetchRegistrations() {
+        try {
+            const { data, error } = await supabase
+                .from('event_registrations')
+                .select('*')
+                .order('created_at', { ascending: false });
 
-// Render table
-function renderTable() {
-    const tbody = document.getElementById('registrationsTableBody');
-    const emptyState = document.getElementById('emptyState');
-    
-    if (filteredData.length === 0) {
-        tbody.innerHTML = '';
-        emptyState.style.display = 'block';
-        document.getElementById('paginationContainer').innerHTML = '';
-        return;
-    }
+            if (error) throw error;
 
-    emptyState.style.display = 'none';
-
-    const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    const pageData = filteredData.slice(start, end);
-
-    tbody.innerHTML = pageData.map(record => `
-        <tr>
-            <td><strong>${record.name}</strong></td>
-            <td>${record.email}</td>
-            <td>${record.phone}</td>
-            <td>${record.city}</td>
-            <td>${formatDate(record.registrationDate)}</td>
-            <td>
-                <span class="status-badge ${record.status}">
-                    <span class="w-2 h-2 rounded-full" style="background: currentColor;"></span>
-                    ${record.status}
-                </span>
-            </td>
-            <td>${record.role}</td>
-        </tr>
-    `).join('');
-
-    renderPagination();
-}
-
-// Render pagination
-function renderPagination() {
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-    const container = document.getElementById('paginationContainer');
-    
-    if (totalPages <= 1) {
-        container.innerHTML = '';
-        return;
-    }
-
-    let html = '';
-    
-    // Previous button
-    html += `<button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} 
-        style="padding: 8px 12px; border: 1px solid #e4e4e7; border-radius: 6px; background: white; cursor: ${currentPage === 1 ? 'not-allowed' : 'pointer'}; opacity: ${currentPage === 1 ? '0.5' : '1'};">
-        Previous
-    </button>`;
-
-    // Page buttons
-    for (let i = 1; i <= totalPages; i++) {
-        if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
-            html += `<button onclick="goToPage(${i})" 
-                style="padding: 8px 12px; border: 1px solid ${i === currentPage ? '#eab308' : '#e4e4e7'}; border-radius: 6px; background: ${i === currentPage ? '#eab308' : 'white'}; color: ${i === currentPage ? 'white' : '#0f1419'}; cursor: pointer; font-weight: ${i === currentPage ? '600' : '400'};">
-                ${i}
-            </button>`;
-        } else if (i === currentPage - 2 || i === currentPage + 2) {
-            html += `<span style="padding: 0 4px;">...</span>`;
+            allData = data || [];
+            filteredData = [...allData];
+            
+            updateStats();
+            populateCityFilter();
+            renderTable();
+        } catch (err) {
+            console.error('Error fetching registrations:', err);
+            document.getElementById('registrationsTableBody').innerHTML = `
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 40px 16px; color: #ef4444;">
+                        Error loading registrations. Please try again later.
+                    </td>
+                </tr>
+            `;
         }
     }
 
-    // Next button
-    html += `<button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} 
-        style="padding: 8px 12px; border: 1px solid #e4e4e7; border-radius: 6px; background: white; cursor: ${currentPage === totalPages ? 'not-allowed' : 'pointer'}; opacity: ${currentPage === totalPages ? '0.5' : '1'};">
-        Next
-    </button>`;
+    // Update statistics
+    function updateStats() {
+        const total = allData.length;
+        const cities = new Set(allData.map(r => r.city)).size;
+        const totalVolunteers = allData.reduce((sum, r) => sum + (r.group_size || 1), 0);
+        const latest = allData.length > 0 ? formatDate(allData[0].created_at) : '—';
 
-    container.innerHTML = html;
-}
-
-// Go to page
-function goToPage(page) {
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-    if (page >= 1 && page <= totalPages) {
-        currentPage = page;
-        renderTable();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        document.getElementById('total-registrations').textContent = total;
+        document.getElementById('total-cities').textContent = cities;
+        document.getElementById('total-volunteers').textContent = totalVolunteers;
+        document.getElementById('latest-registration').textContent = latest;
     }
-}
 
-// Format date
-function formatDate(dateString) {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
-}
+    // Populate city filter dropdown
+    function populateCityFilter() {
+        const cities = [...new Set(allData.map(r => r.city))].sort();
+        const select = document.getElementById('cityFilter');
+        
+        cities.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city;
+            option.textContent = city;
+            select.appendChild(option);
+        });
+    }
 
-// Download as CSV
-function downloadAsCSV() {
-    let csv = 'Name,Email,Phone,City,Registration Date,Status,Role\n';
-    
-    filteredData.forEach(record => {
-        csv += `"${record.name}","${record.email}","${record.phone}","${record.city}","${record.registrationDate}","${record.status}","${record.role}"\n`;
-    });
+    // Setup filters
+    function setupFilters() {
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('cityFilter').addEventListener('change', applyFilters);
+    }
 
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `registrations-${new Date().toISOString().split('T')[0]}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-}
+    // Apply filters
+    function applyFilters() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const cityFilter = document.getElementById('cityFilter').value;
+
+        filteredData = allData.filter(record => {
+            const matchesSearch = record.full_name.toLowerCase().includes(searchTerm) || 
+                                record.email.toLowerCase().includes(searchTerm);
+            const matchesCity = !cityFilter || record.city === cityFilter;
+
+            return matchesSearch && matchesCity;
+        });
+
+        currentPage = 1;
+        renderTable();
+    }
+
+    // Render table
+    function renderTable() {
+        const tbody = document.getElementById('registrationsTableBody');
+        const emptyState = document.getElementById('emptyState');
+        
+        if (filteredData.length === 0) {
+            tbody.innerHTML = '';
+            emptyState.style.display = 'block';
+            document.getElementById('paginationContainer').innerHTML = '';
+            return;
+        }
+
+        emptyState.style.display = 'none';
+
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageData = filteredData.slice(start, end);
+
+        tbody.innerHTML = pageData.map(record => `
+            <tr>
+                <td><strong>${record.full_name}</strong></td>
+                <td>${record.email}</td>
+                <td>${record.phone}</td>
+                <td>${record.city}</td>
+                <td>${record.age_group}</td>
+                <td>${record.preferred_role}</td>
+                <td>${record.availability}</td>
+                <td>${formatDate(record.created_at)}</td>
+            </tr>
+        `).join('');
+
+        renderPagination();
+    }
+
+    // Render pagination
+    function renderPagination() {
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+        const container = document.getElementById('paginationContainer');
+        
+        if (totalPages <= 1) {
+            container.innerHTML = '';
+            return;
+        }
+
+        let html = '';
+        
+        // Previous button
+        html += `<button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} 
+            style="padding: 8px 12px; border: 1px solid #e4e4e7; border-radius: 6px; background: white; cursor: ${currentPage === 1 ? 'not-allowed' : 'pointer'}; opacity: ${currentPage === 1 ? '0.5' : '1'};">
+            Previous
+        </button>`;
+
+        // Page buttons
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                html += `<button onclick="goToPage(${i})" 
+                    style="padding: 8px 12px; border: 1px solid ${i === currentPage ? '#eab308' : '#e4e4e7'}; border-radius: 6px; background: ${i === currentPage ? '#eab308' : 'white'}; color: ${i === currentPage ? 'white' : '#0f1419'}; cursor: pointer; font-weight: ${i === currentPage ? '600' : '400'};">
+                    ${i}
+                </button>`;
+            } else if (i === currentPage - 2 || i === currentPage + 2) {
+                html += `<span style="padding: 0 4px;">...</span>`;
+            }
+        }
+
+        // Next button
+        html += `<button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} 
+            style="padding: 8px 12px; border: 1px solid #e4e4e7; border-radius: 6px; background: white; cursor: ${currentPage === totalPages ? 'not-allowed' : 'pointer'}; opacity: ${currentPage === totalPages ? '0.5' : '1'};">
+            Next
+        </button>`;
+
+        container.innerHTML = html;
+    }
+
+    // Go to page
+    window.goToPage = function(page) {
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+        if (page >= 1 && page <= totalPages) {
+            currentPage = page;
+            renderTable();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
+    // Format date
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
+    }
+
+    // Download as CSV
+    window.downloadAsCSV = function() {
+        if (filteredData.length === 0) {
+            alert('No data to export');
+            return;
+        }
+
+        let csv = 'Full Name,Email,Phone,City,Age Group,Registration Type,Group Size,Cleanup Location,Availability,Preferred Role,Emergency Contact,Referral Source,Comments,Registration Date\n';
+        
+        filteredData.forEach(record => {
+            csv += `"${record.full_name}","${record.email}","${record.phone}","${record.city}","${record.age_group}","${record.registration_type}","${record.group_size}","${record.cleanup_location}","${record.availability}","${record.preferred_role}","${record.emergency_contact}","${record.referral_source || ''}","${(record.comments || '').replace(/"/g, '""')}","${formatDate(record.created_at)}"\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `registrations-${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 </script>
 
 </body>
