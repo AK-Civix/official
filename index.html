@@ -47,7 +47,7 @@
         .activity-body { flex: 1; min-width: 0; }
         .activity-status { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
         .activity-time { font-size: 11px; color: #a1a1aa; font-weight: 500; }
-        .activity-city { font-size: 10px; font-weight: 600; background: rgba(234,179,8,0.08); color: #eab308; padding: 1px 8px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.[...]
+        .activity-city { font-size: 10px; font-weight: 600; background: rgba(234,179,8,0.08); color: #eab308; padding: 1px 8px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.04em; }
         .activity-title { font-size: 14px; font-weight: 600; color: #0f1419; margin-top: 2px; }
         .activity-loc { font-size: 12px; color: #5a5e6b; margin-top: 1px; }
 
@@ -55,7 +55,7 @@
         .timeline-item { display: flex; gap: 20px; padding: 0 0 32px; position: relative; }
         .timeline-item:last-child { padding-bottom: 0; }
         .timeline-item:last-child .timeline-connector { display: none; }
-        .timeline-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; position: relative; z-index: 1;[...]
+        .timeline-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; position: relative; z-index: 1; }
         .timeline-connector { position: absolute; left: 13px; top: 32px; width: 2px; bottom: 0; background: #e4e4e7; }
         .timeline-date { font-size: 12px; font-weight: 600; color: #5a5e6b; text-transform: uppercase; letter-spacing: 0.05em; }
         .timeline-text { font-size: 15px; color: #0f1419; font-weight: 500; margin-top: 2px; }
@@ -86,11 +86,12 @@
             left: 0;
             right: 0;
             height: 36px;
-            background: #eab308;
+            background: linear-gradient(90deg, #eab308 0%, #facc15 50%, #eab308 100%);
             overflow: hidden;
             z-index: 1001;
             display: flex;
             align-items: center;
+            box-shadow: 0 2px 8px rgba(234, 179, 8, 0.15);
         }
         .announcement-track {
             display: flex;
@@ -111,6 +112,167 @@
             100% { transform: translateX(-33.333%); }
         }
         header { margin-top: 36px; }
+
+        /* Enhanced header styling */
+        header {
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        header:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Improved button animations */
+        .cta-btn {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .cta-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Enhanced stat cards */
+        @keyframes countUp {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .stat-number {
+            animation: countUp 0.6s ease-out;
+        }
+
+        /* Improved section transitions */
+        section {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Card hover effects */
+        .city-dashboard-card {
+            position: relative;
+        }
+
+        .city-dashboard-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.1) 0%, rgba(234, 179, 8, 0) 100%);
+            opacity: 0;
+            border-radius: 14px;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .city-dashboard-card:hover::after {
+            opacity: 1;
+        }
+
+        /* Smoother transitions for interactive elements */
+        a, button {
+            transition: all 0.2s ease;
+        }
+
+        /* Enhanced hero section */
+        .hero-badge {
+            animation: slideInDown 0.6s ease-out 0.1s both;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            animation: slideInUp 0.6s ease-out 0.2s both;
+        }
+
+        .hero-cta {
+            animation: slideInUp 0.6s ease-out 0.4s both;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Logo animation */
+        .logo-container {
+            animation: floatIn 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Improved gradient overlays */
+        .gradient-overlay {
+            position: relative;
+        }
+
+        .gradient-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.05) 0%, rgba(234, 179, 8, 0) 100%);
+            pointer-events: none;
+        }
+
+        /* Better focus states for accessibility */
+        button:focus-visible, a:focus-visible {
+            outline: 2px solid #eab308;
+            outline-offset: 2px;
+        }
+
+        /* Loading state improvements */
+        .loading {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
     </style>
 </head>
 <body class="text-on-surface antialiased">
@@ -125,21 +287,21 @@
 </div>
 
 <!-- Navigation -->
-<header class="fixed top-0 w-full bg-white/85 backdrop-blur-xl z-50 border-b border-border" style="box-shadow: 0 1px 2px rgba(0,0,0,.03);">
+<header class="fixed top-0 w-full bg-white/85 backdrop-blur-xl z-50 border-b border-border">
     <nav class="max-w-6xl mx-auto px-5 md:px-10 flex items-center justify-between h-16">
-        <a href="index.html" class="flex items-center gap-2.5">
+        <a href="index.html" class="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
             <img src="logo.png" alt="For The People" class="h-7 w-auto">
             <span class="text-base font-bold tracking-tight text-on-surface">For The People</span>
         </a>
         <div class="hidden md:flex items-center gap-7">
-            <a class="text-sm text-on-surface-variant hover:text-primary font-medium transition-colors" href="#impact">Impact</a>
-            <a class="text-sm text-on-surface-variant hover:text-primary font-medium transition-colors" href="#cities">Cities</a>
-            <a class="text-sm text-on-surface-variant hover:text-primary font-medium transition-colors" href="#how-it-works">How It Works</a>
-            <a class="text-sm text-on-surface-variant hover:text-primary font-medium transition-colors" href="#activity">Updates</a>
-            <a class="text-sm text-on-surface-variant hover:text-primary font-medium transition-colors" href="#events">Events</a>
-            <a class="text-sm text-on-surface-variant hover:text-primary font-medium transition-colors" href="contact.html">About</a>
-            <a class="bg-white text-primary text-sm font-semibold px-4 py-2 rounded-lg border border-border hover:bg-zinc-50 transition-all" href="report.html">Report Issue</a>
-            <a class="bg-primary text-white text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 transition-all shadow-sm" href="register.html">Join</a>
+            <a class="text-sm text-on-surface-variant hover:text-primary font-medium transition-colors duration-200" href="#impact">Impact</a>
+            <a class="text-sm text-on-surface-variant hover:text-primary font-medium transition-colors duration-200" href="#cities">Cities</a>
+            <a class="text-sm text-on-surface-variant hover:text-primary font-medium transition-colors duration-200" href="#how-it-works">How It Works</a>
+            <a class="text-sm text-on-surface-variant hover:text-primary font-medium transition-colors duration-200" href="#activity">Updates</a>
+            <a class="text-sm text-on-surface-variant hover:text-primary font-medium transition-colors duration-200" href="#events">Events</a>
+            <a class="text-sm text-on-surface-variant hover:text-primary font-medium transition-colors duration-200" href="contact.html">About</a>
+            <a class="bg-white text-primary text-sm font-semibold px-4 py-2 rounded-lg border border-border hover:bg-zinc-50 transition-all duration-200 shadow-sm" href="report.html">Report Issue</a>
+            <a class="bg-primary text-white text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 transition-all duration-200 shadow-md" href="register.html">Join</a>
         </div>
     </nav>
 </header>
@@ -147,17 +309,17 @@
 <main>
 
     <!-- Hero -->
-    <section class="pt-32 pb-24 md:pt-40 md:pb-32 relative overflow-hidden">
+    <section class="pt-32 pb-24 md:pt-40 md:pb-32 relative overflow-hidden gradient-overlay">
         <div class="absolute inset-0 dot-grid-bg opacity-30"></div>
         <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/3 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4"></div>
         <div class="max-w-6xl mx-auto px-5 md:px-10 relative z-10">
             <div class="flex flex-col md:flex-row items-center gap-12 md:gap-16">
                 <div class="flex-1 max-w-xl">
-                    <div class="inline-flex items-center gap-2 bg-white/90 border border-border px-3.5 py-1.5 rounded-full mb-8 text-xs font-semibold text-on-surface-variant uppercase tracking-wi[...]
-                        <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
+                    <div class="hero-badge inline-flex items-center gap-2 bg-white/90 border border-border px-3.5 py-1.5 rounded-full mb-8 text-xs font-semibold text-on-surface-variant uppercase tracking-widest hover:bg-white transition-colors">
+                        <span class="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse"></span>
                         Community-driven civic action — 6 cities and growing
                     </div>
-                    <h1 class="text-[clamp(34px,6vw,64px)] font-extrabold tracking-[-0.035em] leading-[1.05] text-on-surface">
+                    <h1 class="hero-title text-[clamp(34px,6vw,64px)] font-extrabold tracking-[-0.035em] leading-[1.05] text-on-surface">
                         A better city<br/>
                         <span class="text-primary">starts with one person.</span><br/>
                         Then another.<br/>
@@ -166,24 +328,24 @@
                     <p class="text-base md:text-lg text-on-surface-variant mt-6 max-w-lg leading-relaxed">
                         Report problems. Organize volunteers. Create measurable impact — starting right where you live.
                     </p>
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-8">
-                        <a href="report.html" class="bg-primary text-white font-semibold text-sm px-7 py-3.5 rounded-xl shadow-md hover:-translate-y-0.5 active:scale-[0.97] transition-all flex it[...]
+                    <div class="hero-cta flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-8">
+                        <a href="report.html" class="bg-primary text-white font-semibold text-sm px-7 py-3.5 rounded-xl shadow-md hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.97] transition-all flex items-center gap-2">
                             <span class="material-symbols-outlined text-lg">edit_location</span>
                             Report an Issue
                         </a>
-                        <a href="#impact" class="text-sm text-on-surface-variant hover:text-primary font-medium flex items-center gap-1 px-1 py-2 transition-colors">
+                        <a href="#impact" class="text-sm text-on-surface-variant hover:text-primary font-medium flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-primary/5 transition-all duration-200">
                             See the impact
                             <span class="material-symbols-outlined text-base">arrow_forward</span>
                         </a>
                     </div>
                 </div>
-                <div class="flex-shrink-0 flex items-center justify-center">
+                <div class="logo-container flex-shrink-0 flex items-center justify-center">
                     <div class="relative">
-                        <div class="absolute inset-0 bg-primary/5 rounded-full blur-3xl scale-150"></div>
-                        <div class="w-56 h-56 md:w-72 md:h-72 rounded-full bg-white shadow-xl border border-border flex items-center justify-center p-6 relative" style="box-shadow: 0 20px 60px -1[...]
+                        <div class="absolute inset-0 bg-primary/5 rounded-full blur-3xl scale-150 animate-pulse"></div>
+                        <div class="w-56 h-56 md:w-72 md:h-72 rounded-full bg-white shadow-xl border border-border flex items-center justify-center p-6 relative hover:shadow-2xl transition-shadow duration-300" style="box-shadow: 0 20px 60px -15px rgba(234, 179, 8, 0.2);">
                             <img src="logo.png" alt="For The People" class="w-full h-full object-contain">
                         </div>
-                        <div class="absolute -bottom-3 -right-3 bg-yellow-50 border border-yellow-200 rounded-xl px-3.5 py-2 text-xs font-semibold text-yellow-700 shadow-sm whitespace-nowrap">
+                        <div class="absolute -bottom-3 -right-3 bg-yellow-50 border border-yellow-200 rounded-xl px-3.5 py-2 text-xs font-semibold text-yellow-700 shadow-md whitespace-nowrap hover:shadow-lg transition-shadow">
                             <span class="text-yellow-600">&#9679;</span> 6 cities active
                         </div>
                     </div>
@@ -193,12 +355,12 @@
     </section>
 
     <!-- Mission -->
-    <section class="py-20 md:py-28 border-t border-border relative overflow-hidden">
+    <section class="py-20 md:py-28 border-t border-border relative overflow-hidden gradient-overlay">
         <div class="absolute right-0 top-0 w-80 h-80 bg-primary/[0.02] rounded-full blur-2xl -translate-y-1/3 translate-x-1/4"></div>
         <div class="max-w-5xl mx-auto px-5 md:px-10 relative z-10">
             <div class="flex flex-col md:flex-row items-center gap-12 md:gap-16">
                 <div class="flex-shrink-0">
-                    <div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-white border border-border shadow-sm flex items-center justify-center p-5">
+                    <div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-white border border-border shadow-sm flex items-center justify-center p-5 hover:shadow-md transition-shadow">
                         <img src="logo.png" alt="For The People" class="w-full h-full object-contain opacity-90">
                     </div>
                 </div>
@@ -207,7 +369,7 @@
                         We're residents who decided to stop waiting and start fixing.
                     </p>
                     <p class="text-base md:text-lg text-on-surface-variant mt-5 leading-relaxed">
-                        For The People is a citizen-led network across Indian cities. We report civic issues, organize community cleanups, and follow through until problems are solved. No politic[...]
+                        For The People is a citizen-led network across Indian cities. We report civic issues, organize community cleanups, and follow through until problems are solved. No politics. No bureaucracy. Just action.
                     </p>
                 </div>
             </div>
@@ -215,25 +377,25 @@
     </section>
 
     <!-- Impact Numbers -->
-    <section id="impact" class="py-20 md:py-28 bg-white border-t border-border">
+    <section id="impact" class="py-20 md:py-28 bg-white border-t border-border gradient-overlay">
         <div class="max-w-5xl mx-auto px-5 md:px-10">
             <div class="text-center mb-14">
                 <span class="text-xs font-semibold text-on-surface-variant uppercase tracking-widest">By the numbers</span>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-                <div class="text-center">
+                <div class="text-center hover:transform hover:scale-105 transition-transform duration-300">
                     <div class="text-[clamp(36px,5vw,56px)] font-extrabold tracking-[-0.03em] text-on-surface" id="stat-total">—</div>
                     <div class="text-sm text-on-surface-variant font-medium mt-1">Issues Reported</div>
                 </div>
-                <div class="text-center">
+                <div class="text-center hover:transform hover:scale-105 transition-transform duration-300">
                     <div class="text-[clamp(36px,5vw,56px)] font-extrabold tracking-[-0.03em] text-yellow-600" id="stat-resolved">—</div>
                     <div class="text-sm text-on-surface-variant font-medium mt-1">Problems Solved</div>
                 </div>
-                <div class="text-center">
+                <div class="text-center hover:transform hover:scale-105 transition-transform duration-300">
                     <div class="text-[clamp(36px,5vw,56px)] font-extrabold tracking-[-0.03em] text-on-surface" id="stat-volunteers">—</div>
                     <div class="text-sm text-on-surface-variant font-medium mt-1">Active Volunteers</div>
                 </div>
-                <div class="text-center">
+                <div class="text-center hover:transform hover:scale-105 transition-transform duration-300">
                     <div class="text-[clamp(36px,5vw,56px)] font-extrabold tracking-[-0.03em] text-on-surface" id="stat-cities">—</div>
                     <div class="text-sm text-on-surface-variant font-medium mt-1">Cities</div>
                 </div>
@@ -242,7 +404,7 @@
     </section>
 
     <!-- Cities Dashboard -->
-    <section id="cities" class="py-20 md:py-28 bg-white border-t border-border">
+    <section id="cities" class="py-20 md:py-28 bg-white border-t border-border gradient-overlay">
         <div class="max-w-5xl mx-auto px-5 md:px-10">
             <div class="text-center mb-16">
                 <span class="text-xs font-semibold text-on-surface-variant uppercase tracking-widest">Our chapters</span>
@@ -251,11 +413,11 @@
             </div>
             <div id="city-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div class="col-span-full text-center py-8">
-                    <p class="text-sm text-on-surface-variant">Loading city data...</p>
+                    <p class="text-sm text-on-surface-variant loading">Loading city data...</p>
                 </div>
             </div>
             <div class="text-center mt-10">
-                <a href="register.html" class="inline-flex items-center gap-2 text-sm font-semibold text-primary border-2 border-dashed border-zinc-300 rounded-xl px-6 py-3 hover:border-primary/4[...]
+                <a href="register.html" class="inline-flex items-center gap-2 text-sm font-semibold text-primary border-2 border-dashed border-zinc-300 rounded-xl px-6 py-3 hover:border-primary hover:bg-primary/5 transition-all duration-200">
                     <span class="material-symbols-outlined text-lg">add</span>
                     Add your city
                 </a>
@@ -264,7 +426,7 @@
     </section>
 
     <!-- How It Works -->
-    <section id="how-it-works" class="py-20 md:py-28 border-t border-border relative overflow-hidden">
+    <section id="how-it-works" class="py-20 md:py-28 border-t border-border relative overflow-hidden gradient-overlay">
         <div class="absolute left-0 top-1/2 w-64 h-64 bg-primary/[0.02] rounded-full blur-2xl -translate-y-1/2 -translate-x-1/3"></div>
         <div class="max-w-5xl mx-auto px-5 md:px-10 relative z-10">
             <div class="text-center mb-16">
@@ -272,29 +434,29 @@
                 <p class="section-title mt-2">Three steps to change your neighborhood</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="rounded-xl bg-white border border-border p-7 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-                    <div class="w-12 h-12 rounded-xl bg-primary/[0.06] flex items-center justify-center mb-5">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d=[...]
+                <div class="rounded-xl bg-white border border-border p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-lg hover:border-primary/30">
+                    <div class="w-12 h-12 rounded-xl bg-primary/[0.06] flex items-center justify-center mb-5 group-hover:bg-primary/10 transition-colors">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M4 20h8m-4-4h16M4 12h16M4 4h16"/></svg>
                     </div>
                     <span class="text-xs font-bold text-primary uppercase tracking-widest">01</span>
                     <h3 class="text-lg font-bold text-on-surface mt-1">Spot it. Report it.</h3>
-                    <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">See a pothole, garbage pile, or broken streetlight? Snap a photo, pin the location, and submit. Every report is[...]
+                    <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">See a pothole, garbage pile, or broken streetlight? Snap a photo, pin the location, and submit. Every report is tracked.</p>
                 </div>
-                <div class="rounded-xl bg-white border border-border p-7 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-                    <div class="w-12 h-12 rounded-xl bg-primary/[0.06] flex items-center justify-center mb-5">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0[...]
+                <div class="rounded-xl bg-white border border-border p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-lg hover:border-primary/30">
+                    <div class="w-12 h-12 rounded-xl bg-primary/[0.06] flex items-center justify-center mb-5 hover:bg-primary/10 transition-colors">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
                     <span class="text-xs font-bold text-primary uppercase tracking-widest">02</span>
                     <h3 class="text-lg font-bold text-on-surface mt-1">Neighbors rally.</h3>
-                    <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">Volunteers in your area get notified. Tools are gathered. A cleanup drive is organized — sometimes within day[...]
+                    <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">Volunteers in your area get notified. Tools are gathered. A cleanup drive is organized — sometimes within days.</p>
                 </div>
-                <div class="rounded-xl bg-white border border-border p-7 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-                    <div class="w-12 h-12 rounded-xl bg-primary/[0.06] flex items-center justify-center mb-5">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 [...]
+                <div class="rounded-xl bg-white border border-border p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-lg hover:border-primary/30">
+                    <div class="w-12 h-12 rounded-xl bg-primary/[0.06] flex items-center justify-center mb-5 hover:bg-primary/10 transition-colors">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                     <span class="text-xs font-bold text-primary uppercase tracking-widest">03</span>
                     <h3 class="text-lg font-bold text-on-surface mt-1">Fixed. Documented. Done.</h3>
-                    <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">The issue gets resolved. We document the outcome, follow up with authorities, and close the loop. Impact measur[...]
+                    <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">The issue gets resolved. We document the outcome, follow up with authorities, and close the loop. Impact measured.</p>
                 </div>
             </div>
         </div>
@@ -303,30 +465,30 @@
     <!-- Upcoming Mega Drive -->
     <section class="py-20 md:py-28 border-t border-border">
         <div class="max-w-5xl mx-auto px-5 md:px-10">
-            <div class="rounded-2xl overflow-hidden relative" style="background: linear-gradient(135deg, #0a0a0a 0%, #eab308 60%, #1a1a1a 100%);">
+            <div class="rounded-2xl overflow-hidden relative group hover:shadow-2xl transition-all duration-300" style="background: linear-gradient(135deg, #0a0a0a 0%, #eab308 60%, #1a1a1a 100%);">
                 <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
-                <div class="absolute top-0 right-0 w-72 h-72 bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4"></div>
-                <div class="absolute bottom-0 left-0 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
+                <div class="absolute top-0 right-0 w-72 h-72 bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4 group-hover:scale-110 transition-transform duration-300"></div>
+                <div class="absolute bottom-0 left-0 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 group-hover:scale-110 transition-transform duration-300"></div>
                 <div class="p-8 md:p-12 relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
-                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center flex-shrink-0">
+                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center flex-shrink-0 group-hover:bg-white/20 transition-colors">
                         <img src="logo.png" alt="" class="w-8 h-8 object-contain brightness-0 invert opacity-80">
                     </div>
                     <div class="flex-1">
                         <span class="text-xs font-semibold uppercase tracking-widest" style="color: rgba(255,255,255,0.7);">Coming up · 18th July</span>
                         <h3 class="text-2xl font-bold text-white mt-1">Multi-City CleanUp Drive</h3>
-                        <p class="text-sm mt-2 max-w-lg" style="color: rgba(255,255,255,0.7);">A coordinated cleanup across Pune, Bengaluru, Hyderabad, and more cities. Join hundreds of volunteer[...]
+                        <p class="text-sm mt-2 max-w-lg" style="color: rgba(255,255,255,0.7);">A coordinated cleanup across Pune, Bengaluru, Hyderabad, and more cities. Join hundreds of volunteers.</p>
                         <div class="flex flex-wrap gap-4 mt-4 text-xs" style="color: rgba(255,255,255,0.55);">
                             <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" style="color: rgba(255,255,255,0.4);">calendar_month</span> 18th July 2026</span>
                             <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" style="color: rgba(255,255,255,0.4);">location_on</span> All 6 cities</span>
-                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" style="color: rgba(255,255,255,0.4);">groups</span> 200+ volunteers expected</spa[...]
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" style="color: rgba(255,255,255,0.4);">groups</span> 200+ volunteers expected</span>
                         </div>
                     </div>
                     <div class="flex flex-wrap items-center gap-3 mt-4 sm:mt-0">
-                        <a href="multi-city-drive.html" class="inline-flex items-center gap-1.5 font-semibold text-sm px-5 py-2.5 rounded-xl hover:-translate-y-0.5 active:scale-[0.97] transition-[...]
+                        <a href="multi-city-drive.html" class="inline-flex items-center gap-1.5 font-semibold text-sm px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all duration-200 border border-white/20 hover:border-white/40">
                             About the event
                             <span class="material-symbols-outlined text-base">arrow_outward</span>
                         </a>
-                        <a href="register.html" class="inline-flex items-center gap-2 bg-white font-semibold text-sm px-6 py-2.5 rounded-xl hover:-translate-y-0.5 active:scale-[0.97] transition-a[...]
+                        <a href="register.html" class="inline-flex items-center gap-2 bg-white font-semibold text-sm px-6 py-2.5 rounded-xl hover:-translate-y-0.5 active:scale-[0.97] transition-all hover:shadow-lg" style="color: #0a0a0a;">
                             Join the Drive
                         </a>
                     </div>
@@ -336,7 +498,7 @@
     </section>
 
     <!-- Upcoming Events -->
-    <section id="events" class="py-20 md:py-28 border-t border-border">
+    <section id="events" class="py-20 md:py-28 border-t border-border gradient-overlay">
         <div class="max-w-5xl mx-auto px-5 md:px-10">
             <div class="text-center mb-14">
                 <span class="text-xs font-semibold text-on-surface-variant uppercase tracking-widest">Get involved</span>
@@ -344,10 +506,10 @@
                 <p class="section-subtitle mx-auto mt-3">Join a cleanup drive, tree plantation, or community meetup in your city.</p>
             </div>
             <div class="grid grid-cols-1 gap-5 max-w-md mx-auto">
-                <div class="rounded-xl bg-white border border-border overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+                <div class="rounded-xl bg-white border border-border overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-lg hover:border-primary/30">
                     <div class="p-5">
                         <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest" style="color: #eab308;">
-                            <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse"></span>
                             18th July
                         </span>
                         <h3 class="text-lg font-bold text-on-surface mt-2">Multi-City CleanUp Drive</h3>
@@ -357,7 +519,7 @@
                             <span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs" style="font-size: 14px;">groups</span> 200+</span>
                         </div>
                         <div class="flex gap-2 mt-4">
-                            <a href="multi-city-drive.html" class="flex-1 text-center text-sm font-semibold px-3 py-2 rounded-lg transition-all" style="background: rgba(234, 179, 8, 0.1); color: [...]
+                            <a href="multi-city-drive.html" class="flex-1 text-center text-sm font-semibold px-3 py-2 rounded-lg transition-all hover:bg-primary/10" style="background: rgba(234, 179, 8, 0.1); color: #eab308;">Details</a>
                             <a href="register.html" class="flex-1 text-center text-sm font-semibold px-3 py-2 rounded-lg bg-primary text-white hover:opacity-90 transition-all">Register</a>
                         </div>
                     </div>
@@ -367,21 +529,21 @@
     </section>
 
     <!-- Recent Reports (Card Grid) -->
-    <section id="activity" class="py-20 md:py-28 border-t border-border">
+    <section id="activity" class="py-20 md:py-28 border-t border-border gradient-overlay">
         <div class="max-w-5xl mx-auto px-5 md:px-10">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-14">
                 <div>
                     <span class="text-xs font-semibold text-on-surface-variant uppercase tracking-widest">Live reports</span>
                     <p class="section-title mt-2">Recent issues from the ground</p>
                 </div>
-                <a href="feed.html" class="text-sm font-semibold text-primary hover:underline flex items-center gap-1 flex-shrink-0">
+                <a href="feed.html" class="text-sm font-semibold text-primary hover:text-primary hover:underline flex items-center gap-1 flex-shrink-0 transition-all duration-200">
                     View all reports
                     <span class="material-symbols-outlined text-base">arrow_outward</span>
                 </a>
             </div>
             <div id="feed-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="col-span-full text-center py-12">
-                    <p class="text-sm text-on-surface-variant font-medium">Loading reports...</p>
+                    <p class="text-sm text-on-surface-variant font-medium loading">Loading reports...</p>
                 </div>
             </div>
         </div>
@@ -404,16 +566,16 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto mb-12">
-                <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-0.5" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);">
-                    <div class="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style="background: rgba(234, 179, 8, 0.15);">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0[...]
+                <div class="rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);">
+                    <div class="w-9 h-9 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors" style="background: rgba(234, 179, 8, 0.15);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                     </div>
                     <h3 class="text-white font-semibold text-sm mb-2">Local Leads</h3>
-                    <p class="text-sm leading-relaxed" style="color: rgba(255,255,255,0.6);">Get notified when an issue is reported near you. Rally your neighbors and organize a fix in your own l[...]
+                    <p class="text-sm leading-relaxed" style="color: rgba(255,255,255,0.6);">Get notified when an issue is reported near you. Rally your neighbors and organize a fix in your own locality.</p>
                 </div>
-                <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-0.5" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);">
-                    <div class="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style="background: rgba(234, 179, 8, 0.15);">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10[...]
+                <div class="rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);">
+                    <div class="w-9 h-9 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors" style="background: rgba(234, 179, 8, 0.15);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5v6"/><path d="M6 12v5c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-5"/></svg>
                     </div>
                     <h3 class="text-white font-semibold text-sm mb-2">Student Benefits</h3>
                     <ul class="text-sm leading-relaxed" style="color: rgba(255,255,255,0.6);">
@@ -423,9 +585,9 @@
                         <li class="flex items-start gap-2">• College recommendation letters</li>
                     </ul>
                 </div>
-                <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-0.5" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);">
-                    <div class="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style="background: rgba(234, 179, 8, 0.15);">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"[...]
+                <div class="rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);">
+                    <div class="w-9 h-9 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors" style="background: rgba(234, 179, 8, 0.15);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
                     </div>
                     <h3 class="text-white font-semibold text-sm mb-2">Join Any Drive</h3>
                     <p class="text-sm leading-relaxed" style="color: rgba(255,255,255,0.6);">From mega multi-city events to local street cleanups — participate when it fits your schedule.</p>
@@ -433,12 +595,12 @@
             </div>
 
             <div class="text-center flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="register.html" class="inline-flex items-center gap-2.5 font-semibold text-sm px-8 py-3.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98][...]
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 [...]
+                <a href="register.html" class="inline-flex items-center gap-2.5 font-semibold text-sm px-8 py-3.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] hover:shadow-lg" style="background: #eab308; color: #0a0a0a;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg>
                     Become a Volunteer
                 </a>
-                <a href="report.html" class="inline-flex items-center gap-2.5 font-semibold text-sm px-8 py-3.5 rounded-xl transition-all duration-200 hover:bg-white/5 active:scale-[0.98]" style=[...]
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="[...]
+                <a href="report.html" class="inline-flex items-center gap-2.5 font-semibold text-sm px-8 py-3.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] hover:shadow-lg" style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M4 20h8m-4-4h16M4 12h16M4 4h16"/></svg>
                     Report an Issue
                 </a>
             </div>
@@ -453,7 +615,7 @@
         <div class="max-w-6xl mx-auto px-5 md:px-10 py-14">
             <div class="flex flex-col md:flex-row justify-between items-start gap-10">
                 <div class="max-w-xs">
-                    <a href="index.html" class="flex items-center gap-3 mb-3">
+                    <a href="index.html" class="flex items-center gap-3 mb-3 hover:opacity-80 transition-opacity">
                         <img src="logo.png" alt="For The People" class="h-9 w-auto">
                         <span class="text-base font-bold text-on-surface">For The People</span>
                     </a>
@@ -463,17 +625,17 @@
                     <div>
                         <p class="text-xs font-semibold text-on-surface-variant uppercase tracking-widest mb-3">Pages</p>
                         <div class="flex flex-col gap-2">
-                            <a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="index.html">Home</a>
-                            <a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="feed.html">Feed</a>
-                            <a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="report.html">Report</a>
-                            <a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="contact.html">About</a>
+                            <a class="text-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="index.html">Home</a>
+                            <a class="text-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="feed.html">Feed</a>
+                            <a class="text-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="report.html">Report</a>
+                            <a class="text-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="contact.html">About</a>
                         </div>
                     </div>
                     <div>
                         <p class="text-xs font-semibold text-on-surface-variant uppercase tracking-widest mb-3">Get Involved</p>
                         <div class="flex flex-col gap-2">
-                            <a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="register.html">Volunteer</a>
-                            <a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="donate.html">Support Us</a>
+                            <a class="text-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="register.html">Volunteer</a>
+                            <a class="text-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="donate.html">Support Us</a>
                         </div>
                     </div>
                 </div>
