@@ -247,8 +247,9 @@
 
 <!-- 4-Second First-Visit Splash Screen -->
 <div id="splash-overlay" style="position: fixed; inset: 0; z-index: 99999; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.6s ease-in-out; padding: 20px;">
+    <button id="splash-close" aria-label="Skip" style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.25); border-radius: 9999px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; backdrop-filter: blur(8px); transition: all 0.2s ease;">Skip &rarr;</button>
     <div style="position: relative; max-width: 90vw; max-height: 85vh; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: splashZoom 0.5s cubic-bezier(0.16, 1, 0.3, 1);">
-        <img src="sonam-wangchuk.jpg" alt="We Stand With Sonam Wangchuk - For The People" style="max-width: 100%; max-height: 75vh; width: auto; height: auto; object-fit: contain; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 35px rgba(234, 179, 8, 0.25); border: 1px solid rgba(255, 255, 255, 0.12);">
+        <img id="splash-img" src="sonam-wangchuk.jpg" alt="We Stand With Sonam Wangchuk - For The People" style="max-width: 100%; max-height: 75vh; width: auto; height: auto; object-fit: contain; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 35px rgba(234, 179, 8, 0.25); border: 1px solid rgba(255, 255, 255, 0.12);">
         <div style="margin-top: 18px; display: flex; align-items: center; gap: 10px; color: rgba(255, 255, 255, 0.75); font-size: 13px; font-weight: 600; font-family: system-ui, -apple-system, sans-serif; letter-spacing: 0.03em;">
             <span style="display: inline-block; width: 14px; height: 14px; border: 2px solid #eab308; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></span>
             <span>Entering site in <span id="splash-countdown">4</span>s...</span>
@@ -258,6 +259,7 @@
 <style>
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes splashZoom { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    #splash-close:hover { background: rgba(255,255,255,0.25); transform: translateY(-1px); }
 </style>
 
 
@@ -571,38 +573,67 @@
     });
 
     // First-Visit 4-Second Splash Screen Logic
-    document.addEventListener('DOMContentLoaded', () => {
+    (function() {
         const splash = document.getElementById('splash-overlay');
+        const splashImg = document.getElementById('splash-img');
         if (!splash) return;
 
-        // Check if first time visit
-        if (localStorage.getItem('hasSeenSonamSplash')) {
+        // Display for the user's session (or if first time visit)
+        if (sessionStorage.getItem('hasSeenSonamSplash')) {
             splash.style.display = 'none';
             return;
         }
 
         document.body.style.overflow = 'hidden';
-        let remainingSeconds = 4;
-        const countdownEl = document.getElementById('splash-countdown');
 
-        const timerInterval = setInterval(() => {
-            remainingSeconds--;
-            if (countdownEl && remainingSeconds > 0) {
-                countdownEl.textContent = remainingSeconds;
-            }
-        }, 1000);
-
-        setTimeout(() => {
-            clearInterval(timerInterval);
+        function dismissSplash() {
             splash.style.opacity = '0';
             splash.style.pointerEvents = 'none';
             setTimeout(() => {
                 splash.style.display = 'none';
                 document.body.style.overflow = '';
             }, 600);
-            localStorage.setItem('hasSeenSonamSplash', 'true');
-        }, 4000);
-    });
+            sessionStorage.setItem('hasSeenSonamSplash', 'true');
+        }
+
+        let started = false;
+        function startCountdown() {
+            if (started) return;
+            started = true;
+
+            let remainingSeconds = 4;
+            const countdownEl = document.getElementById('splash-countdown');
+
+            const timerInterval = setInterval(() => {
+                remainingSeconds--;
+                if (countdownEl && remainingSeconds >= 0) {
+                    countdownEl.textContent = remainingSeconds;
+                }
+                if (remainingSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    dismissSplash();
+                }
+            }, 1000);
+        }
+
+        // Close/Skip button
+        const closeBtn = document.getElementById('splash-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', dismissSplash);
+        }
+
+        // Start countdown only after image has loaded
+        if (splashImg) {
+            if (splashImg.complete) {
+                startCountdown();
+            } else {
+                splashImg.onload = startCountdown;
+                splashImg.onerror = startCountdown;
+            }
+        } else {
+            startCountdown();
+        }
+    })();
 </script>
 
 </body>
