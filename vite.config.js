@@ -30,7 +30,6 @@ export default defineConfig({
         fixcontact: './fixmyarea+contact.html',
         fixdonate: './fixmyarea+donation.html',
         register: './register.html',
-        multidrive: './multi-city-drive.html',
         city_blr: './city-Bengaluru.html',
         city_hyd: './city-Hyderabad.html',
         city_jam: './city-Jamshedpur.html',
